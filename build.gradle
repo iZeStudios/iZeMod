@@ -5,11 +5,73 @@ plugins {
     id "fabric-loom" version "1.10-SNAPSHOT"
 }
 
-base {
-    group = project.maven_group
-    archivesName = project.maven_name
-    version = project.maven_version
-    description = project.maven_description
+allprojects {
+    apply plugin: "java"
+    apply plugin: "idea"
+    apply plugin: "fabric-loom"
+
+    base {
+        group = project.maven_group
+        archivesName = project.maven_name
+        version = project.maven_version
+        description = project.maven_description
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "ViaVersion"
+            url = "https://repo.viaversion.com"
+        }
+        maven {
+            name = "Lenni0451"
+            url = "https://maven.lenni0451.net/everything"
+        }
+        maven {
+            name = "OpenCollab Snapshots"
+            url = "https://repo.opencollab.dev/maven-snapshots/"
+        }
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/releases"
+        }
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io"
+
+            content {
+                includeGroup "com.github.Oryxel"
+            }
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+        mappings "net.fabricmc:yarn:${project.yarn_version}:v2"
+        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    }
+
+    java {
+        withSourcesJar()
+        withJavadocJar()
+
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+
+    jar {
+        // Rename the project's license file to LICENSE_<project_name> to avoid conflicts
+        from("LICENSE") {
+            rename {
+                "${it}_${project.archivesBaseName}"
+            }
+        }
+    }
 }
 
 loom {
@@ -28,41 +90,24 @@ configurations {
     jij.extendsFrom vvDependencies
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "ViaVersion"
-        url = "https://repo.viaversion.com"
-    }
-    maven {
-        name = "Lenni0451"
-        url = "https://maven.lenni0451.net/everything"
-    }
-    maven {
-        name = "OpenCollab Snapshots"
-        url = "https://repo.opencollab.dev/maven-snapshots/"
-    }
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases"
-    }
-    maven {
-        name = "Jitpack"
-        url = "https://jitpack.io"
-
-        content {
-            includeGroup "com.github.Oryxel"
-        }
-    }
-}
-
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_version}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
     modImplementation "com.viaversion:viafabricplus-api:4.0.2"
     modRuntimeOnly "com.viaversion:viafabricplus:4.0.2"
+
+    // Sub projects, since they are Fabric mods as well (mainly to access the game code) we have to first
+    // implement the namedElements (raw output) to compile against, then include the mappedElements into the output jar
+    implementation compileOnlyApi(project(path: ":izemod-api", configuration: "namedElements"))
+
+    include project(":izemod-api")
+
+    // Fabric's jar in jar system doesn't support transitive dependencies, so we have to manually add them
+    afterEvaluate {
+        configurations.jij.incoming.resolutionResult.allDependencies.each {
+            dependencies.include(dependencies.implementation(dependencies.compileOnlyApi(it.requested.toString()) {
+                transitive = false
+            }))
+        }
+    }
 }
 
 processResources {
@@ -80,28 +125,6 @@ String mcVersion() {
         return project.minecraft_version
     } else {
         return project.supported_versions
-    }
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-
-jar {
-    // Rename the project's license file to LICENSE_<project_name> to avoid conflicts
-    from("LICENSE") {
-        rename {
-            "${it}_${project.archivesBaseName}"
-        }
     }
 }
 

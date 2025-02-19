@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod;
+package net.izemods.izemod.api;
 
-public class iZeMod {
+public interface iZeModBase {
+
 }

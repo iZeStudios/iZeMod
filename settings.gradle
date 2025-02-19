@@ -10,3 +10,7 @@ pluginManagement {
 }
 
 rootProject.name = "iZeMod"
+
+include "izemod-api"
+
+project(":izemod-api").projectDir = file("api")
