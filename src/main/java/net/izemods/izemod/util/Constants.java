@@ -28,6 +28,7 @@ import java.io.InputStream;
 public final class Constants {
 
     public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
+    public static final Identifier LOADING_LOGO = Identifier.of("izemod", "loadinglogo.png");
     public static final ButtonTextures BUTTON = new ButtonTextures(
         Identifier.of("izemod", "button"),
         Identifier.of("izemod", "button_disabled"),

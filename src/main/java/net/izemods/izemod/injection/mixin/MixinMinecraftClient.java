@@ -23,8 +23,10 @@ package net.izemods.izemod.injection.mixin;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.izemods.izemod.ModImpl;
+import net.izemods.izemod.util.Constants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.gui.screen.SplashOverlay;
 import net.minecraft.client.session.Session;
 import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.*;
@@ -42,8 +44,9 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public Session session;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
     public void initialize(RunArgs args, CallbackInfo ci) {
+        SplashOverlay.LOGO = Constants.LOADING_LOGO;
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             session = new Session(
                 "iZeMod" + Util.getMeasuringTimeMs() % 10000000L,

@@ -9,6 +9,7 @@
     "MixinMinecraftClient",
     "MixinPressableWidget",
     "MixinScreen",
+    "MixinSplashOverlay",
     "MixinTextFieldWidget",
     "MixinTitleScreen"
   ],
