@@ -1,0 +1,156 @@
+plugins {
+    id "java"
+    id "maven-publish"
+    id "signing"
+    //id "idea"
+}
+
+base {
+    group = project.maven_group
+    archivesName = project.maven_name
+    version = project.maven_version
+    description = project.maven_description
+}
+
+configurations {
+    api.extendsFrom library
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Add for unit testing
+    // testImplementation platform("org.junit:junit-bom:5.10.3")
+    // testImplementation "org.junit.jupiter:junit-jupiter"
+
+    // Add your dependencies here
+    // Example: implementation "org.apache.commons:commons-lang3:3.14.0"
+    // You can use library "org.apache.commons:commons-lang3:3.14.0" to include the dependency in the jar file as well
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+
+jar {
+    // Add all dependencies which are included using "library" to the jar file and exclude the META-INF folder
+    dependsOn configurations.library
+    from {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        configurations.library.collect {
+            zipTree(it)
+        }
+    } {
+        exclude "META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA"
+    }
+
+    manifest {
+        attributes(
+                "Main-Class": "de.florianmichael.baseproject.Example"
+        )
+    }
+
+    // Rename the project's license file to LICENSE_<project_name> to avoid conflicts
+    from("LICENSE") {
+        rename {
+            "${it}_${project.archivesBaseName}"
+        }
+    }
+}
+
+// Add for unit testing
+//test {
+//    useJUnitPlatform()
+//    testLogging {
+//        events "passed", "skipped", "failed"
+//    }
+//    maxParallelForks Runtime.runtime.availableProcessors()
+//}
+
+// Uncomment to exclude specific folders from Intellij's indexing
+//idea {
+//    module {
+//        ["run"].each {
+//            excludeDirs << file("$it")
+//        }
+//    }
+//}
+
+publishing {
+    repositories {
+        maven {
+            name = "reposilite"
+            url = "https://maven.lenni0451.net/" + (project.version.endsWith("SNAPSHOT") ? "snapshots" : "releases")
+
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+        maven {
+            name = "ossrh"
+            def releasesUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = project.version.endsWith("SNAPSHOT") ? snapshotsUrl : releasesUrl
+
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.archivesBaseName
+            version = project.version
+
+            from components.java
+
+            pom {
+                name = artifactId
+                description = project.description
+                url = "https://github.com/FlorianMichael/BaseProject"
+                licenses {
+                    license {
+                        name = "Apache-2.0 license"
+                        url = "https://github.com/FlorianMichael/BaseProject/blob/main/LICENSE"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "FlorianMichael"
+                        name = "EnZaXD"
+                        email = "florian.michael07@gmail.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/FlorianMichael/BaseProject.git"
+                    developerConnection = "scm:git:ssh://github.com/FlorianMichael/BaseProject.git"
+                    url = "github.com/FlorianMichael/BaseProject"
+                }
+            }
+        }
+    }
+}
+
+signing {
+    setRequired false
+    sign configurations.archives
+    sign publishing.publications.maven
+}
+
+project.tasks.withType(PublishToMavenRepository).forEach {
+    it.dependsOn(project.tasks.withType(Sign))
+}
