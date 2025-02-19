@@ -28,6 +28,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -38,9 +39,14 @@ public abstract class MixinTextFieldWidget extends ClickableWidget {
         super(x, y, width, height, message);
     }
 
+    @Shadow
+    public abstract boolean drawsBackground();
+
     @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;drawsBackground()Z"))
     private boolean replaceTextFieldStyle(TextFieldWidget instance, @Local(argsOnly = true) DrawContext context) {
-        context.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.DARK_BLUE);
+        if (drawsBackground()) {
+            context.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.DARK_BLUE);
+        }
         return false;
     }
 
