@@ -1,1 +1,5 @@
 accessWidener v1 named
+
+accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
+
+mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;

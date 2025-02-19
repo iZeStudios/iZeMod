@@ -19,24 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod.api;
+package net.izemods.izemod.util;
 
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.ApiStatus;
+import net.minecraft.util.Identifier;
 
-public final class iZeMod {
+public final class Constants {
 
-    private static iZeModBase impl;
-
-    @ApiStatus.Internal
-    public static void init(final iZeModBase impl) {
-        Preconditions.checkArgument(iZeMod.impl == null, "iZeMod is already initialized");
-        iZeMod.impl = impl;
-    }
-
-    public static iZeModBase getImpl() {
-        Preconditions.checkState(iZeMod.impl != null, "iZeMod is not initialized");
-        return iZeMod.impl;
-    }
+    public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
 
 }
