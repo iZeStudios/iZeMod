@@ -21,7 +21,11 @@
 
 package net.izemods.izemod.component.theme;
 
+import java.awt.*;
+
 public final class ColorTheme {
+
+    public static final int DARK_BLUE = new Color(0, 75, 100).getRGB();
 
     private static final int COLOR_UPPER_LIMIT = 200;
     private static final int COLOR_LOWER_LIMIT = 100;

@@ -19,23 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod.util;
+package net.izemods.izemod.injection.mixin;
 
+import net.izemods.izemod.util.Constants;
 import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.util.Identifier;
-import java.io.InputStream;
+import net.minecraft.client.gui.widget.PressableWidget;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-public final class Constants {
+@Mixin(PressableWidget.class)
+public abstract class MixinPressableWidget {
 
-    public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
-    public static final ButtonTextures BUTTON = new ButtonTextures(
-        Identifier.of("izemod", "button"),
-        Identifier.of("izemod", "button_disabled"),
-        Identifier.of("izemod", "button_highlighted")
-    );
-
-    public static InputStream icon() {
-        return Constants.class.getResourceAsStream("/assets/izemod/icon.png");
+    @Redirect(method = "renderWidget", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/widget/PressableWidget;TEXTURES:Lnet/minecraft/client/gui/screen/ButtonTextures;"))
+    private ButtonTextures replaceButtonTextures() {
+        return Constants.BUTTON;
     }
 
 }
