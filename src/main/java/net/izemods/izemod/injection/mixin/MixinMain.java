@@ -19,31 +19,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod;
+package net.izemods.izemod.injection.mixin;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.izemods.izemod.api.BaseHolder;
-import net.izemods.izemod.api.iZeModBase;
+import net.izemods.izemod.ModImpl;
+import net.minecraft.client.main.Main;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public final class ModImpl implements iZeModBase {
+@Mixin(Main.class)
+public abstract class MixinMain {
 
-    public static final ModImpl INSTANCE = new ModImpl();
-
-    private String version;
-
-    public void initialize() {
-        BaseHolder.init(INSTANCE);
-
-        final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
-        version = metadata.getVersion().getFriendlyString();
+    @Inject(method = "main", at = @At("HEAD"))
+    private static void initialize(CallbackInfo ci) {
+        ModImpl.INSTANCE.initialize();
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    // --------------------------------------------------------------------------------------------
-    // Proxy the most important/used internals to a general API point for mods
 
 }

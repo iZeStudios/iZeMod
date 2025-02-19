@@ -21,21 +21,39 @@
 
 package net.izemods.izemod.injection.mixin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.izemods.izemod.ModImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.session.Session;
+import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient {
 
+    @Mutable
+    @Shadow
+    public Session session;
+
     @Inject(method = "<init>", at = @At("RETURN"))
     public void initialize(RunArgs args, CallbackInfo ci) {
-        ModImpl.INSTANCE.initialize();
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            session = new Session(
+                "iZeMod" + Util.getMeasuringTimeMs() % 10000000L,
+                UUID.randomUUID(),
+                "00000000000000000000000000000000",
+                Optional.empty(),
+                Optional.empty(),
+                Session.AccountType.MOJANG
+            );
+        }
     }
 
     @Inject(method = "getWindowTitle", at = @At(value = "HEAD"), cancellable = true)
