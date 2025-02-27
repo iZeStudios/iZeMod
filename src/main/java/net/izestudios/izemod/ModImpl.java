@@ -1,9 +1,6 @@
 /*
- * This file is part of iZeMod - https://github.com/iZeMods/iZeMod
- * Copyright (C) 2014-2025 the original authors
- *                         - FlorianMichael/EnZaXD <florian.michael07@gmail.com>
- *                         - iZePlayzYT
- * Copyright (C) 2025 GitHub contributors
+ * This file is part of iZeMod - https://github.com/iZeStudios/iZeMod
+ * Copyright (C) 2025 iZeStudios and GitHub contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod;
+package net.izestudios.izemod;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.izemods.izemod.api.BaseHolder;
-import net.izemods.izemod.api.iZeModBase;
+import net.izestudios.izemod.api.BaseHolder;
+import net.izestudios.izemod.api.iZeModBase;
 
 public final class ModImpl implements iZeModBase {
 

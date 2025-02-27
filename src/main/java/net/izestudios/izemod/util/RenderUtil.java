@@ -1,9 +1,6 @@
 /*
- * This file is part of iZeMod - https://github.com/iZeMods/iZeMod
- * Copyright (C) 2014-2025 the original authors
- *                         - FlorianMichael/EnZaXD <florian.michael07@gmail.com>
- *                         - iZePlayzYT
- * Copyright (C) 2025 GitHub contributors
+ * This file is part of iZeMod - https://github.com/iZeStudios/iZeMod
+ * Copyright (C) 2025 iZeStudios and GitHub contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod.api;
+package net.izestudios.izemod.util;
 
-public interface iZeModBase {
+public final class RenderUtil {
 
 }

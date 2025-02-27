@@ -1,9 +1,6 @@
 /*
- * This file is part of iZeMod - https://github.com/iZeMods/iZeMod
- * Copyright (C) 2014-2025 the original authors
- *                         - FlorianMichael/EnZaXD <florian.michael07@gmail.com>
- *                         - iZePlayzYT
- * Copyright (C) 2025 GitHub contributors
+ * This file is part of iZeMod - https://github.com/iZeStudios/iZeMod
+ * Copyright (C) 2025 iZeStudios and GitHub contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izemods.izemod.injection.mixin;
+package net.izestudios.izemod.injection.mixin;
 
-import net.izemods.izemod.ModImpl;
-import net.minecraft.client.main.Main;
+import net.izestudios.izemod.component.screen.LoginScreen;
+import net.izestudios.izemod.component.screen.MainMenuScreen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Main.class)
-public abstract class MixinMain {
+@Mixin(TitleScreen.class)
+public abstract class MixinTitleScreen {
 
-    @Inject(method = "main", at = @At("HEAD"))
-    private static void initialize(CallbackInfo ci) {
-        ModImpl.INSTANCE.initialize();
+    @Inject(method = "init", at = @At("HEAD"))
+    private void redirectScreens(CallbackInfo ci) {
+        if (LoginScreen.loggedIn) {
+            MinecraftClient.getInstance().setScreen(MainMenuScreen.INSTANCE);
+        } else {
+            MinecraftClient.getInstance().setScreen(LoginScreen.INSTANCE);
+        }
     }
-
 
 }

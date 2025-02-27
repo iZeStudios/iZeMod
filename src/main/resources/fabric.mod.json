@@ -23,13 +23,13 @@
     {
       "name": "GitHub contributors",
       "contact": {
-        "homepage": "https://github.com/iZeMods/iZeMod/graphs/contributors"
+        "homepage": "https://github.com/iZeStudios/iZeMod/graphs/contributors"
       }
     }
   ],
   "contact": {
-    "sources": "https://github.com/iZeMods/iZeMod",
-    "issues": "https://github.com/iZeMods/iZeMod/issues"
+    "sources": "https://github.com/iZeStudios/iZeMod",
+    "issues": "https://github.com/iZeStudios/iZeMod/issues"
   },
   "license": "GPL-v3",
   "icon": "assets/izemod/icon.png",
