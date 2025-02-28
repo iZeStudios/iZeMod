@@ -18,7 +18,7 @@
 
 package net.izestudios.izemod.component.screen;
 
-import net.izestudios.izemod.ModImpl;
+import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
@@ -50,7 +50,7 @@ public abstract class AbstractInitialScreen extends Screen {
         final int gray = Formatting.GRAY.getColorValue();
 
         context.drawText(textRenderer, "Minecraft " + SharedConstants.getGameVersion().getName(), 3, this.height - 22, gray, true);
-        context.drawText(textRenderer, "iZeMod " + ModImpl.INSTANCE.getVersion() + " by iZePlayz & EnZaXD", 3, this.height - 11, gray, true);
+        context.drawText(textRenderer, "iZeMod " + IzeModImpl.INSTANCE.getVersion() + " by iZePlayz & EnZaXD", 3, this.height - 11, gray, true);
 
         final String copyrightText = "Copyright Mojang AB. Do not distribute!";
         context.drawText(textRenderer, copyrightText, this.width - textRenderer.getWidth(copyrightText) - 2, this.height - 11, gray, true);

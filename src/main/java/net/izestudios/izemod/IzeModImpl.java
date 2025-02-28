@@ -20,17 +20,17 @@ package net.izestudios.izemod;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.izestudios.izemod.api.BaseHolder;
-import net.izestudios.izemod.api.iZeModBase;
+import net.izestudios.izemod.api.IzeModAPI;
+import net.izestudios.izemod.api.IzeModAPIBase;
 
-public final class ModImpl implements iZeModBase {
+public final class IzeModImpl implements IzeModAPIBase {
 
-    public static final ModImpl INSTANCE = new ModImpl();
+    public static final IzeModImpl INSTANCE = new IzeModImpl();
 
     private String version;
 
     public void initialize() {
-        BaseHolder.init(INSTANCE);
+        IzeModAPI.init(INSTANCE);
 
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();

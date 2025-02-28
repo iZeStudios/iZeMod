@@ -19,7 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.izestudios.izemod.ModImpl;
+import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -58,7 +58,7 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "getWindowTitle", at = @At(value = "HEAD"), cancellable = true)
     public void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
-         cir.setReturnValue("iZeMod " + ModImpl.INSTANCE.getVersion());
+         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.getVersion());
     }
 
 }

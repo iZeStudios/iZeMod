@@ -18,22 +18,6 @@
 
 package net.izestudios.izemod.api;
 
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.ApiStatus;
-
-public final class BaseHolder {
-
-    private static iZeModBase impl;
-
-    @ApiStatus.Internal
-    public static void init(final iZeModBase impl) {
-        Preconditions.checkArgument(BaseHolder.impl == null, "iZeMod is already initialized");
-        BaseHolder.impl = impl;
-    }
-
-    public static iZeModBase getImpl() {
-        Preconditions.checkState(BaseHolder.impl != null, "iZeMod is not initialized");
-        return BaseHolder.impl;
-    }
+public interface IzeModAPIBase {
 
 }
