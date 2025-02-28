@@ -12,7 +12,7 @@ allprojects {
 
     base {
         group = project.maven_group
-        archivesName = project.maven_name
+        archivesName = project.name
         version = project.maven_version
         description = project.maven_description
     }
@@ -91,13 +91,12 @@ configurations {
 }
 
 dependencies {
-    modImplementation "com.viaversion:viafabricplus-api:4.0.2"
-    modRuntimeOnly "com.viaversion:viafabricplus:4.0.2"
+    modImplementation("com.viaversion:viafabricplus-api:4.0.2")
+    include modRuntimeOnly("com.viaversion:viafabricplus:4.0.2")
 
     // Sub projects, since they are Fabric mods as well (mainly to access the game code) we have to first
     // implement the namedElements (raw output) to compile against, then include the mappedElements into the output jar
     implementation compileOnlyApi(project(path: ":izemod-api", configuration: "namedElements"))
-
     include project(":izemod-api")
 
     // Fabric's jar in jar system doesn't support transitive dependencies, so we have to manually add them
