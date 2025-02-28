@@ -19,15 +19,20 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.IzeModImpl;
-import net.izestudios.izemod.util.Assets;
+import net.izestudios.izemod.util.Constants;
+import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
+import net.minecraft.client.gui.widget.PressableTextWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Util;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public abstract class AbstractInitialScreen extends Screen {
 
@@ -39,21 +44,59 @@ public abstract class AbstractInitialScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
+        RenderUtil.drawIngameLogo(context, 0.6F);
         final int logoX = (this.width / 2) - (2279 / 12);
         final int logoY = this.height / 20;
-        final int logoSizeX = 2279 / 6;
-        final int logoSizeY = 278 / 6;
+        RenderUtil.drawLogo(context, logoX, logoY, -1);
+    }
 
-        context.drawTexture(RenderLayer::getGuiTextured, Assets.LOGO, logoX, logoY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY);
+    private void openGitHub() {
+        try {
+            Util.getOperatingSystem().open(new URI("https://github.com/iZeStudios/iZeMod"));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    protected void setupCopyrightTexts() {
         final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-        final int gray = Formatting.GRAY.getColorValue();
 
-        context.drawText(textRenderer, "Minecraft " + SharedConstants.getGameVersion().getName(), 3, this.height - 22, gray, true);
-        context.drawText(textRenderer, "iZeMod " + IzeModImpl.INSTANCE.getVersion() + " by iZePlayz & EnZaXD", 3, this.height - 11, gray, true);
+        this.addDrawableChild(new PressableTextWidget(
+            2,
+            this.height - 20,
+            200,
+            10,
+            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION + ")"),
+            button -> this.openGitHub(), this.textRenderer
+        ));
 
-        final String copyrightText = "Copyright Mojang AB. Do not distribute!";
-        context.drawText(textRenderer, copyrightText, this.width - textRenderer.getWidth(copyrightText) - 2, this.height - 11, gray, true);
+        this.addDrawableChild(new PressableTextWidget(
+            2,
+            this.height - 10,
+            200,
+            10,
+            Text.of("by iZePlayz & EnZaXD"),
+            button -> this.openGitHub(), this.textRenderer
+        ));
+
+        final String minecraftText = "Minecraft " + SharedConstants.getGameVersion().getName();
+        this.addDrawableChild(new PressableTextWidget(
+            this.width - textRenderer.getWidth(minecraftText) - 2,
+            this.height - 20,
+            200,
+            10,
+            Text.of(minecraftText),
+            button -> this.client.setScreen(new CreditsAndAttributionScreen(this)), this.textRenderer));
+
+        final Text copyrightText = Text.translatable(Constants.TEXT_COPYRIGHT);
+        this.addDrawableChild(new PressableTextWidget(
+            this.width - textRenderer.getWidth(copyrightText) - 2,
+            this.height - 10,
+            200,
+            10,
+            copyrightText,
+            button -> this.client.setScreen(new CreditsAndAttributionScreen(this)), this.textRenderer
+        ));
     }
 
 }

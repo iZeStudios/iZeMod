@@ -22,6 +22,8 @@ import java.awt.*;
 
 public interface IzeModAPIBase {
 
+    String getVersion();
+
     Color getThemeColor();
 
 }

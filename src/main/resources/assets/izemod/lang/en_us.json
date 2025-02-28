@@ -10,8 +10,15 @@
   "screens.title.program": "iZeMod Programs",
   "screens.title.options": "iZeMod Options",
   "screens.title.profile": "iZeMod Profile",
-  "screens.title.addons": "Fabric Mods",
+  "screens.title.mods": "Fabric Mods",
   "screens.title.changelog": "iZeMod Changelog",
-  "screens.title.minecraft": ".minecraft folder"
+  "screens.title.minecraft": ".minecraft folder",
+
+  "screens.profile": "Profile",
+  "screens.profile.password": "Change password",
+  "screens.profile.email": "Change email",
+  "screens.profile.transfer": "Transfer account",
+  "screens.profile.delete": "Delete account",
+  "screens.profile.back": "Back to main menu"
 
 }

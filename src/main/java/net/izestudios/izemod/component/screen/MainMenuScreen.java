@@ -42,6 +42,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
     @Override
     protected void init() {
         super.init();
+        setupCopyrightTexts();
 
         int worldCount = client.getLevelStorage().getLevelList().levels().size();
         int serverCount = new ServerList(client).size();
@@ -69,7 +70,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
 
         addMainMenuButton(rightX, baseY, -5, programText, null, () -> {});
         addMainMenuButton(rightX, baseY, -4, optionsText, null, () -> {});
-        addMainMenuButton(rightX, baseY, -3, profileText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -3, profileText, null, () -> this.client.setScreen(ProfileScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -2, modsText, null, () -> {});
         addMainMenuButton(rightX, baseY, -1, changelogText, null, () -> {});
         addMainMenuButton(rightX, baseY, 0, minecraftText, null, () -> {});

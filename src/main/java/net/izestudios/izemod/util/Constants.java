@@ -26,6 +26,7 @@ public final class Constants {
     public static final String TEXT_ONLINE = "menu.online";
     public static final String TEXT_OPTIONS = "menu.options";
     public static final String TEXT_QUIT = "menu.quit";
+    public static final String TEXT_COPYRIGHT = "title.credits";
 
     public static final String OPTIONS_LANGUAGE = "options.language";
 

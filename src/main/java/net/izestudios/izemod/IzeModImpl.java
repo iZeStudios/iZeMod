@@ -27,6 +27,8 @@ import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
 
+    @Deprecated // To be removed once we leave alpha
+    public static final String ALPHA_VERSION = "Alpha 0.0.2";
     public static final IzeModImpl INSTANCE = new IzeModImpl();
 
     private String version;
@@ -38,13 +40,13 @@ public final class IzeModImpl implements IzeModAPIBase {
         version = metadata.getVersion().getFriendlyString();
     }
 
-    public String getVersion() {
-        return version;
-    }
-
     // --------------------------------------------------------------------------------------------
     // Proxy the most important/used internals to a general API point for mods
 
+    @Override
+    public String getVersion() {
+        return version;
+    }
 
     @Override
     public Color getThemeColor() {

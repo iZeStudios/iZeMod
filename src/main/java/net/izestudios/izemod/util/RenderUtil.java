@@ -18,6 +18,25 @@
 
 package net.izestudios.izemod.util;
 
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.ColorHelper;
+
 public final class RenderUtil {
+
+    public static void drawIngameLogo(final DrawContext context, final float alpha) {
+        final MatrixStack matrices = context.getMatrices();
+        matrices.push();
+        matrices.scale(0.25F, 0.25F, 0.25F);
+        drawLogo(context, 2, 2, ColorHelper.fromFloats(alpha, 1F, 1F, 1F));
+        matrices.pop();
+    }
+
+    public static void drawLogo(final DrawContext context, final int x, final int y, final int color) {
+        final int logoSizeX = 2279 / 6;
+        final int logoSizeY = 278 / 6;
+        context.drawTexture(RenderLayer::getGuiTextured, Assets.LOGO, x, y, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, color);
+    }
 
 }

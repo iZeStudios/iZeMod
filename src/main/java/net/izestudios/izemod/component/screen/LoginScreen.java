@@ -19,6 +19,7 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.util.Constants;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -36,6 +37,7 @@ public final class LoginScreen extends AbstractInitialScreen {
     @Override
     protected void init() {
         super.init();
+        setupCopyrightTexts();
 
         final int buttonY = (int) (this.height / Math.sqrt(1.3 * 1.2));
         final int textFieldY = (int) (this.height / 2.5);
