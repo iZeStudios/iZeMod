@@ -18,22 +18,15 @@
 
 package net.izestudios.izemod.util;
 
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.util.Identifier;
-import java.io.InputStream;
-
 public final class Constants {
+    
+    // Title screen...
+    public static final String TEXT_SINGLEPLAYER = "menu.singleplayer";
+    public static final String TEXT_MULTIPLAYER = "menu.multiplayer";
+    public static final String TEXT_ONLINE = "menu.online";
+    public static final String TEXT_OPTIONS = "menu.options";
+    public static final String TEXT_QUIT = "menu.quit";
 
-    public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
-    public static final Identifier LOADING_LOGO = Identifier.of("izemod", "loadinglogo.png");
-    public static final ButtonTextures BUTTON = new ButtonTextures(
-        Identifier.of("izemod", "button"),
-        Identifier.of("izemod", "button_disabled"),
-        Identifier.of("izemod", "button_highlighted")
-    );
-
-    public static InputStream icon() {
-        return Constants.class.getResourceAsStream("/assets/izemod/icon.png");
-    }
+    public static final String OPTIONS_LANGUAGE = "options.language";
 
 }

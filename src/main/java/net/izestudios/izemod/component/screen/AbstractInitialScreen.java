@@ -19,7 +19,7 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.IzeModImpl;
-import net.izestudios.izemod.util.Constants;
+import net.izestudios.izemod.util.Assets;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -44,7 +44,7 @@ public abstract class AbstractInitialScreen extends Screen {
         final int logoSizeX = 2279 / 6;
         final int logoSizeY = 278 / 6;
 
-        context.drawTexture(RenderLayer::getGuiTextured, Constants.LOGO, logoX, logoY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY);
+        context.drawTexture(RenderLayer::getGuiTextured, Assets.LOGO, logoX, logoY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY);
 
         final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         final int gray = Formatting.GRAY.getColorValue();

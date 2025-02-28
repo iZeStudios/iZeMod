@@ -22,20 +22,21 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerWarningScreen;
 import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.ServerList;
+import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.text.Text;
+
+import static net.izestudios.izemod.util.Constants.*;
 
 public final class MainMenuScreen extends AbstractInitialScreen {
 
     public static final MainMenuScreen INSTANCE = new MainMenuScreen();
 
     private MainMenuScreen() {
-        super(Text.of("Login"));
+        super(Text.translatable("screen.title"));
     }
 
     @Override
@@ -49,24 +50,29 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         int leftX = this.width / 2 - 202;
         int rightX = this.width / 2 + 2;
 
-        addMainMenuButton(leftX, baseY, -5, "menu.singleplayer", worldCount + " " + (worldCount == 1 ? "Welt" : "Welten"), () -> this.client.setScreen(new SelectWorldScreen(this)));
-        addMainMenuButton(leftX, baseY, -4, "menu.multiplayer", serverCount + " Server", () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
-        addMainMenuButton(leftX, baseY, -3, "menu.options", null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
-        addMainMenuButton(leftX, baseY, -2, "options.resourcepack", null, () -> this.client.setScreen(new PackScreen(this.client.getResourcePackManager(), this::refreshResourcePacks, this.client.getResourcePackDir(), Text.translatable("resourcePack.title"))));
-        addMainMenuButton(leftX, baseY, -1, "options.language", null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
-        addMainMenuButton(leftX, baseY, 0, "menu.quit", null, client::scheduleStop);
+        final String worldText = I18n.translate("screens.title.world");
+        final String worldsText = I18n.translate("screens.title.worlds");
+        final String serverText = I18n.translate("screens.title.server");
 
-        addMainMenuButton(rightX, baseY, -5, "iZeMod Programme", null, () -> {});
-        addMainMenuButton(rightX, baseY, -4, "iZeMod Optionen", null, () -> {});
-        addMainMenuButton(rightX, baseY, -3, "iZeMod Profil", null, () -> {});
-        addMainMenuButton(rightX, baseY, -2, "iZeMod Addons (0 Addons)", null, () -> {});
-        addMainMenuButton(rightX, baseY, -1, "iZeMod Changelog", null, () -> {});
-        addMainMenuButton(rightX, baseY, 0, ".minecraft Ordner", null, () -> {});
-    }
+        final String programText = I18n.translate("screens.title.program");
+        final String optionsText = I18n.translate("screens.title.options");
+        final String profileText = I18n.translate("screens.title.profile");
+        final String modsText = I18n.translate("screens.title.mods");
+        final String changelogText = I18n.translate("screens.title.changelog");
+        final String minecraftText = I18n.translate("screens.title.minecraft");
+        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
+        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
+        addMainMenuButton(leftX, baseY, -3, TEXT_OPTIONS, null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
+        addMainMenuButton(leftX, baseY, -2, TEXT_ONLINE, null, () -> this.client.setScreen(new RealmsMainScreen(this)));
+        addMainMenuButton(leftX, baseY, -1, OPTIONS_LANGUAGE, null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
+        addMainMenuButton(leftX, baseY, 0, TEXT_QUIT, null, client::scheduleStop);
 
-    private void refreshResourcePacks(ResourcePackManager resourcePackManager) {
-        this.client.options.refreshResourcePacks(resourcePackManager);
-        this.client.setScreen(this);
+        addMainMenuButton(rightX, baseY, -5, programText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -4, optionsText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -3, profileText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -1, changelogText, null, () -> {});
+        addMainMenuButton(rightX, baseY, 0, minecraftText, null, () -> {});
     }
 
     private void addMainMenuButton(int x, int baseY, int offset, String key, String extraText, Runnable action) {

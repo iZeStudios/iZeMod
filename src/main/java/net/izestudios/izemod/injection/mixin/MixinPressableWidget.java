@@ -18,7 +18,7 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.util.Constants;
+import net.izestudios.izemod.util.Assets;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.PressableWidget;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +30,7 @@ public abstract class MixinPressableWidget {
 
     @Redirect(method = "renderWidget", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/widget/PressableWidget;TEXTURES:Lnet/minecraft/client/gui/screen/ButtonTextures;"))
     private ButtonTextures replaceButtonTextures() {
-        return Constants.BUTTON;
+        return Assets.BUTTON;
     }
 
 }

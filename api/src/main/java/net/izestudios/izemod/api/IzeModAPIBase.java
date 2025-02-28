@@ -18,6 +18,10 @@
 
 package net.izestudios.izemod.api;
 
+import java.awt.*;
+
 public interface IzeModAPIBase {
+
+    Color getThemeColor();
 
 }

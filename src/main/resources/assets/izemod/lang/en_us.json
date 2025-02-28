@@ -1,0 +1,17 @@
+{
+
+  "screens.login": "Login",
+  "screens.login.login": "Login",
+
+  "screens.title": "Main Menu",
+  "screens.title.world": "World",
+  "screens.title.worlds": "Worlds",
+  "screens.title.server": "Server",
+  "screens.title.program": "iZeMod Programs",
+  "screens.title.options": "iZeMod Options",
+  "screens.title.profile": "iZeMod Profile",
+  "screens.title.addons": "Fabric Mods",
+  "screens.title.changelog": "iZeMod Changelog",
+  "screens.title.minecraft": ".minecraft folder"
+
+}

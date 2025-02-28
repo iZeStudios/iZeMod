@@ -22,6 +22,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.izestudios.izemod.api.IzeModAPI;
 import net.izestudios.izemod.api.IzeModAPIBase;
+import net.izestudios.izemod.component.theme.ColorTheme;
+import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
 
@@ -42,5 +44,11 @@ public final class IzeModImpl implements IzeModAPIBase {
 
     // --------------------------------------------------------------------------------------------
     // Proxy the most important/used internals to a general API point for mods
+
+
+    @Override
+    public Color getThemeColor() {
+        return new Color(0, 125, ColorTheme.getBlue());
+    }
 
 }

@@ -16,24 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.injection.mixin;
+package net.izestudios.izemod.util;
 
-import net.izestudios.izemod.util.Assets;
-import net.minecraft.client.util.Icons;
-import net.minecraft.resource.InputSupplier;
-import net.minecraft.resource.ResourcePack;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.client.gui.screen.ButtonTextures;
+import net.minecraft.util.Identifier;
 import java.io.InputStream;
 
-@Mixin(Icons.class)
-public abstract class MixinIcons {
+public final class Assets {
 
-    @Inject(method = "getIcon", at = @At("HEAD"), cancellable = true)
-    private void replaceProcessIcon(ResourcePack resourcePack, String fileName, CallbackInfoReturnable<InputSupplier<InputStream>> cir) {
-        cir.setReturnValue(Assets::icon);
+    public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
+    public static final Identifier LOADING_LOGO = Identifier.of("izemod", "loadinglogo.png");
+    public static final ButtonTextures BUTTON = new ButtonTextures(
+        Identifier.of("izemod", "button"),
+        Identifier.of("izemod", "button_disabled"),
+        Identifier.of("izemod", "button_highlighted")
+    );
+
+    public static InputStream icon() {
+        return Assets.class.getResourceAsStream("/assets/izemod/icon.png");
     }
-    
+
 }

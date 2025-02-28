@@ -18,6 +18,7 @@
 
 package net.izestudios.izemod.component.screen;
 
+import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -29,7 +30,7 @@ public final class LoginScreen extends AbstractInitialScreen {
     public static boolean loggedIn = false;
 
     private LoginScreen() {
-        super(Text.of("Login"));
+        super(Text.translatable("screen.login"));
     }
 
     @Override
@@ -39,12 +40,12 @@ public final class LoginScreen extends AbstractInitialScreen {
         final int buttonY = (int) (this.height / Math.sqrt(1.3 * 1.2));
         final int textFieldY = (int) (this.height / 2.5);
 
-        addDrawableChild(ButtonWidget.builder(Text.of("Einloggen"), button -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable("screens.login.login"), button -> {
             loggedIn = true;
             client.setScreen(new TitleScreen());
         }).position(this.width / 2 - 102, buttonY).size(101, 20).build());
 
-        addDrawableChild(ButtonWidget.builder(Text.of("Spiel beenden"), button -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable(Constants.TEXT_QUIT), button -> {
             client.stop();
         }).position(this.width / 2 + 2, buttonY).size(101, 20).build());
 
