@@ -29,7 +29,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.widget.PressableTextWidget;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,15 +43,14 @@ public abstract class AbstractInitialScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        RenderUtil.drawIngameLogo(context, 0.6F);
         final int logoX = (this.width / 2) - (2279 / 12);
         final int logoY = this.height / 20;
         RenderUtil.drawLogo(context, logoX, logoY, -1);
     }
 
-    private void openGitHub() {
+    private void openWebUrl() {
         try {
-            Util.getOperatingSystem().open(new URI("https://github.com/iZeStudios/iZeMod"));
+            Util.getOperatingSystem().open(new URI("https://izeplayz.de/izemod"));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +65,7 @@ public abstract class AbstractInitialScreen extends Screen {
             200,
             10,
             Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION + ")"),
-            button -> this.openGitHub(), this.textRenderer
+            button -> this.openWebUrl(), this.textRenderer
         ));
 
         this.addDrawableChild(new PressableTextWidget(
@@ -76,7 +74,7 @@ public abstract class AbstractInitialScreen extends Screen {
             200,
             10,
             Text.of("by iZePlayz & EnZaXD"),
-            button -> this.openGitHub(), this.textRenderer
+            button -> this.openWebUrl(), this.textRenderer
         ));
 
         final String minecraftText = "Minecraft " + SharedConstants.getGameVersion().getName();
