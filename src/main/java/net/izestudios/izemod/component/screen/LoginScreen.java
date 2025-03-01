@@ -30,7 +30,7 @@ public final class LoginScreen extends AbstractInitialScreen {
     public static final LoginScreen INSTANCE = new LoginScreen();
     public static boolean loggedIn = false;
 
-    private LoginScreen() {
+    LoginScreen() {
         super(Text.translatable("screen.login"));
     }
 
@@ -45,11 +45,11 @@ public final class LoginScreen extends AbstractInitialScreen {
         addDrawableChild(ButtonWidget.builder(Text.translatable("screens.login.login"), button -> {
             loggedIn = true;
             client.setScreen(new TitleScreen());
-        }).position(this.width / 2 - 102, buttonY).size(101, 20).build());
+        }).position(this.width / 2 - 102, textFieldY + 60).size(101, 20).build());
 
         addDrawableChild(ButtonWidget.builder(Text.translatable(Constants.TEXT_QUIT), button -> {
             client.stop();
-        }).position(this.width / 2 + 2, buttonY).size(101, 20).build());
+        }).position(this.width / 2 + 2, textFieldY + 60).size(101, 20).build());
 
         final TextFieldWidget nameField = addDrawableChild(new TextFieldWidget(
                 client.textRenderer, this.width / 2 - 101, textFieldY, 202, 20, Text.empty()));
@@ -60,6 +60,5 @@ public final class LoginScreen extends AbstractInitialScreen {
         nameField.setText("iZePlayz");
         passwordField.setText("123456");
     }
-
 }
 

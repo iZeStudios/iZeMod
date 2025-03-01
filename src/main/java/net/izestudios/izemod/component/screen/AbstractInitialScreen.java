@@ -29,6 +29,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.widget.PressableTextWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
@@ -52,7 +53,7 @@ public abstract class AbstractInitialScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
 
         final int logoX = (this.width / 2) - (2279 / 12);
-        final int logoY = this.height / 20;
+        final int logoY = this.height / 20 + 4;
         RenderUtil.drawLogo(context, logoX, logoY, -1);
     }
 
@@ -73,13 +74,23 @@ public abstract class AbstractInitialScreen extends Screen {
         final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
         final int logoY = this.height / 20;
-        final Text updateText = Text.translatable("update.text").styled(style -> style.withColor(Formatting.GOLD));
+
+        final Text updateText1 = Text.translatable("update.text1", version.replaceAll("-", " ")).styled(style -> style.withColor(Formatting.GOLD));
         this.addDrawableChild(new PressableTextWidget(
-            this.width / 2 - textRenderer.getWidth(updateText) / 2,
-            logoY * 5 + 10,
+            this.width / 2 - textRenderer.getWidth(updateText1) / 2,
+            this.height - 45,
             200,
             10,
-            updateText,
+            updateText1,
+            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
+        ));
+        final Text updateText2 = Text.translatable("update.text2").styled(style -> style.withColor(Formatting.GOLD));
+        this.addDrawableChild(new PressableTextWidget(
+            this.width / 2 - textRenderer.getWidth(updateText2) / 2,
+            this.height - 35,
+            200,
+            10,
+            updateText2,
             button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
         ));
     }
@@ -92,7 +103,7 @@ public abstract class AbstractInitialScreen extends Screen {
             this.height - 20,
             200,
             10,
-            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (Alpha v" + IzeModImpl.ALPHA_VERSION + ")"),
+            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION_TAG + ")"),
             button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
         ));
 

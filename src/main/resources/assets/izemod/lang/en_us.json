@@ -6,17 +6,17 @@
   "screens.title.world": "World",
   "screens.title.worlds": "Worlds",
   "screens.title.server": "Server",
-  "screens.title.program": "iZeMod Programs",
-  "screens.title.options": "iZeMod Options",
-  "screens.title.mods": "Fabric Mods",
+  "screens.title.program": "iZeMod Programs & Tools",
+  "screens.title.options": "iZeMod Settings",
+  "screens.title.addons": "iZeMod Addons (0)",
+  "screens.title.mods": "Fabric Mods (0)",
   "screens.title.minecraft": ".minecraft folder",
 
-  "screens.profile": "Profile",
-  "screens.profile.password": "Change password",
-  "screens.profile.email": "Change email",
-  "screens.profile.transfer": "Transfer account",
-  "screens.profile.delete": "Delete account",
-  "screens.profile.back": "Back to main menu",
+  "screens.debug": "Debug",
+  "screens.debug.title": "Debug Menu",
+  "screens.debug.toLoginScreen": "To login screen",
+  "screens.debug.unusedTodo": "[UNUSED/TODO]",
 
-  "update.text": "A new version of iZeMod is available. Click to update."
+  "update.text1": "A new iZeMod update is available (%s)!",
+  "update.text2": "Click here to download the latest version!"
 }
