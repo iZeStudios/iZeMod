@@ -8,15 +8,15 @@
   "screens.title.server": "Server",
   "screens.title.program": "iZeMod Programs & Tools",
   "screens.title.options": "iZeMod Settings",
-  "screens.title.addons": "iZeMod Addons (0)",
-  "screens.title.mods": "Fabric Mods (0)",
+  "screens.title.addons": "iZeMod Addons (%s)",
+  "screens.title.mods": "Fabric Mods (%s)",
   "screens.title.minecraft": ".minecraft folder",
 
   "screens.debug": "Debug",
   "screens.debug.title": "Debug Menu",
-  "screens.debug.toLoginScreen": "To login screen",
+  "screens.debug.toLoginScreen": "Back to login screen",
   "screens.debug.unusedTodo": "[UNUSED/TODO]",
 
-  "update.text1": "A new iZeMod update is available (%s)!",
-  "update.text2": "Click here to download the latest version!"
+  "update.first": "A new iZeMod update is available (%s)!",
+  "update.second": "Click here to download the latest version!"
 }

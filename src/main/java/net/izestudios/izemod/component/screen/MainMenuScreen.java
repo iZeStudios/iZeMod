@@ -18,6 +18,7 @@
 
 package net.izestudios.izemod.component.screen;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerWarningScreen;
 import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
@@ -57,18 +58,18 @@ public final class MainMenuScreen extends AbstractInitialScreen {
 
         final String programText = I18n.translate("screens.title.program");
         final String optionsText = I18n.translate("screens.title.options");
-        final String modsText = I18n.translate("screens.title.mods");
-        final String addonsText = I18n.translate("screens.title.addons");
+        final String modsText = I18n.translate("screens.title.mods", FabricLoader.getInstance().getAllMods().size());
+        final String addonsText = I18n.translate("screens.title.addons", 0 /* Filter for izemod entries */);
         addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
         addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
         addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.client.setScreen(new RealmsMainScreen(this)));
         addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
         addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
 
-        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.client.setScreen(new DebugScreen()));
-        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.client.setScreen(new DebugScreen()));
-        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(new DebugScreen()));
-        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(new DebugScreen()));
+        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, client::scheduleStop);
     }
 

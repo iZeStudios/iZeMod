@@ -73,24 +73,22 @@ public abstract class AbstractInitialScreen extends Screen {
 
         final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
-        final int logoY = this.height / 20;
-
-        final Text updateText1 = Text.translatable("update.text1", version.replaceAll("-", " ")).styled(style -> style.withColor(Formatting.GOLD));
+        final Text firstUpdateText = Text.translatable("update.first", version).styled(style -> style.withColor(Formatting.GOLD));
         this.addDrawableChild(new PressableTextWidget(
-            this.width / 2 - textRenderer.getWidth(updateText1) / 2,
+            this.width / 2 - textRenderer.getWidth(firstUpdateText) / 2,
             this.height - 45,
             200,
             10,
-            updateText1,
+            firstUpdateText,
             button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
         ));
-        final Text updateText2 = Text.translatable("update.text2").styled(style -> style.withColor(Formatting.GOLD));
+        final Text secondUpdateText = Text.translatable("update.second").styled(style -> style.withColor(Formatting.GOLD));
         this.addDrawableChild(new PressableTextWidget(
-            this.width / 2 - textRenderer.getWidth(updateText2) / 2,
+            this.width / 2 - textRenderer.getWidth(secondUpdateText) / 2,
             this.height - 35,
             200,
             10,
-            updateText2,
+            secondUpdateText,
             button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
         ));
     }
@@ -103,7 +101,7 @@ public abstract class AbstractInitialScreen extends Screen {
             this.height - 20,
             200,
             10,
-            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION_TAG + ")"),
+            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
             button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
         ));
 

@@ -31,7 +31,7 @@ public final class DebugScreen extends AbstractInitialScreen {
 
     public static final DebugScreen INSTANCE = new DebugScreen();
 
-    public DebugScreen() {
+    private DebugScreen() {
         super(Text.translatable("screens.debug"));
     }
 
@@ -40,22 +40,29 @@ public final class DebugScreen extends AbstractInitialScreen {
         final int baseY = (int) Math.sqrt(((double) (this.height * this.height) / (1.3 * 1.2)));
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.toLoginScreen"), button -> {
-            client.setScreen(new LoginScreen());
+            client.setScreen(LoginScreen.INSTANCE);
         }).dimensions(this.width / 2 - 202, baseY + (25 * -4), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 - 202, baseY + (25 * -3), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 - 202, baseY + (25 * -2), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 - 202, baseY + (25 * -1), 200, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 + 2, baseY + (25 * -4), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 + 2, baseY + (25 * -3), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 + 2, baseY + (25 * -2), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> { button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
+            button.active = false;
         }).dimensions(this.width / 2 + 2, baseY + (25 * -1), 200, 20).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.profile.back"), button -> {

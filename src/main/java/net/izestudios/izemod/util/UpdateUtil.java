@@ -51,7 +51,7 @@ public final class UpdateUtil {
     }
 
     public static String getLatestVersion() {
-        return version.replaceAll("-", " ");
+        return version;
     }
 
 }

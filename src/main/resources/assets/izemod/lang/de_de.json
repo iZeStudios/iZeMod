@@ -8,14 +8,14 @@
   "screens.title.server": "Server",
   "screens.title.program": "iZeMod Programme & Tools",
   "screens.title.options": "iZeMod Einstellungen",
-  "screens.title.addons": "iZeMod Addons (0)",
-  "screens.title.mods": "Fabric Mods (0)",
+  "screens.title.addons": "iZeMod Addons (%s)",
+  "screens.title.mods": "Fabric Mods (%s)",
 
   "screens.debug": "Debug",
   "screens.debug.title": "Debug-Menü",
-  "screens.debug.toLoginScreen": "Zum Login-Screen",
+  "screens.debug.toLoginScreen": "Zurück zum Login-Screen",
   "screens.debug.unusedTodo": "[UNGENUTZT/TODO]",
 
-  "update.text1": "Ein neues Update von iZeMod ist verfügbar (%s)!",
-  "update.text2": "Klicke hier, um die neueste Version herunterzuladen!"
+  "update.first": "Ein neues Update von iZeMod ist verfügbar (%s)!",
+  "update.second": "Klicke hier, um die neueste Version herunterzuladen!"
 }

@@ -30,7 +30,7 @@ public final class LoginScreen extends AbstractInitialScreen {
     public static final LoginScreen INSTANCE = new LoginScreen();
     public static boolean loggedIn = false;
 
-    LoginScreen() {
+    private LoginScreen() {
         super(Text.translatable("screen.login"));
     }
 
@@ -39,7 +39,6 @@ public final class LoginScreen extends AbstractInitialScreen {
         super.init();
         setupCopyrightTexts();
 
-        final int buttonY = (int) (this.height / Math.sqrt(1.3 * 1.2));
         final int textFieldY = (int) (this.height / 2.5);
 
         addDrawableChild(ButtonWidget.builder(Text.translatable("screens.login.login"), button -> {
