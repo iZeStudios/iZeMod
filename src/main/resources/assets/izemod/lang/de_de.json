@@ -1,0 +1,22 @@
+{
+  "screens.login": "Anmeldung",
+  "screens.login.login": "Einloggen",
+
+  "screens.title": "Hauptmenü",
+  "screens.title.world": "Welt",
+  "screens.title.worlds": "Welten",
+  "screens.title.server": "Server",
+  "screens.title.program": "iZeMod Programme",
+  "screens.title.options": "iZeMod Optionen",
+  "screens.title.mods": "Fabric Mods",
+  "screens.title.minecraft": ".minecraft Ordner",
+
+  "screens.profile": "Profil",
+  "screens.profile.password": "Passwort ändern",
+  "screens.profile.email": "E-Mail ändern",
+  "screens.profile.transfer": "Konto übertragen",
+  "screens.profile.delete": "Konto löschen",
+  "screens.profile.back": "Zurück zum Hauptmenü",
+
+  "update.text": "Eine neue Version von iZeMod ist verfügbar. Klicke zum Aktualisieren."
+}

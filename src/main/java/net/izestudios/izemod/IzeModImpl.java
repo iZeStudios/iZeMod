@@ -27,8 +27,10 @@ import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
 
-    @Deprecated // To be removed once we leave alpha
-    public static final String ALPHA_VERSION = "Alpha v0.1.0";
+    // To be removed once we leave alpha
+    public static final String ALPHA_VERSION = "0.1.0";
+    public static final String ALPHA_VERSION_TAG = "v" + ALPHA_VERSION + "-alpha";
+
     public static final IzeModImpl INSTANCE = new IzeModImpl();
 
     private String version;

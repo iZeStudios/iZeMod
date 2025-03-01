@@ -1,5 +1,4 @@
 {
-
   "screens.login": "Login",
   "screens.login.login": "Login",
 
@@ -9,9 +8,7 @@
   "screens.title.server": "Server",
   "screens.title.program": "iZeMod Programs",
   "screens.title.options": "iZeMod Options",
-  "screens.title.profile": "iZeMod Profile",
   "screens.title.mods": "Fabric Mods",
-  "screens.title.changelog": "iZeMod Changelog",
   "screens.title.minecraft": ".minecraft folder",
 
   "screens.profile": "Profile",
@@ -19,6 +16,7 @@
   "screens.profile.email": "Change email",
   "screens.profile.transfer": "Transfer account",
   "screens.profile.delete": "Delete account",
-  "screens.profile.back": "Back to main menu"
+  "screens.profile.back": "Back to main menu",
 
+  "update.text": "A new version of iZeMod is available. Click to update."
 }

@@ -21,6 +21,7 @@ package net.izestudios.izemod.component.screen;
 import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.Constants;
 import net.izestudios.izemod.util.RenderUtil;
+import net.izestudios.izemod.util.UpdateUtil;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -29,6 +30,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.widget.PressableTextWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,6 +42,12 @@ public abstract class AbstractInitialScreen extends Screen {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        setupUpdateNotification();
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
@@ -48,12 +56,32 @@ public abstract class AbstractInitialScreen extends Screen {
         RenderUtil.drawLogo(context, logoX, logoY, -1);
     }
 
-    private void openWebUrl() {
+    private void openWebUrl(final String url) {
         try {
-            Util.getOperatingSystem().open(new URI("https://izeplayz.de/izemod"));
+            Util.getOperatingSystem().open(new URI(url));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void setupUpdateNotification() {
+        final String version = UpdateUtil.getLatestVersion();
+        if (version == null || IzeModImpl.ALPHA_VERSION_TAG.equals(version)) {
+            return;
+        }
+
+        final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+
+        final int logoY = this.height / 20;
+        final Text updateText = Text.translatable("update.text").styled(style -> style.withColor(Formatting.GOLD));
+        this.addDrawableChild(new PressableTextWidget(
+            this.width / 2 - textRenderer.getWidth(updateText) / 2,
+            logoY * 5 + 10,
+            200,
+            10,
+            updateText,
+            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
+        ));
     }
 
     protected void setupCopyrightTexts() {
@@ -64,8 +92,8 @@ public abstract class AbstractInitialScreen extends Screen {
             this.height - 20,
             200,
             10,
-            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION + ")"),
-            button -> this.openWebUrl(), this.textRenderer
+            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (Alpha v" + IzeModImpl.ALPHA_VERSION + ")"),
+            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
         ));
 
         this.addDrawableChild(new PressableTextWidget(
@@ -74,7 +102,7 @@ public abstract class AbstractInitialScreen extends Screen {
             200,
             10,
             Text.of("by iZePlayz & EnZaXD"),
-            button -> this.openWebUrl(), this.textRenderer
+            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
         ));
 
         final String minecraftText = "Minecraft " + SharedConstants.getGameVersion().getName();

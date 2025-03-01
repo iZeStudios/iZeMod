@@ -24,29 +24,28 @@ public final class ColorTheme {
 
     public static final int DARK_BLUE = new Color(0, 75, 100).getRGB();
 
-    private static final int COLOR_UPPER_LIMIT = 200;
-    private static final int COLOR_LOWER_LIMIT = 100;
-    private static final long UPDATE_INTERVAL_MS = 30L;
-
-    private static int rgba = 150;
-    private static long lastUpdate = System.currentTimeMillis();
+    private static int blue = 150;
     private static boolean isReversing = false;
+    private static long lastUpdate = System.currentTimeMillis();
 
     public static int getBlue() {
-        return rgba;
+        return blue;
     }
 
     public static void tick() {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdate > UPDATE_INTERVAL_MS) {
-            lastUpdate = currentTime;
-
-            if (rgba >= COLOR_UPPER_LIMIT) {
+        if (System.currentTimeMillis() - lastUpdate > 30) {
+            int currentColor = blue;
+            if (currentColor > 200) {
                 isReversing = true;
-            } else if (rgba <= COLOR_LOWER_LIMIT) {
+            } else if (currentColor < 100) {
                 isReversing = false;
             }
-            rgba += isReversing ? -1 : 1;
+            if (isReversing) {
+                blue = currentColor - 1;
+            } else {
+                blue = currentColor + 1;
+            }
+            lastUpdate = System.currentTimeMillis();
         }
     }
 

@@ -61,18 +61,16 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         final String modsText = I18n.translate("screens.title.mods");
         final String changelogText = I18n.translate("screens.title.changelog");
         final String minecraftText = I18n.translate("screens.title.minecraft");
-        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
-        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
+        addMainMenuButton(leftX, baseY, -4, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
         addMainMenuButton(leftX, baseY, -3, TEXT_OPTIONS, null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
         addMainMenuButton(leftX, baseY, -2, TEXT_ONLINE, null, () -> this.client.setScreen(new RealmsMainScreen(this)));
         addMainMenuButton(leftX, baseY, -1, OPTIONS_LANGUAGE, null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
         addMainMenuButton(leftX, baseY, 0, TEXT_QUIT, null, client::scheduleStop);
 
-        addMainMenuButton(rightX, baseY, -5, programText, null, () -> {});
-        addMainMenuButton(rightX, baseY, -4, optionsText, null, () -> {});
-        addMainMenuButton(rightX, baseY, -3, profileText, null, () -> this.client.setScreen(ProfileScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> {});
-        addMainMenuButton(rightX, baseY, -1, changelogText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
+        addMainMenuButton(rightX, baseY, -3, programText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -2, optionsText, null, () -> {});
+        addMainMenuButton(rightX, baseY, -1, modsText, null, () -> {});
         addMainMenuButton(rightX, baseY, 0, minecraftText, null, () -> {});
     }
 

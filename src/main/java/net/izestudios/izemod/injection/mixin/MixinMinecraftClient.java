@@ -20,6 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.IzeModImpl;
+import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.util.Assets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -42,7 +43,7 @@ public abstract class MixinMinecraftClient {
     public Session session;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
-    public void initialize(RunArgs args, CallbackInfo ci) {
+    private void initialize(RunArgs args, CallbackInfo ci) {
         SplashOverlay.LOGO = Assets.LOADING_LOGO;
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             session = new Session(
@@ -56,9 +57,14 @@ public abstract class MixinMinecraftClient {
         }
     }
 
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void tickColorTheme(CallbackInfo ci) {
+        ColorTheme.tick();
+    }
+
     @Inject(method = "getWindowTitle", at = @At(value = "HEAD"), cancellable = true)
-    public void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
-         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION + ")");
+    private void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
+         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (Alpha v" + IzeModImpl.ALPHA_VERSION + ")");
     }
 
 }

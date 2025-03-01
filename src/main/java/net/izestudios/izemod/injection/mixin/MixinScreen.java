@@ -18,8 +18,7 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.IzeModImpl;
-import net.izestudios.izemod.component.theme.ColorTheme;
+import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,11 +38,8 @@ public abstract class MixinScreen {
 
     @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
     private void changeBackground(DrawContext context, float delta, CallbackInfo ci) {
-        ColorTheme.tick();
-        context.fill(0, 0, this.width, this.height, IzeModImpl.INSTANCE.getThemeColor().getRGB());
-        context.fillGradient(0, 0, this.width, this.height, -2130706433, 16777215);
-        context.fillGradient(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
         ci.cancel();
+        RenderUtil.drawBlueFade(context, 0, 0, this.width, this.height);
     }
 
 }

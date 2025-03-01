@@ -18,6 +18,7 @@
 
 package net.izestudios.izemod.util;
 
+import net.izestudios.izemod.IzeModImpl;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -37,6 +38,12 @@ public final class RenderUtil {
         final int logoSizeX = 2279 / 6;
         final int logoSizeY = 278 / 6;
         context.drawTexture(RenderLayer::getGuiTexturedOverlay, Assets.LOGO, x, y, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, color);
+    }
+
+    public static void drawBlueFade(final DrawContext context, final int x, final int y, final int width, final int height) {
+        context.fill(x, y, width, height, IzeModImpl.INSTANCE.getThemeColor().getRGB());
+        context.fillGradient(x, y, width, height, -2130706433, 16777215);
+        context.fillGradient(x, y, width, height, 0, Integer.MIN_VALUE);
     }
 
 }
