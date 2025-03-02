@@ -1,14 +1,11 @@
 /*
- * This file is part of iZeMod - https://github.com/iZeMods/iZeMod
- * Copyright (C) 2014-2025 the original authors
- *                         - FlorianMichael/EnZaXD <florian.michael07@gmail.com>
- *                         - iZePlayzYT
- * Copyright (C) 2025 GitHub contributors
+ * This file is part of iZeMod - https://github.com/iZeStudios/iZeMod
+ * Copyright (C) 2025 iZeStudios and GitHub contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -52,8 +49,8 @@ public final class DebugScreen extends AbstractInitialScreen {
             button.active = false;
         }).dimensions(this.width / 2 - 202, baseY + (25 * -1), 200, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.tetris"), button -> {
+            client.setScreen(TetrisScreen.INSTANCE);
         }).dimensions(this.width / 2 + 2, baseY + (25 * -4), 200, 20).build());
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
             button.active = false;
@@ -65,7 +62,7 @@ public final class DebugScreen extends AbstractInitialScreen {
             button.active = false;
         }).dimensions(this.width / 2 + 2, baseY + (25 * -1), 200, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.profile.back"), button -> {
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.back"), button -> {
             this.client.setScreen(MainMenuScreen.INSTANCE);
         }).dimensions(this.width / 2 - 100, baseY + 10, 200, 20).build());
 

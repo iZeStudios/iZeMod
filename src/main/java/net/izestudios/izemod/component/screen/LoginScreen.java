@@ -5,7 +5,7 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +30,9 @@ public final class LoginScreen extends AbstractInitialScreen {
     public static final LoginScreen INSTANCE = new LoginScreen();
     public static boolean loggedIn = false;
 
+    private TextFieldWidget nameField;
+    private TextFieldWidget passwordField;
+
     private LoginScreen() {
         super(Text.translatable("screen.login"));
     }
@@ -37,27 +40,62 @@ public final class LoginScreen extends AbstractInitialScreen {
     @Override
     protected void init() {
         super.init();
-        setupCopyrightTexts();
+
+        this.setupCopyrightTexts();
 
         final int textFieldY = (int) (this.height / 2.5);
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable("screens.login.login"), button -> {
-            loggedIn = true;
-            client.setScreen(new TitleScreen());
-        }).position(this.width / 2 - 102, textFieldY + 60).size(101, 20).build());
+        addDrawableChild(
+            ButtonWidget
+                .builder(Text.translatable("screens.login.login"), button -> {
+                    loggedIn = true;
+                    if ("tetris".equals(passwordField.getText())) {
+                        client.setScreen(TetrisScreen.INSTANCE);
+                    } else {
+                        client.setScreen(new TitleScreen());
+                    }
+                })
+                .position(this.width / 2 - 102, textFieldY + 60)
+                .size(101, 20)
+                .build()
+        );
 
-        addDrawableChild(ButtonWidget.builder(Text.translatable(Constants.TEXT_QUIT), button -> {
-            client.stop();
-        }).position(this.width / 2 + 2, textFieldY + 60).size(101, 20).build());
+        addDrawableChild(
+            ButtonWidget
+                .builder(Text.translatable(Constants.TEXT_QUIT), button -> {
+                    client.stop();
+                })
+                .position(this.width / 2 + 2, textFieldY + 60)
+                .size(101, 20)
+                .build()
+        );
 
-        final TextFieldWidget nameField = addDrawableChild(new TextFieldWidget(
-                client.textRenderer, this.width / 2 - 101, textFieldY, 202, 20, Text.empty()));
-        final TextFieldWidget passwordField = addDrawableChild(new TextFieldWidget(
-                client.textRenderer, this.width / 2 - 101, textFieldY + 30, 202, 20, Text.empty()));
-
-        passwordField.setRenderTextProvider((s, integer) -> Text.of("*".repeat(s.length())).asOrderedText());
+        nameField = addDrawableChild(new TextFieldWidget(
+            client.textRenderer,
+            this.width / 2 - 101,
+            textFieldY,
+            202,
+            20,
+            Text.empty()
+        ));
         nameField.setText("iZePlayz");
+
+        passwordField = addDrawableChild(new TextFieldWidget(
+            client.textRenderer,
+            this.width / 2 - 101,
+            textFieldY + 30,
+            202,
+            20,
+            Text.empty()
+        ));
+        passwordField.setRenderTextProvider(
+            (text, index) -> Text.of("*".repeat(text.length())).asOrderedText()
+        );
         passwordField.setText("123456");
     }
-}
 
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+    }
+}

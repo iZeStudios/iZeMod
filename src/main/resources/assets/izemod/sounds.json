@@ -1,0 +1,10 @@
+{
+  "tetris": {
+    "sounds": [
+      {
+        "name": "izemod:tetris",
+        "stream": true
+      }
+    ]
+  }
+}
