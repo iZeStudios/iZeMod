@@ -28,7 +28,7 @@ import java.awt.*;
 public final class IzeModImpl implements IzeModAPIBase {
 
     // To be removed once we leave alpha
-    public static final String ALPHA_VERSION = "0.3.0";
+    public static final String ALPHA_VERSION = "0.3.1";
     public static final String ALPHA_VERSION_TAG = "v" + ALPHA_VERSION + "-alpha";
     public static final String ALPHA_VERSION_NAME = "Alpha v" + ALPHA_VERSION;
 

@@ -702,7 +702,7 @@ public class TetrisScreen extends Screen {
 
     private class TetrisMusicInstance extends AbstractSoundInstance {
         public TetrisMusicInstance() {
-            super(TETRIS_ID, SoundCategory.MUSIC, Random.create());
+            super(TETRIS_ID, SoundCategory.MASTER, Random.create());
             this.repeat = true;
             this.repeatDelay = 0;
             this.volume = 1.0F;
