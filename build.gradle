@@ -91,8 +91,8 @@ configurations {
 }
 
 dependencies {
-    modImplementation("com.viaversion:viafabricplus-api:4.0.2")
-    include modRuntimeOnly("com.viaversion:viafabricplus:4.0.2")
+    modImplementation("com.viaversion:viafabricplus-api:4.0.3")
+    include modRuntimeOnly("com.viaversion:viafabricplus:4.0.3")
 
     // Sub projects, since they are Fabric mods as well (mainly to access the game code) we have to first
     // implement the namedElements (raw output) to compile against, then include the mappedElements into the output jar
