@@ -23,10 +23,12 @@
 
   "screens.tetris.title": "Tetris",
   "screens.tetris.paused": "PAUSE!",
-  "screens.tetris.gameOver": "GAME OVER! Drücke LEERTASTE zum Neustart!",
+  "screens.tetris.gameOver1": "GAME OVER!",
+  "screens.tetris.gameOver2": "(Drücke LEERTASTE)",
   "screens.tetris.score": "Punkte",
   "screens.tetris.highScore": "Highscore",
   "screens.tetris.level": "Level",
+  "screens.tetris.lines": "Zeilen",
   "screens.tetris.time": "Zeit",
   "screens.tetris.next": "Nächstes",
   "screens.tetris.controls.a": "A",

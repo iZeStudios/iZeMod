@@ -6,5 +6,21 @@
         "stream": true
       }
     ]
+  },
+  "tetris1": {
+    "sounds": [
+      {
+        "name": "izemod:tetris1",
+        "stream": true
+      }
+    ]
+  },
+  "tetris2": {
+    "sounds": [
+      {
+        "name": "izemod:tetris2",
+        "stream": true
+      }
+    ]
   }
 }

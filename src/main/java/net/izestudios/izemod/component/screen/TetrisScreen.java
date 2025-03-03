@@ -21,6 +21,7 @@ package net.izestudios.izemod.component.screen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.sound.AbstractSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.registry.Registry;
@@ -28,7 +29,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.sound.MusicSound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
@@ -42,11 +42,15 @@ import java.util.Optional;
 import java.util.Queue;
 
 public class TetrisScreen extends Screen {
-    private static final SoundEvent TETRIS_ID = new SoundEvent(Identifier.of("izemod:tetris"), Optional.empty());
+    private static final SoundEvent TETRIS_NORMAL = new SoundEvent(Identifier.of("izemod:tetris1"), Optional.empty());
+    private static final SoundEvent TETRIS_FAST = new SoundEvent(Identifier.of("izemod:tetris2"), Optional.empty());
+
     static {
         try {
-            Registry.register(Registries.SOUND_EVENT, Identifier.of("izemod", "tetris"), TETRIS_ID);
-        } catch (Exception ignored) {}
+            Registry.register(Registries.SOUND_EVENT, Identifier.of("izemod", "tetris1"), TETRIS_NORMAL);
+            Registry.register(Registries.SOUND_EVENT, Identifier.of("izemod", "tetris2"), TETRIS_FAST);
+        } catch (Exception ignored) {
+        }
     }
 
     public static final TetrisScreen INSTANCE = new TetrisScreen();
@@ -120,8 +124,8 @@ public class TetrisScreen extends Screen {
         String[] lines = {
             Text.translatable("screens.tetris.controls.a").getString() + " = " + Text.translatable("screens.tetris.controls.left").getString(),
             Text.translatable("screens.tetris.controls.d").getString() + " = " + Text.translatable("screens.tetris.controls.right").getString(),
-            Text.translatable("screens.tetris.controls.s").getString() + " = " + Text.translatable("screens.tetris.controls.down").getString(),
-            Text.translatable("screens.tetris.controls.w").getString() + " = " + Text.translatable("screens.tetris.controls.drop").getString(),
+            Text.translatable("screens.tetris.controls.w").getString() + " = " + Text.translatable("screens.tetris.controls.down").getString(),
+            Text.translatable("screens.tetris.controls.s").getString() + " = " + Text.translatable("screens.tetris.controls.drop").getString(),
             Text.translatable("screens.tetris.controls.space").getString() + " = " + Text.translatable("screens.tetris.controls.rotate").getString(),
             Text.translatable("screens.tetris.controls.shift").getString() + " = " + Text.translatable("screens.tetris.controls.rotate").getString(),
             Text.translatable("screens.tetris.controls.p").getString() + " = " + Text.translatable("screens.tetris.controls.pause").getString(),
@@ -142,7 +146,8 @@ public class TetrisScreen extends Screen {
         private final int[][] board = new int[bw][bh];
         private TetrominoWrapper cur, nxt;
         private int cx, cy;
-        private boolean paused = false, gameOver = false;
+        private boolean paused = false;
+        private boolean gameOver = false;
         private long lastUpdate = System.currentTimeMillis();
         private long updateInt = 500;
         private int score = 0;
@@ -158,6 +163,9 @@ public class TetrisScreen extends Screen {
         private long roundTimeMs = 0;
         private long lastTickTime = System.currentTimeMillis();
 
+        private int clearAnimationTicks = 0;
+        private List<Integer> linesToClear = new ArrayList<>();
+
         public TetrisGame() {
             loadHighScore();
             clearBoard();
@@ -169,7 +177,7 @@ public class TetrisScreen extends Screen {
         private void loadHighScore() {
             if (loadedHS) return;
             loadedHS = true;
-            HS_FILE = new File(MinecraftClient.getInstance().runDirectory, "tetris_highscore.txt");
+            HS_FILE = new File(MinecraftClient.getInstance().runDirectory, "tetrisHighscore.txt");
             if (!HS_FILE.exists()) {
                 highScore = 0;
                 return;
@@ -191,13 +199,18 @@ public class TetrisScreen extends Screen {
             if (HS_FILE == null) return;
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(HS_FILE))) {
                 bw.write(String.valueOf(highScore));
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         private void startMusic() {
             if (playing) return;
             if (client != null && client.getSoundManager() != null) {
-                music = new TetrisMusicInstance();
+                if (level >= 5) {
+                    music = new TetrisMusicInstance(TETRIS_FAST);
+                } else {
+                    music = new TetrisMusicInstance(TETRIS_NORMAL);
+                }
                 client.getSoundManager().play(music);
                 playing = true;
             }
@@ -205,7 +218,9 @@ public class TetrisScreen extends Screen {
 
         private void stopMusic() {
             if (playing && music != null) {
-                client.getSoundManager().stop(music);
+                if (client != null) {
+                    client.getSoundManager().stop(music);
+                }
                 music = null;
                 playing = false;
             }
@@ -245,6 +260,17 @@ public class TetrisScreen extends Screen {
             long dt = now - lastTickTime;
             lastTickTime = now;
             roundTimeMs += dt;
+
+            if (clearAnimationTicks > 0) {
+                clearAnimationTicks -= (int) dt;
+                if (clearAnimationTicks <= 0) {
+                    removeLines();
+                    applyPartialGravity();
+                    recheckAll();
+                }
+                return;
+            }
+
             if (now - lastUpdate >= updateInt) {
                 if (canMove(cur, cx, cy + 1)) {
                     cy++;
@@ -256,6 +282,14 @@ public class TetrisScreen extends Screen {
             }
         }
 
+        private void recheckAll() {
+            List<Integer> newLines = findFullLines();
+            if (!newLines.isEmpty()) {
+                linesToClear = newLines;
+                clearAnimationTicks = 500;
+            }
+        }
+
         private void lockPiece() {
             for (int[] p : cur.cells()) {
                 int x = cx + p[0];
@@ -264,17 +298,15 @@ public class TetrisScreen extends Screen {
                     board[x][y] = cur.color();
                 }
             }
-            int linesCleared = checkLines();
-            if (linesCleared > 0) {
-                linesClearedTotal += linesCleared;
-                addScoreNES(linesCleared);
-                updateLevel();
-                checkHighScore();
+            List<Integer> newLines = findFullLines();
+            if (!newLines.isEmpty()) {
+                linesToClear = newLines;
+                clearAnimationTicks = 500;
             }
         }
 
-        private int checkLines() {
-            int lines = 0;
+        private List<Integer> findFullLines() {
+            List<Integer> lines = new ArrayList<>();
             for (int row = 0; row < bh; row++) {
                 boolean full = true;
                 for (int col = 0; col < bw; col++) {
@@ -284,19 +316,31 @@ public class TetrisScreen extends Screen {
                     }
                 }
                 if (full) {
-                    lines++;
-                    for (int sr = row; sr > 0; sr--) {
-                        for (int col = 0; col < bw; col++) {
-                            board[col][sr] = board[col][sr - 1];
-                        }
-                    }
-                    for (int col = 0; col < bw; col++) {
-                        board[col][0] = 0;
-                    }
+                    lines.add(row);
                 }
             }
-            applyPartialGravity();
             return lines;
+        }
+
+        private void removeLines() {
+            if (linesToClear.isEmpty()) return;
+            int lines = linesToClear.size();
+            linesClearedTotal += lines;
+            addScoreNES(lines);
+            updateLevel();
+            checkHighScore();
+
+            for (int row : linesToClear) {
+                for (int sr = row; sr > 0; sr--) {
+                    for (int col = 0; col < bw; col++) {
+                        board[col][sr] = board[col][sr - 1];
+                    }
+                }
+                for (int col = 0; col < bw; col++) {
+                    board[col][0] = 0;
+                }
+            }
+            linesToClear.clear();
         }
 
         private void applyPartialGravity() {
@@ -307,7 +351,6 @@ public class TetrisScreen extends Screen {
                     bfsSupport(x, y, visited);
                 }
             }
-
             for (int y = bh - 1; y >= 0; y--) {
                 for (int x = 0; x < bw; x++) {
                     if (board[x][y] != 0 && !visited[x][y]) {
@@ -326,7 +369,7 @@ public class TetrisScreen extends Screen {
                 int[] cur = queue.poll();
                 int cx = cur[0];
                 int cy = cur[1];
-                for (int[] dir : new int[][]{{1,0},{-1,0},{0,1},{0,-1}}) {
+                for (int[] dir : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
                     int nx = cx + dir[0];
                     int ny = cy + dir[1];
                     if (nx >= 0 && nx < bw && ny >= 0 && ny < bh) {
@@ -349,7 +392,7 @@ public class TetrisScreen extends Screen {
                 cluster.add(cur);
                 int cx = cur[0];
                 int cy = cur[1];
-                for (int[] dir : new int[][]{{1,0},{-1,0},{0,1},{0,-1}}) {
+                for (int[] dir : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
                     int nx = cx + dir[0];
                     int ny = cy + dir[1];
                     if (nx >= 0 && nx < bw && ny >= 0 && ny < bh) {
@@ -390,13 +433,13 @@ public class TetrisScreen extends Screen {
         }
 
         private void addScoreNES(int lines) {
-            int points = 0;
-            switch (lines) {
-                case 1 -> points = 40 * level;
-                case 2 -> points = 100 * level;
-                case 3 -> points = 300 * level;
-                case 4 -> points = 1200 * level;
-            }
+            int points = switch (lines) {
+                case 1 -> 40 * level;
+                case 2 -> 100 * level;
+                case 3 -> 300 * level;
+                case 4 -> 1200 * level;
+                default -> 0;
+            };
             score += points;
         }
 
@@ -405,11 +448,17 @@ public class TetrisScreen extends Screen {
             if (newLevel > level) {
                 level = newLevel;
                 adjustSpeed();
+                if (!paused && !gameOver) {
+                    if (newLevel == 5) {
+                        stopMusic();
+                        startMusic();
+                    }
+                }
             }
         }
 
         private void adjustSpeed() {
-            updateInt = 500 - (level - 1) * 40;
+            updateInt = 500 - (level - 1) * 16L;
             if (updateInt < 100) {
                 updateInt = 100;
             }
@@ -445,12 +494,33 @@ public class TetrisScreen extends Screen {
             int bph = bh * cs;
             int sx = (width - bpw) / 2;
             int sy = (height - bph) / 2;
-            c.fill(sx - 2, sy - 2, sx + bpw + 2, sy + bph + 2, 0xFF000000);
+
+            c.fill(sx, sy, sx + bpw, sy + bph, 0xFF000000);
+
+            if (!linesToClear.isEmpty()) {
+                float fade = clearAnimationTicks / 500f;
+                for (int y : linesToClear) {
+                    for (int x = 0; x < bw; x++) {
+                        int color = board[x][y];
+                        if (color != 0) {
+                            int origAlpha = (color >> 24) & 0xFF;
+                            int newAlpha = (int) (origAlpha * fade);
+                            int newColor = (newAlpha << 24) | (color & 0x00FFFFFF);
+                            int px = sx + x * cs;
+                            int py = sy + y * cs;
+                            c.fill(px, py, px + cs, py + cs, newColor);
+                        }
+                    }
+                }
+            }
 
             for (int x = 0; x < bw; x++) {
                 for (int y = 0; y < bh; y++) {
                     int color = board[x][y];
                     if (color != 0) {
+                        if (linesToClear.contains(y)) {
+                            continue;
+                        }
                         int px = sx + x * cs;
                         int py = sy + y * cs;
                         c.fill(px, py, px + cs, py + cs, color);
@@ -477,26 +547,82 @@ public class TetrisScreen extends Screen {
                 c.fill(sx, py, sx + bpw, py + 1, 0xFF444444);
             }
 
-            int ix = sx + bpw + 10;
-            int iy = sy + 10;
+            c.fill(sx + bpw, sy + bph, sx + bpw + 1, sy + bph + 1, 0xFF444444);
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.score"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 2;
-            c.drawTextWithShadow(textRenderer, String.valueOf(score), ix, iy, 0xFF00FF00);
-            iy += textRenderer.fontHeight + 10;
+            int ix = sx + bpw + 10;
+            int iy = sy + 4;
 
             c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.highScore"), ix, iy, 0xFFFFFFFF);
+            iy += textRenderer.fontHeight + 1;
+            c.drawTextWithShadow(textRenderer, String.valueOf(highScore), ix, iy, 0xFFFFFF00);
+            iy += textRenderer.fontHeight + 8;
+
+            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.next"), ix, iy, 0xFFFFFFFF);
             iy += textRenderer.fontHeight + 2;
-            c.drawTextWithShadow(textRenderer, String.valueOf(highScore), ix, iy, 0xFF00FF00);
-            iy += textRenderer.fontHeight + 10;
+
+            int pcs = cs;
+            int boxWidth = pcs * 5;
+            int boxHeight = pcs * 4;
+            int boxY = iy;
+
+            c.fill(ix, boxY, ix + boxWidth, boxY + boxHeight, 0xC0000000);
+
+            if (nxt != null) {
+                int[][] shape = nxt.cells();
+                int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
+                int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+                for (int[] p : shape) {
+                    if (p[0] < minX) minX = p[0];
+                    if (p[0] > maxX) maxX = p[0];
+                    if (p[1] < minY) minY = p[1];
+                    if (p[1] > maxY) maxY = p[1];
+                }
+                int shapeWidthInCells = (maxX - minX + 1);
+                int shapeHeightInCells = (maxY - minY + 1);
+                int shapeWidth = shapeWidthInCells * pcs;
+                int shapeHeight = shapeHeightInCells * pcs;
+                int centerX = ix + boxWidth / 2;
+                int centerY = boxY + boxHeight / 2;
+                int shapeLeft = centerX - shapeWidth / 2;
+                int shapeTop  = centerY - shapeHeight / 2;
+                for (int[] p : shape) {
+                    int xx = p[0] - minX;
+                    int yy = p[1] - minY;
+                    int px = shapeLeft + xx * pcs;
+                    int py = shapeTop  + yy * pcs;
+                    c.fill(px, py, px + pcs, py + pcs, nxt.color());
+                }
+
+                int outlineColor = 0x00000000;
+                for (int gx = 0; gx <= shapeWidthInCells; gx++) {
+                    int lineX = shapeLeft + gx * pcs;
+                    c.fill(lineX, shapeTop, lineX + 1, shapeTop + shapeHeight, outlineColor);
+                }
+                for (int gy = 0; gy <= shapeHeightInCells; gy++) {
+                    int lineY = shapeTop + gy * pcs;
+                    c.fill(shapeLeft, lineY, shapeLeft + shapeWidth, lineY + 1, outlineColor);
+                }
+            }
+
+            iy += boxHeight + 10;
 
             c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.level"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 2;
-            c.drawTextWithShadow(textRenderer, String.valueOf(level), ix, iy, 0xFF00FF00);
+            iy += textRenderer.fontHeight + 1;
+            c.drawTextWithShadow(textRenderer, String.valueOf(level), ix, iy, 0xFFFF0000);
+            iy += textRenderer.fontHeight + 10;
+
+            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.score"), ix, iy, 0xFFFFFFFF);
+            iy += textRenderer.fontHeight + 1;
+            c.drawTextWithShadow(textRenderer, String.valueOf(score), ix, iy, 0xFFFF8000);
+            iy += textRenderer.fontHeight + 10;
+
+            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.lines"), ix, iy, 0xFFFFFFFF);
+            iy += textRenderer.fontHeight + 1;
+            c.drawTextWithShadow(textRenderer, String.valueOf(linesClearedTotal), ix, iy, 0xFFFF00FF);
             iy += textRenderer.fontHeight + 10;
 
             c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.time"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 2;
+            iy += textRenderer.fontHeight + 1;
             long totalMs = roundTimeMs;
             long h = totalMs / 3600000;
             long r = totalMs % 3600000;
@@ -504,47 +630,25 @@ public class TetrisScreen extends Screen {
             r = r % 60000;
             long s = r / 1000;
             long ms = r % 1000;
-            String timeStr;
-            if (h > 0) {
-                timeStr = String.format("%02d:%02d:%02d.%03d", h, m, s, ms);
-            } else {
-                timeStr = String.format("%02d:%02d.%03d", m, s, ms);
-            }
+            String timeStr = (h > 0)
+                ? String.format("%02d:%02d:%02d.%03d", h, m, s, ms)
+                : String.format("%02d:%02d.%03d", m, s, ms);
             c.drawTextWithShadow(textRenderer, timeStr, ix, iy, 0xFF00FF00);
-            iy += textRenderer.fontHeight + 10;
-
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.next"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 6;
-            int pcs = (int)(cs * 0.75);
-            if (pcs < 1) pcs = 1;
-            int psx = ix;
-            int psy = iy;
-
-            if (nxt != null) {
-                int[][] shape = nxt.cells();
-                int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
-                int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
-                for (int[] p : shape) {
-                    if (p[0] < minX) minX = p[0];
-                    if (p[0] > maxX) maxX = p[0];
-                    if (p[1] < minY) minY = p[1];
-                    if (p[1] > maxY) maxY = p[1];
-                }
-                int offsetX = -minX;
-                int offsetY = -minY;
-                for (int[] p : shape) {
-                    int xx = p[0] + offsetX;
-                    int yy = p[1] + offsetY;
-                    int px = psx + xx * pcs;
-                    int py = psy + yy * pcs;
-                    c.fill(px, py, px + pcs, py + pcs, nxt.color());
-                }
-            }
 
             if (paused) {
-                drawCenteredShadow(c, Text.translatable("screens.tetris.paused"), 0xFFFFFF00);
+                c.fill(sx, sy, sx + bpw, sy + bph, 0xA0000000);
+                drawCenteredShadow(c, Text.translatable("screens.tetris.paused"), 0xFFFFFFFF);
             } else if (gameOver) {
-                drawCenteredShadow(c, Text.translatable("screens.tetris.gameOver"), 0xFFFF0000);
+                c.fill(sx, sy, sx + bpw, sy + bph, 0xA0000000);
+                String line1 = I18n.translate("screens.tetris.gameOver1");
+                String line2 = I18n.translate("screens.tetris.gameOver2");
+                int w1 = textRenderer.getWidth(line1);
+                int w2 = textRenderer.getWidth(line2);
+                int x1 = (width - w1) / 2;
+                int x2 = (width - w2) / 2;
+                int yMid = height / 2;
+                c.drawTextWithShadow(textRenderer, line1, x1, yMid - 10, 0xFF00FFFF);
+                c.drawTextWithShadow(textRenderer, line2, x2, yMid + 10, 0xFF0000FF);
             }
         }
 
@@ -580,23 +684,25 @@ public class TetrisScreen extends Screen {
                         h = true;
                     }
                 }
-                case 83 -> {
+                case 87 -> {
                     if (canMove(cur, cx, cy + 1)) {
                         cy++;
                         h = true;
                     }
                 }
-                case 87 -> {
+                case 83 -> {
                     while (canMove(cur, cx, cy + 1)) {
                         cy++;
                     }
                     h = true;
                 }
                 case 32, 340, 344 -> {
-                    TetrominoWrapper r = cur.rotate();
-                    if (canMove(r, cx, cy)) {
-                        cur = r;
-                        h = true;
+                    if (!isOShape(cur)) {
+                        TetrominoWrapper r = cur.rotate();
+                        if (canMove(r, cx, cy)) {
+                            cur = r;
+                            h = true;
+                        }
                     }
                 }
                 case 80 -> {
@@ -609,6 +715,21 @@ public class TetrisScreen extends Screen {
                 playClickSound();
             }
             return h;
+        }
+
+        private boolean isOShape(TetrominoWrapper piece) {
+            int[][] c = piece.cells();
+            int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
+            int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+            for (int[] p : c) {
+                if (p[0] < minX) minX = p[0];
+                if (p[0] > maxX) maxX = p[0];
+                if (p[1] < minY) minY = p[1];
+                if (p[1] > maxY) maxY = p[1];
+            }
+            int width = (maxX - minX) + 1;
+            int height = (maxY - minY) + 1;
+            return (width == 2 && height == 2 && c.length == 4);
         }
 
         private void restartGame() {
@@ -635,29 +756,27 @@ public class TetrisScreen extends Screen {
         }
 
         private void playClickSound() {
-            if (MinecraftClient.getInstance().player != null) {
-                MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
-            }
+            // ClickableWidget.playClickSound(MinecraftClient.getInstance().getSoundManager());
         }
 
         private TetrominoData randomData() {
             int[][] shape;
             switch (Tetromino.randomT()) {
-                case I -> shape = new int[][]{{-1,0},{0,0},{1,0},{2,0}};
-                case O -> shape = new int[][]{{0,0},{1,0},{0,1},{1,1}};
-                case T -> shape = new int[][]{{-1,0},{0,0},{1,0},{0,1}};
-                case S -> shape = new int[][]{{0,0},{1,0},{-1,1},{0,1}};
-                case Z -> shape = new int[][]{{-1,0},{0,0},{0,1},{1,1}};
-                case J -> shape = new int[][]{{-1,0},{0,0},{1,0},{1,1}};
-                case L -> shape = new int[][]{{-1,0},{0,0},{1,0},{-1,1}};
-                default -> shape = new int[][]{{-1,0},{0,0},{1,0},{2,0}};
+                case I -> shape = new int[][]{{-1, 0}, {0, 0}, {1, 0}, {2, 0}};
+                case O -> shape = new int[][]{{0, 0}, {1, 0}, {0, 1}, {1, 1}};
+                case T -> shape = new int[][]{{-1, 0}, {0, 0}, {1, 0}, {0, 1}};
+                case S -> shape = new int[][]{{0, 0}, {1, 0}, {-1, 1}, {0, 1}};
+                case Z -> shape = new int[][]{{-1, 0}, {0, 0}, {0, 1}, {1, 1}};
+                case J -> shape = new int[][]{{-1, 0}, {0, 0}, {1, 0}, {1, 1}};
+                case L -> shape = new int[][]{{-1, 0}, {0, 0}, {1, 0}, {-1, 1}};
+                default -> shape = new int[][]{{-1, 0}, {0, 0}, {1, 0}, {2, 0}};
             }
             int[] mainColors = {
                 0xFFFF0000, 0xFFFF7F00, 0xFFFFFF00, 0xFF7FFF00,
                 0xFF00FF00, 0xFF00FF7F, 0xFF00FFFF, 0xFF007FFF,
                 0xFF0000FF, 0xFF7F00FF, 0xFFFF00FF, 0xFFFF007F
             };
-            int color = mainColors[(int)(Math.random() * mainColors.length)];
+            int color = mainColors[(int) (Math.random() * mainColors.length)];
             return new TetrominoData(shape, color);
         }
     }
@@ -671,9 +790,10 @@ public class TetrisScreen extends Screen {
         Z,
         J,
         L;
+
         public static Tetromino randomT() {
-            Tetromino[] v = {I,O,T,S,Z,J,L};
-            return v[(int)(Math.random()*v.length)];
+            Tetromino[] v = {I, O, T, S, Z, J, L};
+            return v[(int) (Math.random() * v.length)];
         }
     }
 
@@ -692,17 +812,19 @@ public class TetrisScreen extends Screen {
         public int[][] cells() {
             return d.shape();
         }
+
         public int color() {
             return d.color();
         }
+
         public TetrominoWrapper rotate() {
             return new TetrominoWrapper(d.rotate());
         }
     }
 
-    private class TetrisMusicInstance extends AbstractSoundInstance {
-        public TetrisMusicInstance() {
-            super(TETRIS_ID, SoundCategory.MASTER, Random.create());
+    private static class TetrisMusicInstance extends AbstractSoundInstance {
+        public TetrisMusicInstance(SoundEvent event) {
+            super(event, SoundCategory.MASTER, Random.create());
             this.repeat = true;
             this.repeatDelay = 0;
             this.volume = 1.0F;

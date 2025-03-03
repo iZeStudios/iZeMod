@@ -24,10 +24,12 @@
 
   "screens.tetris.title": "Tetris",
   "screens.tetris.paused": "PAUSED!",
-  "screens.tetris.gameOver": "GAME OVER! Press SPACE to restart!",
+  "screens.tetris.gameOver1": "GAME OVER!",
+  "screens.tetris.gameOver2": "(Press SPACE)",
   "screens.tetris.score": "Score",
   "screens.tetris.highScore": "Highscore",
   "screens.tetris.level": "Level",
+  "screens.tetris.lines": "Lines",
   "screens.tetris.time": "Time",
   "screens.tetris.next": "Next",
   "screens.tetris.controls.a": "A",
