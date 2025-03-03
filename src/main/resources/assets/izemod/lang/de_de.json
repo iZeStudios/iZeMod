@@ -45,5 +45,7 @@
   "screens.tetris.controls.drop": "Sofortfall",
   "screens.tetris.controls.rotate": "Drehen",
   "screens.tetris.controls.pause": "Pause",
-  "screens.tetris.controls.back": "Zurück"
+  "screens.tetris.controls.back": "Zurück",
+
+  "screens.chat": "%s/%s Zeichen"
 }

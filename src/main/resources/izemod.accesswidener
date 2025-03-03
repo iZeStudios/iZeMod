@@ -2,5 +2,7 @@ accessWidener v1 named
 
 accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
 
+accessible method net/minecraft/client/gui/widget/TextFieldWidget getMaxLength ()I
+
 mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
 mutable field net/minecraft/client/gui/screen/SplashOverlay LOGO Lnet/minecraft/util/Identifier;

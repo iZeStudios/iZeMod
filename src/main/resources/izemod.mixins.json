@@ -4,6 +4,7 @@
   "package": "net.izestudios.izemod.injection.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "MixinChatScreen",
     "MixinGameRenderer",
     "MixinIcons",
     "MixinMain",
