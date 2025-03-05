@@ -48,5 +48,15 @@
   "screens.tetris.controls.pause": "Pause",
   "screens.tetris.controls.back": "Back",
 
-  "screens.chat": "%s/%s characters"
+  "screens.chat": "%s/%s characters",
+
+  "ingame.hud.fps": "§3FPS» %s",
+  "ingame.hud.x": "§3X» %s",
+  "ingame.hud.y": "§3Y» %s",
+  "ingame.hud.z": "§3Z» %s",
+  "ingame.hud.biome": "§3Biome» %s",
+  "ingame.hud.ping": "§3Ping» %sms",
+  "ingame.hud.players": "§3Players» %s/%s",
+  "ingame.hud.date": "§3Date» %s",
+  "ingame.hud.time": "§3Time» %s"
 }
