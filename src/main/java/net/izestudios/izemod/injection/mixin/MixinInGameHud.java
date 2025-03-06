@@ -58,8 +58,6 @@ public class MixinInGameHud {
 
         numformat.setMaximumFractionDigits(2);
 
-        // TODO englische übersetzung hinzufügen
-
         final MutableText fps = Text.translatable("ingame.hud.fps", client.getCurrentFps())
             .styled(style -> style.withColor(Formatting.AQUA));
         final MutableText coords_x = Text.translatable("ingame.hud.x", numformat.format(client.player.getX()))
