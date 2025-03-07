@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Objects;
 
 @Mixin(InGameHud.class)
 public class MixinInGameHud {
@@ -70,7 +71,7 @@ public class MixinInGameHud {
             .styled(style -> style.withColor(Formatting.AQUA));
         final MutableText ping = Text.translatable("ingame.hud.ping", client.getNetworkHandler().getPlayerListEntry(client.player.getUuid()) == null ? "?" : client.getNetworkHandler().getPlayerListEntry(client.player.getUuid()).getLatency())
             .styled(style -> style.withColor(Formatting.AQUA));
-        final MutableText players = Text.translatable("ingame.hud.players", client.getNetworkHandler().getPlayerList().size(), client.getCurrentServerEntry().players.max())
+        final MutableText players = Text.translatable("ingame.hud.players", client.getNetworkHandler().getPlayerList() == null ? 0 : client.getNetworkHandler().getPlayerList().size())
             .styled(style -> style.withColor(Formatting.AQUA));
         final MutableText date = Text.translatable("ingame.hud.date", dateformat.format(new Date()))
             .styled(style -> style.withColor(Formatting.AQUA));

@@ -55,7 +55,7 @@
   "ingame.hud.z": "§3Z» %s",
   "ingame.hud.biome": "§3Biom» %s",
   "ingame.hud.ping": "§3Ping» %sms",
-  "ingame.hud.players": "§3Spieler» %s/%s",
+  "ingame.hud.players": "§3Spieler» %s",
   "ingame.hud.date": "§3Datum» %s",
   "ingame.hud.time": "§3Uhrzeit» %s"
 }
