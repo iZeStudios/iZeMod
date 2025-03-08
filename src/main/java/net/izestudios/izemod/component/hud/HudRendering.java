@@ -25,13 +25,18 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.biome.Biome;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public final class HudRendering {
@@ -47,7 +52,19 @@ public final class HudRendering {
         register("x", () -> numberFormat.format(client.player.getX()));
         register("y", () -> numberFormat.format(client.player.getY()));
         register("z", () -> numberFormat.format(client.player.getZ()));
-        register("biome", () -> client.world.getBiome(client.player.getBlockPos()).getIdAsString());
+        register("biome", () -> {
+            final Optional<RegistryKey<Biome>> key = client.world.getBiome(client.player.getBlockPos()).getKey();
+            if (key.isPresent()) {
+                final Identifier identifier = key.get().getValue();
+                if (Objects.equals(identifier.getNamespace(), Identifier.DEFAULT_NAMESPACE)) {
+                    return identifier.getPath();
+                } else {
+                    return identifier.toString();
+                }
+            } else {
+                return null;
+            }
+        });
         register("ping", () -> {
             if (client.isInSingleplayer()) {
                 return null;
