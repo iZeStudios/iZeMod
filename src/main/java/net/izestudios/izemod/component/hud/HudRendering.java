@@ -24,7 +24,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -106,7 +105,7 @@ public final class HudRendering {
                 continue;
             }
 
-            final int keyWidth = context.drawTextWithShadow(textRenderer, I18n.translate(element.key()), x, y, Formatting.DARK_AQUA.getColorValue());
+            final int keyWidth = context.drawTextWithShadow(textRenderer, element.key(), x, y, Formatting.DARK_AQUA.getColorValue());
             final int arrowWidth = context.drawTextWithShadow(textRenderer, "»", x + keyWidth, y, Formatting.DARK_AQUA.getColorValue());
             context.drawTextWithShadow(textRenderer, value, x + arrowWidth, y, Formatting.AQUA.getColorValue());
             y += 10;
