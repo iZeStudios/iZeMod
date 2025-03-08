@@ -55,6 +55,8 @@ public abstract class MixinMinecraftClient {
                 Session.AccountType.MOJANG
             );
         }
+
+        IzeModImpl.INSTANCE.lateInitialize();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

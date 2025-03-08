@@ -16,21 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.api;
+package net.izestudios.izemod.util;
 
-import net.izestudios.izemod.api.hud.HudElement;
-import java.awt.*;
+import java.text.SimpleDateFormat;
 
-public interface IzeModAPIBase {
+public final class TimeFormatter {
 
-    String getVersion();
-
-    Color getThemeColor();
-
-    void addHudElement(final HudElement hudElement);
-
-    void removeHudElement(final HudElement hudElement);
-
-    void removeHudElement(final String key);
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
 }

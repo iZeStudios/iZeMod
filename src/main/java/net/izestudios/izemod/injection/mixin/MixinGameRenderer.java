@@ -20,6 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.izestudios.izemod.component.hud.HudRendering;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -40,10 +41,15 @@ public abstract class MixinGameRenderer {
     private void drawLogo(DrawContext instance, Operation<Void> original) {
         original.call(instance);
 
-        if (client.getOverlay() == null) {
-            final float alpha = client.player != null && !client.inGameHud.getDebugHud().shouldShowDebugHud() ? 1F : 0.6F;
-            RenderUtil.drawScaledLogo(instance, alpha);
-            instance.draw();
+        if (client.getOverlay() != null) {
+            return;
+        }
+
+        final boolean hud = client.player != null && !client.inGameHud.getDebugHud().shouldShowDebugHud();
+        RenderUtil.drawScaledLogo(instance, hud ? 1F : 0.6F);
+        instance.draw();
+        if (hud) {
+            HudRendering.render(instance);
         }
     }
 

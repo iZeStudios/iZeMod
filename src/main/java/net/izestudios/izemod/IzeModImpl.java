@@ -22,6 +22,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.izestudios.izemod.api.IzeModAPI;
 import net.izestudios.izemod.api.IzeModAPIBase;
+import net.izestudios.izemod.api.hud.HudElement;
+import net.izestudios.izemod.component.hud.HudRendering;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import java.awt.*;
 
@@ -43,6 +45,10 @@ public final class IzeModImpl implements IzeModAPIBase {
         version = metadata.getVersion().getFriendlyString();
     }
 
+    public void lateInitialize() {
+        HudRendering.init();
+    }
+
     // --------------------------------------------------------------------------------------------
     // Proxy the most important/used internals to a general API point for mods
 
@@ -54,6 +60,21 @@ public final class IzeModImpl implements IzeModAPIBase {
     @Override
     public Color getThemeColor() {
         return new Color(0, 125, ColorTheme.getBlue());
+    }
+
+    @Override
+    public void addHudElement(final HudElement hudElement) {
+        HudRendering.elements.add(hudElement);
+    }
+
+    @Override
+    public void removeHudElement(final HudElement hudElement) {
+        HudRendering.elements.remove(hudElement);
+    }
+
+    @Override
+    public void removeHudElement(final String key) {
+        HudRendering.elements.removeIf(hudElement -> hudElement.key().equals(key));
     }
 
 }
