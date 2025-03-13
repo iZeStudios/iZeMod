@@ -26,13 +26,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(WorldIcon.class)
 public class MixinWorldIcon {
+
+    int cycleTime = 5000; // 5 seconds cycle time
+    int timeInCycle = (int) (System.currentTimeMillis() % cycleTime);
+    int frame;
+
     @Redirect(method = "getTextureId", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/world/WorldIcon;UNKNOWN_SERVER_ID:Lnet/minecraft/util/Identifier;"))
     private Identifier replaceButtonTextures() {
 
-
-        int cycleTime = 5000; // 5 seconds cycle time
-        int timeInCycle = (int) (System.currentTimeMillis() % cycleTime);
-        int frame;
 
         if (timeInCycle < 1500) { // 0 to 10 in 1.5 seconds
             frame = timeInCycle / 150;
