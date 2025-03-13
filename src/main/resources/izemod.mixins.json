@@ -13,7 +13,8 @@
     "MixinScreen",
     "MixinSplashOverlay",
     "MixinTextFieldWidget",
-    "MixinTitleScreen"
+    "MixinTitleScreen",
+    "MixinWorldIcon"
   ],
   "injectors": {
     "defaultRequire": 1
