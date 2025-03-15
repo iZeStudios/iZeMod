@@ -44,7 +44,7 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
     private void initialize(RunArgs args, CallbackInfo ci) {
-        SplashOverlay.LOGO = Assets.LOADING_LOGO;
+        SplashOverlay.LOGO = Assets.SPLASH_OVERLAY;
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             session = new Session(
                 "iZeMod" + Util.getMeasuringTimeMs() % 10000000L,

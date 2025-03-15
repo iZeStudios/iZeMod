@@ -24,14 +24,14 @@ import java.io.InputStream;
 
 public final class Assets {
 
-    public static final Identifier LOGO = Identifier.of("izemod", "logo.png");
-    public static final Identifier LOADING_LOGO = Identifier.of("izemod", "loadinglogo.png");
+    public static final Identifier LOGO = Identifier.of("izemod", "textures/logo.png");
+    public static final Identifier SPLASH_OVERLAY = Identifier.of("izemod", "textures/splash_overlay.png");
+    public static final Identifier[] SATURATION_FRAMES = new Identifier[20];
     public static final ButtonTextures BUTTON = new ButtonTextures(
         Identifier.of("izemod", "button"),
         Identifier.of("izemod", "button_disabled"),
         Identifier.of("izemod", "button_highlighted")
     );
-    public static final Identifier[] SATURATION_FRAMES = new Identifier[20];
 
     static {
         for (int i = 0; i <= 9; i++) {
@@ -43,7 +43,7 @@ public final class Assets {
     }
 
     public static InputStream icon() {
-        return Assets.class.getResourceAsStream("/assets/izemod/icon.png");
+        return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/icon.png");
     }
 
 }

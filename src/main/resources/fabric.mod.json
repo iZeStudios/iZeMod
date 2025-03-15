@@ -32,7 +32,7 @@
     "issues": "https://github.com/iZeStudios/iZeMod/issues"
   },
   "license": "GPL-v3",
-  "icon": "assets/izemod/icon.png",
+  "icon": "/assets/izemod/textures/icon/icon.png",
   "environment": "client",
   "mixins": [
     "izemod.mixins.json"

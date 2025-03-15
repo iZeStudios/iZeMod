@@ -30,7 +30,6 @@ public final class LoginScreen extends AbstractInitialScreen {
     public static final LoginScreen INSTANCE = new LoginScreen();
     public static boolean loggedIn = false;
 
-    private TextFieldWidget nameField;
     private TextFieldWidget passwordField;
 
     private LoginScreen() {
@@ -70,7 +69,7 @@ public final class LoginScreen extends AbstractInitialScreen {
                 .build()
         );
 
-        nameField = addDrawableChild(new TextFieldWidget(
+        final TextFieldWidget nameField = addDrawableChild(new TextFieldWidget(
             client.textRenderer,
             this.width / 2 - 101,
             textFieldY,

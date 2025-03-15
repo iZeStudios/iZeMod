@@ -26,6 +26,9 @@ import net.minecraft.util.math.ColorHelper;
 
 public final class RenderUtil {
 
+    private static final int BLACK_COLOR = 0x80FFFFFF;
+    private static final int WHITE_COLOR = 0xFFFFFF;
+
     public static void drawScaledLogo(final DrawContext context, final float opacity) {
         final MatrixStack matrices = context.getMatrices();
         matrices.push();
@@ -42,7 +45,7 @@ public final class RenderUtil {
 
     public static void drawBlueFade(final DrawContext context, final int x, final int y, final int width, final int height) {
         context.fill(x, y, width, height, IzeModImpl.INSTANCE.getThemeColor().getRGB());
-        context.fillGradient(x, y, width, height, -2130706433, 16777215);
+        context.fillGradient(x, y, width, height, BLACK_COLOR, WHITE_COLOR);
         context.fillGradient(x, y, width, height, 0, Integer.MIN_VALUE);
     }
 
