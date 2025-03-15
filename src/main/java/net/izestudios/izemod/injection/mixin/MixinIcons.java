@@ -33,7 +33,7 @@ public abstract class MixinIcons {
 
     @Inject(method = "getIcon", at = @At("HEAD"), cancellable = true)
     private void replaceProcessIcon(ResourcePack resourcePack, String fileName, CallbackInfoReturnable<InputSupplier<InputStream>> cir) {
-        cir.setReturnValue(Assets::icon);
+        cir.setReturnValue(() -> Assets.icon(fileName));
     }
     
 }

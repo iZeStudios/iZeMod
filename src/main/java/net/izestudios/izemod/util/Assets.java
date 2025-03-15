@@ -20,6 +20,7 @@ package net.izestudios.izemod.util;
 
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import java.io.InputStream;
 
 public final class Assets {
@@ -42,8 +43,12 @@ public final class Assets {
         }
     }
 
-    public static InputStream icon() {
-        return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/icon.png");
+    public static InputStream icon(final String name) {
+        if (Util.getOperatingSystem() == Util.OperatingSystem.WINDOWS) {
+            return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/icon.png");
+        } else {
+            return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/" + name);
+        }
     }
 
 }
