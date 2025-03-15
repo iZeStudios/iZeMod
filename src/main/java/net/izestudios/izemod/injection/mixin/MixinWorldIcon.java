@@ -21,29 +21,41 @@ package net.izestudios.izemod.injection.mixin;
 import net.minecraft.client.gui.screen.world.WorldIcon;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import static net.izestudios.izemod.util.Assets.SATURATION_FRAMES;
+
 @Mixin(WorldIcon.class)
-public class MixinWorldIcon {
+public abstract class MixinWorldIcon {
+
+    @Unique
+    private static final int iZeMod$WAIT_FRAMES = 10;
+
+    @Unique
+    private int izeMod$currentFrame = 1;
+
+    @Unique
+    private int izeMod$waitCounter = 0;
+
+    @Unique
+    private boolean izeMod$reversing = true;
+
     @Redirect(method = "getTextureId", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/world/WorldIcon;UNKNOWN_SERVER_ID:Lnet/minecraft/util/Identifier;"))
-    private Identifier replaceButtonTextures() {
+    private Identifier replaceUnknownServerIcon() {
+        if (++izeMod$waitCounter >= iZeMod$WAIT_FRAMES) {
+            izeMod$currentFrame += izeMod$reversing ? -1 : 1;
 
+            if (izeMod$currentFrame <= 0 || izeMod$currentFrame >= SATURATION_FRAMES.length - 1) {
+                izeMod$reversing = !izeMod$reversing;
+                izeMod$currentFrame = Math.max(0, Math.min(SATURATION_FRAMES.length - 1 - 1, izeMod$currentFrame));
+            }
 
-        int cycleTime = 5000; // 5 seconds cycle time
-        int timeInCycle = (int) (System.currentTimeMillis() % cycleTime);
-        int frame;
-
-        if (timeInCycle < 1500) { // 0 to 10 in 1.5 seconds
-            frame = timeInCycle / 150;
-        } else if (timeInCycle < 2500) { // 1 second break
-            frame = 10;
-        } else if (timeInCycle < 4000) { // 10 to 0 in 1.5 seconds
-            frame = 10 - ((timeInCycle - 2500) / 150);
-        } else { // 1 second break
-            frame = 0;
+            izeMod$waitCounter = 0;
         }
 
-        return Identifier.of("izemod", "logosaturation/frame" + frame + ".png");
+        return SATURATION_FRAMES[izeMod$currentFrame];
     }
+
 }
