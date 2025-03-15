@@ -31,6 +31,16 @@ public final class Assets {
         Identifier.of("izemod", "button_disabled"),
         Identifier.of("izemod", "button_highlighted")
     );
+    public static final Identifier[] SATURATION_FRAMES = new Identifier[20];
+
+    static {
+        for (int i = 0; i <= 9; i++) {
+            SATURATION_FRAMES[i] = Identifier.of("izemod", "textures/gui/saturation/frame0.png");
+        }
+        for (int i = 10; i <= 19; i++) {
+            SATURATION_FRAMES[i] = Identifier.of("izemod", "textures/gui/saturation/frame" + (i - 9) + ".png");
+        }
+    }
 
     public static InputStream icon() {
         return Assets.class.getResourceAsStream("/assets/izemod/icon.png");
