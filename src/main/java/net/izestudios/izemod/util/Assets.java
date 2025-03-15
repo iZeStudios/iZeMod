@@ -18,9 +18,13 @@
 
 package net.izestudios.izemod.util;
 
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.util.Identifier;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.List;
+import net.minecraft.client.gui.screen.ButtonTextures;
+import net.minecraft.resource.InputSupplier;
+import net.minecraft.util.Identifier;
 
 public final class Assets {
 
@@ -32,6 +36,23 @@ public final class Assets {
         Identifier.of("izemod", "button_highlighted")
     );
     public static final Identifier[] SATURATION_FRAMES = new Identifier[20];
+    private static final List<InputSupplier<InputStream>> WINDOW_ICONS;
+    private static final InputSupplier<InputStream> WINDOW_ICON_MAC;
+
+    static {
+        try {
+            WINDOW_ICONS = List.of(
+                InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/16x16.png").toURI())),
+                InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/32x32.png").toURI())),
+                InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/48x48.png").toURI())),
+                InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/128x128.png").toURI())),
+                InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/256x256.png").toURI()))
+            );
+            WINDOW_ICON_MAC = InputSupplier.create(Path.of(Assets.class.getResource("/assets/izemod/window/mac.icns").toURI()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static {
         for (int i = 0; i <= 9; i++) {
@@ -46,4 +67,11 @@ public final class Assets {
         return Assets.class.getResourceAsStream("/assets/izemod/icon.png");
     }
 
+    public static List<InputSupplier<InputStream>> windowIcons() {
+        return WINDOW_ICONS;
+    }
+
+    public static InputSupplier<InputStream> windowIconMac() {
+        return WINDOW_ICON_MAC;
+    }
 }
