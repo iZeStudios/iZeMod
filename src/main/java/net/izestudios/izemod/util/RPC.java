@@ -39,7 +39,7 @@ public class RPC {
         RichPresence presence = new RichPresence();
         presence.setDetails(line1);
         presence.setState(line2);
-        presence.setLargeImage("large", "s");
+        presence.setLargeImage("large", "© iZeStudios");
         presence.setStart(Instant.now().getEpochSecond());
         DiscordIPC.setActivity(presence);
     }

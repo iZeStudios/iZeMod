@@ -25,6 +25,7 @@ import net.izestudios.izemod.api.IzeModAPIBase;
 import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.component.hud.HudRendering;
 import net.izestudios.izemod.component.theme.ColorTheme;
+import net.izestudios.izemod.util.RPC;
 import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
@@ -43,6 +44,8 @@ public final class IzeModImpl implements IzeModAPIBase {
 
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
+
+        RPC.startup(1345014762047541329L,"Username: /","Starting...");
     }
 
     public void lateInitialize() {

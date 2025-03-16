@@ -19,6 +19,7 @@
 package net.izestudios.izemod.component.screen;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.izestudios.izemod.util.RPC;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerWarningScreen;
 import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
@@ -71,6 +72,9 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, client::scheduleStop);
+
+
+        RPC.update("Username: "+client.getSession().getUsername(),"Main Menu");
     }
 
     private void addMainMenuButton(int x, int baseY, int offset, String key, String extraText, Runnable action) {
