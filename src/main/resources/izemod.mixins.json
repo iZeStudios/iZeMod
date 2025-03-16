@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "MixinChatScreen",
+    "MixinDirectConnectScreen",
     "MixinGameRenderer",
     "MixinIcons",
     "MixinMain",
