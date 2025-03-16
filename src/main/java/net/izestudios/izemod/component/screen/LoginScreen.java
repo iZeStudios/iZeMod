@@ -19,7 +19,6 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.util.Constants;
-import net.izestudios.izemod.util.RPC;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -93,8 +92,6 @@ public final class LoginScreen extends AbstractInitialScreen {
         );
         passwordField.setText("123456");
 
-
-        RPC.update("Username: "+client.getSession().getUsername(),"Login Screen");
     }
 
     @Override

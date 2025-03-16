@@ -24,6 +24,8 @@ import java.time.Instant;
 
 public class RPC {
 
+    private static long startTime;
+
     public static void startup(long appID, String line1, String line2){
 
 
@@ -32,6 +34,7 @@ public class RPC {
             return;
         }
 
+        startTime = Instant.now().getEpochSecond();
         update(line1, line2);
 
     }
@@ -40,8 +43,7 @@ public class RPC {
         presence.setDetails(line1);
         presence.setState(line2);
         presence.setLargeImage("large", "© iZeStudios");
-        presence.setStart(Instant.now().getEpochSecond());
+        presence.setStart(startTime);
         DiscordIPC.setActivity(presence);
     }
-
 }

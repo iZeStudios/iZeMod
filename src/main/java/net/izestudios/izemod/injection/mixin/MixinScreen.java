@@ -18,9 +18,12 @@
 
 package net.izestudios.izemod.injection.mixin;
 
+import net.izestudios.izemod.util.RPC;
 import net.izestudios.izemod.util.RenderUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,10 +39,20 @@ public abstract class MixinScreen {
     @Shadow
     public int height;
 
+    @Shadow
+    protected MinecraftClient client;
+
+    @Shadow
+    public abstract Text getTitle();
+
     @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
     private void changeBackground(DrawContext context, float delta, CallbackInfo ci) {
         ci.cancel();
         RenderUtil.drawBlueFade(context, 0, 0, this.width, this.height);
+    }
+    @Inject(method = "init()V", at = @At("HEAD"))
+    private void onInit(CallbackInfo ci) {
+        RPC.update("Username: "+client.getSession().getUsername(),"   " /* literally nothing */);
     }
 
 }
