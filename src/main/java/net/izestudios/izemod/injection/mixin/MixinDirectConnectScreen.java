@@ -23,10 +23,17 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.DirectConnectScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.option.ServerList;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,18 +41,43 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DirectConnectScreen.class)
 public abstract class MixinDirectConnectScreen extends Screen {
-    private @Unique
-    static final String[] serversSaved = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
-    private @Unique
-    static int serversCurrentIdx = 0;
+    private static final @Unique String[] serverSaved = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
+    private static @Unique int serverCurrentIdx = 0;
+
+    private final ButtonWidget[] serverSavedButtons = new ButtonWidget[15];
+    private @Unique MultiplayerServerListWidget serverWidget;
+    private @Unique ServerList dummyServerList;
 
     private @Shadow TextFieldWidget addressField;
 
+    @Shadow
+    @Final
+    private Screen parent;
+
+    @Shadow
+    @Final
+    private ServerInfo serverEntry;
+
     protected MixinDirectConnectScreen(final Text title) {
         super(title);
+    }
+
+    @Inject(method = "<init>", at = @At(value = "RETURN"))
+    private void injectInit_dummyScreenInit(CallbackInfo ci) {
+        MultiplayerScreen dummyScreen = parent instanceof MultiplayerScreen screen ? screen : new MultiplayerScreen(this);
+        serverWidget = new MultiplayerServerListWidget(dummyScreen, MinecraftClient.getInstance(), 0, 0, 0, 0);
+        dummyServerList = new ServerList(MinecraftClient.getInstance());
+        dummyServerList.add(new ServerInfo("", "", ServerInfo.ServerType.OTHER), false);
+        setEntry(serverSaved[serverCurrentIdx]);
+    }
+
+    private @Unique void setEntry(String address) {
+        dummyServerList.set(0, new ServerInfo(address, address, ServerInfo.ServerType.OTHER));
+        serverWidget.setServers(dummyServerList);
     }
 
     @Redirect(method = "init", at = @At(
@@ -79,11 +111,16 @@ public abstract class MixinDirectConnectScreen extends Screen {
         // temporary server buttons
         for (int i = 0; i < 15; i++) {
             final int finalI = i;
-            this.addDrawableChild(ButtonWidget.builder(Text.literal(String.valueOf(finalI + 1)), button -> {
-                serversCurrentIdx = finalI;
-                addressField.setText(String.valueOf(finalI));
-            }).position(addressField.getX() + (20 * i), addressField.getY() + addressField.getHeight()).size(20, 20).tooltip(Tooltip.of(Text.of(serversSaved[i]))).build());
+            this.addDrawableChild(serverSavedButtons[i] = ButtonWidget.builder(Text.literal(String.valueOf(finalI + 1)), button -> {
+                    addressField.setText(serverSaved[serverCurrentIdx = finalI]);
+                    setEntry(this.addressField.getText());
+                })
+                .position(addressField.getX() + (20 * i), addressField.getY() + addressField.getHeight())
+                .size(20, 20)
+                .tooltip(Tooltip.of(serverSaved[i].isBlank() ? Text.empty() : Text.literal(serverSaved[i])))
+                .build());
         }
+        updateButtons();
     }
 
     @Redirect(method = "render", at = @At(
@@ -93,6 +130,41 @@ public abstract class MixinDirectConnectScreen extends Screen {
     ))
     public int injectRender_fixTitle(DrawContext instance, TextRenderer font, Text text, int x, int y, int color) {
         return instance.drawTextWithShadow(font, text, this.addressField.getX(), this.addressField.getY() - font.fontHeight, color);
+    }
+
+    @Inject(method = "render", at = @At(value = "HEAD"))
+    public void injectRender_pinger_1(
+        DrawContext context,
+        int mouseX, int mouseY,
+        float delta, CallbackInfo ci
+    ) {
+        serverSaved[serverCurrentIdx] = addressField.getText();
+    }
+
+    @Inject(method = "keyPressed", at = @At(value = "HEAD"))
+    public void injectKeyPressed_entry(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        MultiplayerServerListWidget.SERVER_PINGER_THREAD_POOL.getQueue().clear();
+    }
+
+    @Inject(method = "onAddressFieldChanged", at = @At(value = "HEAD"))
+    public void injectOnAddressFieldChanged_updateEntry(CallbackInfo ci) {
+        setEntry(this.addressField.getText());
+    }
+
+    @Inject(method = "onAddressFieldChanged", at = @At(value = "RETURN"))
+    public void injectOnAddressFieldChanged_updateButtons(CallbackInfo ci) {
+        updateButtons();
+    }
+
+    public void updateButtons() {
+        for (int i = 0; i < serverSavedButtons.length; i++) {
+            ButtonWidget button = serverSavedButtons[i];
+            if (button == null) break;
+            button.setMessage(Text.literal(button.getMessage().getString())
+                .withColor(TextColor.fromFormatting(i == serverCurrentIdx ? Formatting.GREEN :
+                    serverSaved[i].isBlank() ? Formatting.DARK_GRAY :
+                        Formatting.WHITE).getRgb()));
+        }
     }
 
     /*
@@ -109,7 +181,11 @@ public abstract class MixinDirectConnectScreen extends Screen {
         target = "Lnet/minecraft/client/gui/screen/Screen;render(Lnet/minecraft/client/gui/DrawContext;IIF)V",
         shift = At.Shift.AFTER
     ))
-    public void injectRender_pinger(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    public void injectRender_pinger_2(
+        DrawContext context,
+        int mouseX, int mouseY,
+        float delta, CallbackInfo ci
+    ) {
         int gradientX = this.addressField.getX(), gradientX1 = this.addressField.getX() + this.addressField.getWidth();
         int gradientY = this.addressField.getY() / 2 - 13 - 41 + 20, gradientY1 = this.addressField.getY() / 2 - 13 + 41 + 20;
         // the background of our pinger
@@ -118,5 +194,33 @@ public abstract class MixinDirectConnectScreen extends Screen {
             gradientX1, gradientY1,
             0xFF318e9e, 0xFF2b8495
         );
+
+        if (serverWidget.getFirst() != null && serverWidget.getFirst() instanceof MultiplayerServerListWidget.ServerEntry entry) {
+            ServerInfo server = entry.getServer();
+            serverWidget.renderEntry(
+                context, mouseX, mouseY, delta, 0,
+                gradientX, gradientY,
+                gradientX1 - gradientX, gradientY1 - gradientY
+            );
+            int red = TextColor.fromFormatting(Formatting.RED).getRgb(), turquoise = TextColor.fromFormatting(Formatting.AQUA).getRgb();
+            context.drawText(client.textRenderer, Text
+                    .literal("Version: ").withColor(red)
+                    .append(server == null ? Text.empty() : Text.literal(server.version.getString()).withColor(turquoise)),
+                gradientX + 4, gradientY + 32 + client.textRenderer.fontHeight, -1, false);
+            context.drawText(client.textRenderer, Text
+                    .literal("Protokoll: ").withColor(red)
+                    .append(server == null ? Text.empty() : Text.literal(String.valueOf(server.protocolVersion)).withColor(turquoise)),
+                gradientX + 4, gradientY + 32 + (client.textRenderer.fontHeight * 2), -1, false);
+            context.drawText(client.textRenderer, Text
+                    .literal("Ping: ").withColor(red)
+                    .append(server == null ? Text.empty() : Text.literal(String.valueOf(server.ping)).withColor(turquoise)),
+                gradientX + 4, gradientY + 32 + (client.textRenderer.fontHeight * 3), -1, false);
+            context.drawText(client.textRenderer, Text
+                    .literal("Spieler: ").withColor(red)
+                    .append(server == null || server.players == null ? Text.empty() : Text.literal("%d".formatted(server.players.online())).withColor(turquoise))
+                    .append(server == null ? Text.empty() : Text.literal("/").withColor(TextColor.fromFormatting(Formatting.DARK_GRAY).getRgb()))
+                    .append(server == null || server.players == null ? Text.empty() : Text.literal("%d".formatted(server.players.max())).withColor(turquoise)),
+                gradientX + 4, gradientY + 32 + (client.textRenderer.fontHeight * 4), -1, false);
+        }
     }
 }
