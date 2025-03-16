@@ -45,7 +45,7 @@ public final class IzeModImpl implements IzeModAPIBase {
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
 
-        RPC.startup(1345014762047541329L,"Username: /","Starting...");
+        RPC.startup(1345014762047541329L,"  ","Starting...");
     }
 
     public void lateInitialize() {
