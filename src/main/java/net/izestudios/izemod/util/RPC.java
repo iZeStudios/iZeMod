@@ -24,7 +24,7 @@ import java.time.Instant;
 
 public class RPC {
 
-    public static void startup(long appID){
+    public static void startup(long appID, String line1, String line2){
 
 
         if (!DiscordIPC.start(appID, () -> System.out.println("Logged in account: " + DiscordIPC.getUser().username))) {
@@ -32,14 +32,16 @@ public class RPC {
             return;
         }
 
+        update(line1, line2);
+
+    }
+    public static void update(String line1,String line2){
         RichPresence presence = new RichPresence();
-        presence.setDetails("Ingame: x7t");
-        presence.setState("Main Screen");
+        presence.setDetails(line1);
+        presence.setState(line2);
         presence.setLargeImage("large", "s");
         presence.setStart(Instant.now().getEpochSecond());
         DiscordIPC.setActivity(presence);
-
-
     }
 
 }
