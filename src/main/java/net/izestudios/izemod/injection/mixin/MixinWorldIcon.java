@@ -31,7 +31,7 @@ import static net.izestudios.izemod.util.Assets.SATURATION_FRAMES;
 public abstract class MixinWorldIcon {
 
     @Unique
-    private static final int iZeMod$WAIT_FRAMES = 10;
+    private static final int iZeMod$WAIT_FRAMES = 7;
 
     @Unique
     private int izeMod$currentFrame = 1;
