@@ -50,6 +50,9 @@
 
   "screens.chat": "%s/%s characters",
 
+  "screens.multiplayer.manage": "Manage Servers",
+  "screens.multiplayer.last": "Last Server",
+
   "ingame.hud.fps": "FPS",
   "ingame.hud.x": "X",
   "ingame.hud.y": "Y",

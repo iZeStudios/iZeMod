@@ -49,6 +49,9 @@
 
   "screens.chat": "%s/%s Zeichen",
 
+  "screens.multiplayer.manage": "Server verwalten",
+  "screens.multiplayer.last": "Letzter Server",
+
   "ingame.hud.fps": "FPS",
   "ingame.hud.x": "X",
   "ingame.hud.y": "Y",
