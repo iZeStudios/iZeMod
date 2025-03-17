@@ -18,9 +18,12 @@
 
 package net.izestudios.izemod.util;
 
+/**
+ * Used to move buttons or to add existing buttons to custom screens. Make sure to keep this up-to-date with the latest Minecraft version.
+ */
 public final class Constants {
-    
-    // Title screen...
+
+    // Title
     public static final String TEXT_SINGLEPLAYER = "menu.singleplayer";
     public static final String TEXT_MULTIPLAYER = "menu.multiplayer";
     public static final String TEXT_ONLINE = "menu.online";
@@ -28,6 +31,15 @@ public final class Constants {
     public static final String TEXT_QUIT = "menu.quit";
     public static final String TEXT_COPYRIGHT = "title.credits";
 
+    // Multiplayer
+    public static final String TEXT_SELECT_SERVER = "selectServer.select";
+    public static final String TEXT_DIRECT_CONNECT = "selectServer.direct";
+    public static final String TEXT_ADD_SERVER = "selectServer.add";
+    public static final String TEXT_EDIT_SERVER = "selectServer.edit";
+    public static final String TEXT_DELETE_SERVER = "selectServer.delete";
+    public static final String TEXT_REFRESH = "selectServer.refresh";
+
+    // Options
     public static final String OPTIONS_LANGUAGE = "options.language";
 
 }

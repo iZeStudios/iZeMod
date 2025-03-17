@@ -9,6 +9,7 @@
     "MixinIcons",
     "MixinMain",
     "MixinMinecraftClient",
+    "MixinMultiplayerScreen",
     "MixinPressableWidget",
     "MixinScreen",
     "MixinSplashOverlay",
