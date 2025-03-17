@@ -18,6 +18,9 @@
 
 package net.izestudios.izemod.util;
 
+/**
+ * Used to move buttons or to add existing buttons to custom screens. Make sure to keep this up-to-date with the latest Minecraft version.
+ */
 public final class Constants {
 
     // Title
