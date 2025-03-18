@@ -42,4 +42,9 @@ public abstract class MixinScreen {
         RenderUtil.drawBlueFade(context, 0, 0, this.width, this.height);
     }
 
+    @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
+    private void removeDarkening(DrawContext context, int x, int y, int width, int height, CallbackInfo ci) {
+        ci.cancel();
+    }
+
 }
