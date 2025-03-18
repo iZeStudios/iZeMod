@@ -33,7 +33,7 @@ public final class RenderUtil {
         final MatrixStack matrices = context.getMatrices();
         matrices.push();
         matrices.scale(0.25F, 0.25F, 0.25F);
-        drawLogo(context, 4, 4, ColorHelper.getWhite(opacity));
+        drawLogo(context, 6, 6, ColorHelper.getWhite(opacity));
         matrices.pop();
     }
 
