@@ -20,6 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.izestudios.izemod.component.multiplayer.ServerPinger;
 import net.izestudios.izemod.component.multiplayer.ServerSaveStates;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -50,10 +51,19 @@ public abstract class MixinDirectConnectScreen extends Screen {
     private ButtonWidget selectServerButton;
 
     @Unique
+    private static final int izeMod$PING_INTERVAL = 10_000;
+
+    @Unique
     private final List<ButtonWidget> izeMod$serverStateButtons = new ArrayList<>();
 
     @Unique
     private int izeMod$serverStateIndex = 0;
+
+    @Unique
+    private ServerPinger izeMod$serverPinger;
+
+    @Unique
+    private long izeMod$lastPingTime = 0;
 
     protected MixinDirectConnectScreen(final Text title) {
         super(title);
@@ -79,12 +89,22 @@ public abstract class MixinDirectConnectScreen extends Screen {
         for (int i = 0; i < ServerSaveStates.STATE_COUNT - 1; i++) {
             final int index = i;
             izeMod$serverStateButtons.add(addDrawableChild(ButtonWidget.builder(Text.of(izeMod$formatServerStateButton(index)), button -> {
-                final String address = addressField.getText().trim();
-                ServerSaveStates.set(index, address.isBlank() ? null : address);
+                ServerSaveStates.set(izeMod$serverStateIndex, addressField.getText().isBlank() ? null : addressField.getText().trim());
                 izeMod$serverStateIndex = index;
+                addressField.setText(ServerSaveStates.get(index));
                 button.setFocused(false);
+                izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
             }).position(addressField.getX() + (i * 20), addressField.getY() + addressField.getHeight()).size(20, 20).build()));
         }
+
+        izeMod$serverPinger = addDrawableChild(new ServerPinger(this.width / 2 - 150, 51));
+        izeMod$updateServerPinger();
+    }
+
+    @Inject(method = "onAddressFieldChanged", at = @At("RETURN"))
+    private void resetPingTimer(CallbackInfo ci) {
+        // Cause the if to be true after one second
+        izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
     }
 
     @Override
@@ -93,11 +113,16 @@ public abstract class MixinDirectConnectScreen extends Screen {
             final ButtonWidget button = izeMod$serverStateButtons.get(i);
             button.setMessage(Text.of(izeMod$formatServerStateButton(i)));
         }
+
+        if (System.currentTimeMillis() - izeMod$lastPingTime > izeMod$PING_INTERVAL) {
+            izeMod$updateServerPinger();
+            izeMod$lastPingTime = System.currentTimeMillis();
+        }
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
     private int moveAddressTitlePosition(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
-        return original.call(instance, textRenderer, text, addressField.getX(), addressField.getY() - textRenderer.fontHeight, color);
+        return original.call(instance, textRenderer, text, addressField.getX(), addressField.getY() - textRenderer.fontHeight - 5, color);
     }
 
     @Unique
@@ -108,6 +133,17 @@ public abstract class MixinDirectConnectScreen extends Screen {
             return (selected ? Formatting.GREEN : Formatting.WHITE) + String.valueOf(index + 1);
         } else {
             return (selected ? Formatting.DARK_GREEN : Formatting.DARK_GRAY) + String.valueOf(index + 1);
+        }
+    }
+
+    @Unique
+    private void izeMod$updateServerPinger() {
+        if (addressField.getText().isBlank()) {
+            return;
+        }
+
+        if (izeMod$serverPinger != null) {
+            izeMod$serverPinger.updateServer(addressField.getText().trim());
         }
     }
 
