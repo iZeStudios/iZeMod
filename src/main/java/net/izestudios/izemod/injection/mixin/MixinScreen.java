@@ -18,7 +18,7 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.util.RPC;
+import net.izestudios.izemod.component.discord.DiscordRPC;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -50,14 +50,16 @@ public abstract class MixinScreen {
         ci.cancel();
         RenderUtil.drawBlueFade(context, 0, 0, this.width, this.height);
     }
-    @Inject(method = "init()V", at = @At("HEAD"))
-    private void onInit(CallbackInfo ci) {
-        RPC.update("Username: "+client.getSession().getUsername(),"   " /* literally nothing */);
-    }
 
     @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
     private void removeDarkening(DrawContext context, int x, int y, int width, int height, CallbackInfo ci) {
         ci.cancel();
+    }
+
+    @Inject(method = "init()V", at = @At("HEAD"))
+    private void setIdleDiscordRPC(CallbackInfo ci) {
+        final String username = this.client.getSession().getUsername();
+        DiscordRPC.update("Username: " + username, null);
     }
 
 }

@@ -91,11 +91,11 @@ public final class LoginScreen extends AbstractInitialScreen {
             (text, index) -> Text.of("*".repeat(text.length())).asOrderedText()
         );
         passwordField.setText("123456");
-
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
     }
+
 }

@@ -16,34 +16,52 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.util;
+package net.izestudios.izemod.component.discord;
 
+import java.time.Instant;
 import meteordevelopment.discordipc.DiscordIPC;
 import meteordevelopment.discordipc.RichPresence;
-import java.time.Instant;
 
-public class RPC {
+public class DiscordRPC {
 
-    private static long startTime;
+    private static final long APPLICATION_ID = 1352601841376165908L;
+    private static long startTime = -1L;
 
-    public static void startup(long appID, String line1, String line2){
+    public static void start() {
+        if (startTime != -1L) {
+            return;
+        }
 
-
-        if (!DiscordIPC.start(appID, () -> System.out.println("Logged in account: " + DiscordIPC.getUser().username))) {
+        if (!DiscordIPC.start(APPLICATION_ID, () -> System.out.println("Logged in account: " + DiscordIPC.getUser().username))) {
             System.out.println("Discord RPC failed to start");
             return;
         }
 
         startTime = Instant.now().getEpochSecond();
-        update(line1, line2);
-
+        update(null, null);
     }
-    public static void update(String line1,String line2){
-        RichPresence presence = new RichPresence();
-        presence.setDetails(line1);
-        presence.setState(line2);
-        presence.setLargeImage("large", "© iZeStudios");
+
+    public static void close() {
+        if (startTime == -1L) {
+            return;
+        }
+
+        DiscordIPC.stop();
+        startTime = -1L;
+    }
+
+    public static void update(final String first, final String second) {
+        if (startTime == -1L) {
+            return;
+        }
+
+        final RichPresence presence = new RichPresence();
+        presence.setDetails(first);
+        presence.setState(second);
+        presence.setLargeImage("icon", "© iZeStudios");
         presence.setStart(startTime);
+
         DiscordIPC.setActivity(presence);
     }
+
 }

@@ -97,7 +97,6 @@ dependencies {
 
     include implementation("com.github.iZeStudios:discord-ipc:b0d38c7edc")
 
-
     // Sub projects, since they are Fabric mods as well (mainly to access the game code) we have to first
     // implement the namedElements (raw output) to compile against, then include the mappedElements into the output jar
     implementation compileOnlyApi(project(path: ":izemod-api", configuration: "namedElements"))

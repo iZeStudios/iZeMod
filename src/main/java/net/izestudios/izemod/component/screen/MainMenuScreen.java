@@ -71,7 +71,6 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, client::scheduleStop);
-
     }
 
     private void addMainMenuButton(int x, int baseY, int offset, String key, String extraText, Runnable action) {
