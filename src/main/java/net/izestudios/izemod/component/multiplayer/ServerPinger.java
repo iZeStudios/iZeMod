@@ -106,7 +106,7 @@ public final class ServerPinger extends ClickableWidget {
         }
 
         final MultiplayerServerListWidget.ServerEntry entry = status != ServerInfo.Status.SUCCESSFUL ? previousServerEntry : serverEntry;
-        context.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.getThemeColor().getRGB());
+        context.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
         entry.render(context, 0, getY() + 2, getX() + 2, WIDTH + 1, HEIGHT, mouseX, mouseY, false, delta);
         if (tooltip != null) {
             context.drawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, positioner, mouseX, mouseY);

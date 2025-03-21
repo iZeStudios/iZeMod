@@ -20,7 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.izestudios.izemod.component.hud.HudRendering;
+import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -49,7 +49,7 @@ public abstract class MixinGameRenderer {
         RenderUtil.drawScaledLogo(instance, hud ? 1F : 0.6F);
         instance.draw();
         if (hud) {
-            HudRendering.render(instance);
+            HudRenderingImpl.INSTANCE.render(instance);
         }
     }
 

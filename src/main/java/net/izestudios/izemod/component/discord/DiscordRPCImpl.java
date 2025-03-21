@@ -21,13 +21,17 @@ package net.izestudios.izemod.component.discord;
 import java.time.Instant;
 import meteordevelopment.discordipc.DiscordIPC;
 import meteordevelopment.discordipc.RichPresence;
+import net.izestudios.izemod.api.discord.DiscordRPC;
 
-public class DiscordRPC {
+public final class DiscordRPCImpl implements DiscordRPC {
 
     private static final long APPLICATION_ID = 1352601841376165908L;
-    private static long startTime = -1L;
+    public static final DiscordRPCImpl INSTANCE = new DiscordRPCImpl();
 
-    public static void start() {
+    private long startTime = -1L;
+
+    @Override
+    public void start() {
         if (startTime != -1L) {
             return;
         }
@@ -41,7 +45,8 @@ public class DiscordRPC {
         update(null, null);
     }
 
-    public static void close() {
+    @Override
+    public void stop() {
         if (startTime == -1L) {
             return;
         }
@@ -50,7 +55,8 @@ public class DiscordRPC {
         startTime = -1L;
     }
 
-    public static void update(final String first, final String second) {
+    @Override
+    public void update(final String first, final String second) {
         if (startTime == -1L) {
             return;
         }

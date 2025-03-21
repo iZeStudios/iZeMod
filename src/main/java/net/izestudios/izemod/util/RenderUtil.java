@@ -44,7 +44,7 @@ public final class RenderUtil {
     }
 
     public static void drawBlueFade(final DrawContext context, final int x, final int y, final int width, final int height) {
-        context.fill(x, y, width, height, IzeModImpl.INSTANCE.getThemeColor().getRGB());
+        context.fill(x, y, width, height, IzeModImpl.INSTANCE.themeColor().getRGB());
         context.fillGradient(x, y, width, height, BLACK_COLOR, WHITE_COLOR);
         context.fillGradient(x, y, width, height, 0, Integer.MIN_VALUE);
     }

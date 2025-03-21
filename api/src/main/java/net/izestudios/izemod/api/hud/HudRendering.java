@@ -16,20 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.api;
+package net.izestudios.izemod.api.hud;
 
-import net.izestudios.izemod.api.discord.DiscordRPC;
-import net.izestudios.izemod.api.hud.HudRendering;
-import java.awt.*;
+public interface HudRendering {
 
-public interface IzeModAPIBase {
+    void addHudElement(final HudElement hudElement);
 
-    String version();
+    void removeHudElement(final HudElement hudElement);
 
-    Color themeColor();
-
-    HudRendering hudRendering();
-
-    DiscordRPC discordRPC();
+    void removeHudElement(final String key);
 
 }

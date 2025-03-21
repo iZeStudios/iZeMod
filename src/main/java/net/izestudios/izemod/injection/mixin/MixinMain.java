@@ -19,6 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.IzeModImpl;
+import net.izestudios.izemod.api.IzeModAPI;
 import net.minecraft.client.main.Main;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,6 +31,7 @@ public abstract class MixinMain {
 
     @Inject(method = "main", at = @At("HEAD"))
     private static void initialize(CallbackInfo ci) {
+        IzeModAPI.init(IzeModImpl.INSTANCE);
         IzeModImpl.INSTANCE.initialize();
     }
 

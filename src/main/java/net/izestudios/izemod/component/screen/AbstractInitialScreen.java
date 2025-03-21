@@ -29,7 +29,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.widget.PressableTextWidget;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
@@ -101,7 +100,7 @@ public abstract class AbstractInitialScreen extends Screen {
             this.height - 20,
             200,
             10,
-            Text.of("iZeMod " + IzeModImpl.INSTANCE.getVersion() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
+            Text.of("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
             button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
         ));
 

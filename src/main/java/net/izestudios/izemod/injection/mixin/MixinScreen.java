@@ -18,7 +18,7 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.component.discord.DiscordRPC;
+import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -59,7 +59,7 @@ public abstract class MixinScreen {
     @Inject(method = "init()V", at = @At("HEAD"))
     private void setIdleDiscordRPC(CallbackInfo ci) {
         final String username = this.client.getSession().getUsername();
-        DiscordRPC.update("Username: " + username, null);
+        DiscordRPCImpl.INSTANCE.update("Username: " + username, null);
     }
 
 }

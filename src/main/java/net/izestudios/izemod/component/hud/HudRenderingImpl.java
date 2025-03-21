@@ -18,7 +18,17 @@
 
 package net.izestudios.izemod.component.hud;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
+import com.google.common.base.Preconditions;
 import net.izestudios.izemod.api.hud.HudElement;
+import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.util.TimeFormatter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -29,20 +39,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Supplier;
 
-public final class HudRendering {
+public final class HudRenderingImpl implements HudRendering {
 
-    public static final List<HudElement> elements = new ArrayList<>();
+    public static final HudRenderingImpl INSTANCE = new HudRenderingImpl();
+    public final List<HudElement> elements = new ArrayList<>();
 
-    static {
+    public void init() {
+        Preconditions.checkState(elements.isEmpty(), "Hud elements already initialized");
+
         final NumberFormat numberFormat = NumberFormat.getInstance();
         numberFormat.setMaximumFractionDigits(2);
 
@@ -92,10 +97,7 @@ public final class HudRendering {
         register("time", () -> TimeFormatter.TIME_FORMAT.format(new Date()));
     }
 
-    public static void init() {
-    }
-
-    public static void render(final DrawContext context) {
+    public void render(final DrawContext context) {
         final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         final int x = 2;
         int y = 15;
@@ -112,7 +114,22 @@ public final class HudRendering {
         }
     }
 
-    private static void register(final String key, final Supplier<Object> value) {
+    @Override
+    public void addHudElement(final HudElement hudElement) {
+        elements.add(hudElement);
+    }
+
+    @Override
+    public void removeHudElement(final HudElement hudElement) {
+        elements.remove(hudElement);
+    }
+
+    @Override
+    public void removeHudElement(final String key) {
+        elements.removeIf(hudElement -> hudElement.key().equals(key));
+    }
+
+    private void register(final String key, final Supplier<Object> value) {
         elements.add(HudElement.of(Text.translatable("ingame.hud." + key), value));
     }
 

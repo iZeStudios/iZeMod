@@ -20,12 +20,12 @@ package net.izestudios.izemod;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.izestudios.izemod.api.IzeModAPI;
 import net.izestudios.izemod.api.IzeModAPIBase;
-import net.izestudios.izemod.api.hud.HudElement;
-import net.izestudios.izemod.component.hud.HudRendering;
+import net.izestudios.izemod.api.discord.DiscordRPC;
+import net.izestudios.izemod.api.hud.HudRendering;
+import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
-import net.izestudios.izemod.component.discord.DiscordRPC;
+import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
@@ -40,49 +40,42 @@ public final class IzeModImpl implements IzeModAPIBase {
     private String version;
 
     public void initialize() {
-        IzeModAPI.init(INSTANCE);
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
-
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
 
-        DiscordRPC.start();
+        DiscordRPCImpl.INSTANCE.start();
     }
 
     public void lateInitialize() {
-        HudRendering.init();
+        HudRenderingImpl.INSTANCE.init();
     }
 
     private void shutdown() {
-        DiscordRPC.close();
+        DiscordRPCImpl.INSTANCE.stop();
     }
 
     // --------------------------------------------------------------------------------------------
     // Proxy the most important/used internals to a general API point for mods
 
     @Override
-    public String getVersion() {
+    public String version() {
         return version;
     }
 
     @Override
-    public Color getThemeColor() {
+    public Color themeColor() {
         return new Color(0, 125, ColorTheme.getBlue());
     }
 
     @Override
-    public void addHudElement(final HudElement hudElement) {
-        HudRendering.elements.add(hudElement);
+    public HudRendering hudRendering() {
+        return HudRenderingImpl.INSTANCE;
     }
 
     @Override
-    public void removeHudElement(final HudElement hudElement) {
-        HudRendering.elements.remove(hudElement);
-    }
-
-    @Override
-    public void removeHudElement(final String key) {
-        HudRendering.elements.removeIf(hudElement -> hudElement.key().equals(key));
+    public DiscordRPC discordRPC() {
+        return DiscordRPCImpl.INSTANCE;
     }
 
 }
