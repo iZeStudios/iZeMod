@@ -97,4 +97,5 @@ public final class LoginScreen extends AbstractInitialScreen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
     }
+
 }

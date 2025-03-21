@@ -25,6 +25,7 @@ import net.izestudios.izemod.api.IzeModAPIBase;
 import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.component.hud.HudRendering;
 import net.izestudios.izemod.component.theme.ColorTheme;
+import net.izestudios.izemod.component.discord.DiscordRPC;
 import java.awt.*;
 
 public final class IzeModImpl implements IzeModAPIBase {
@@ -40,13 +41,20 @@ public final class IzeModImpl implements IzeModAPIBase {
 
     public void initialize() {
         IzeModAPI.init(INSTANCE);
-
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+
+        DiscordRPC.start();
     }
 
     public void lateInitialize() {
         HudRendering.init();
+    }
+
+    private void shutdown() {
+        DiscordRPC.close();
     }
 
     // --------------------------------------------------------------------------------------------

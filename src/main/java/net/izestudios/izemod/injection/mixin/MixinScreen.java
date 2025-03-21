@@ -18,9 +18,12 @@
 
 package net.izestudios.izemod.injection.mixin;
 
+import net.izestudios.izemod.component.discord.DiscordRPC;
 import net.izestudios.izemod.util.RenderUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,6 +39,12 @@ public abstract class MixinScreen {
     @Shadow
     public int height;
 
+    @Shadow
+    protected MinecraftClient client;
+
+    @Shadow
+    public abstract Text getTitle();
+
     @Inject(method = "renderPanoramaBackground", at = @At("HEAD"), cancellable = true)
     private void changeBackground(DrawContext context, float delta, CallbackInfo ci) {
         ci.cancel();
@@ -45,6 +54,12 @@ public abstract class MixinScreen {
     @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
     private void removeDarkening(DrawContext context, int x, int y, int width, int height, CallbackInfo ci) {
         ci.cancel();
+    }
+
+    @Inject(method = "init()V", at = @At("HEAD"))
+    private void setIdleDiscordRPC(CallbackInfo ci) {
+        final String username = this.client.getSession().getUsername();
+        DiscordRPC.update("Username: " + username, null);
     }
 
 }
