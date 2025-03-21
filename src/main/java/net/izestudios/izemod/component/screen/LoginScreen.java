@@ -71,9 +71,9 @@ public final class LoginScreen extends AbstractInitialScreen {
 
         final TextFieldWidget nameField = addDrawableChild(new TextFieldWidget(
             client.textRenderer,
-            this.width / 2 - 101,
+            this.width / 2 - 102,
             textFieldY,
-            202,
+            205,
             20,
             Text.empty()
         ));
@@ -81,9 +81,9 @@ public final class LoginScreen extends AbstractInitialScreen {
 
         passwordField = addDrawableChild(new TextFieldWidget(
             client.textRenderer,
-            this.width / 2 - 101,
+            this.width / 2 - 102,
             textFieldY + 30,
-            202,
+            205,
             20,
             Text.empty()
         ));

@@ -55,4 +55,9 @@ public abstract class MixinScreen {
         RPC.update("Username: "+client.getSession().getUsername(),"   " /* literally nothing */);
     }
 
+    @Inject(method = "renderDarkening(Lnet/minecraft/client/gui/DrawContext;IIII)V", at = @At("HEAD"), cancellable = true)
+    private void removeDarkening(DrawContext context, int x, int y, int width, int height, CallbackInfo ci) {
+        ci.cancel();
+    }
+
 }

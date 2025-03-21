@@ -53,6 +53,9 @@
   "screens.multiplayer.manage": "Manage Servers",
   "screens.multiplayer.last": "Last Server",
 
+  "screens.directconnect.brand": "Brand",
+  "screens.directconnect.version": "Version",
+
   "ingame.hud.fps": "FPS",
   "ingame.hud.x": "X",
   "ingame.hud.y": "Y",

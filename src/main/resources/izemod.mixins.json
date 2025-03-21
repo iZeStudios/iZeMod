@@ -5,11 +5,13 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "MixinChatScreen",
+    "MixinDirectConnectScreen",
     "MixinGameRenderer",
     "MixinIcons",
     "MixinMain",
     "MixinMinecraftClient",
     "MixinMultiplayerScreen",
+    "MixinMultiplayerServerListWidget_ServerEntry",
     "MixinPressableWidget",
     "MixinScreen",
     "MixinSplashOverlay",
