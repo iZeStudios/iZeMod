@@ -30,7 +30,7 @@ public class RPC {
 
 
         if (!DiscordIPC.start(appID, () -> System.out.println("Logged in account: " + DiscordIPC.getUser().username))) {
-            System.out.println("Failed to start Discord IPC");
+            System.out.println("Discord RPC failed to start");
             return;
         }
 
