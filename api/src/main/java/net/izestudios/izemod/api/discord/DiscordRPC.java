@@ -18,12 +18,27 @@
 
 package net.izestudios.izemod.api.discord;
 
+/**
+ * Endpoint to interact with the Discord Rich Presence. The methods here do not throw exceptions, but simply discard invalid usage.
+ */
 public interface DiscordRPC {
 
+    /**
+     * Starts the Discord Rich Presence.
+     */
     void start();
 
+    /**
+     * Stops the Discord Rich Presence.
+     */
     void stop();
 
+    /**
+     * Updates the Discord Rich Presence with the given first and second line.
+     *
+     * @param first  The first line to display.
+     * @param second The second line to display.
+     */
     void update(final String first, final String second);
 
 }

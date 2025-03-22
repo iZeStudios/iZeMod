@@ -16,32 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.api.hud;
+package net.izestudios.izemod.api.command;
 
 /**
- * Endpoint to extend the HUD rendering.
+ * Endpoint to handle commands.
  */
-public interface HudRendering {
+public interface CommandHandler {
 
     /**
-     * Adds a HUD element to the rendering.
+     * Adds a command to the handler.
      *
-     * @param hudElement The HUD element to add.
+     * @param command The command to add.
      */
-    void addHudElement(final HudElement hudElement);
+    void addCommand(final AbstractCommand command);
 
     /**
-     * Removes a HUD element from the rendering.
+     * Removes a command from the handler.
      *
-     * @param hudElement The HUD element to remove.
+     * @param command The command to remove.
      */
-    void removeHudElement(final HudElement hudElement);
+    void removeCommand(final AbstractCommand command);
 
     /**
-     * Removes a HUD element from the rendering by the key. If the key is not found, nothing happens.
+     * Removes a command from the handler by one of the aliases. If the alias is not found, nothing happens.
      *
-     * @param key The key of the HUD element to remove.
+     * @param alias The alias of the command to remove.
      */
-    void removeHudElement(final String key);
+    void removeCommand(final String alias);
 
 }

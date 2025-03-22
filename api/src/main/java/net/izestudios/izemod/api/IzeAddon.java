@@ -18,10 +18,23 @@
 
 package net.izestudios.izemod.api;
 
+/**
+ * General bridge interface for iZeMod addons. The methods below are called by iZeMod on specific events.
+ */
 public interface IzeAddon {
 
+    /**
+     * Called after iZeMod has loaded all its components. This is the place to register commands, HUD elements, etc.
+     *
+     * @param api The iZeMod API endpoint
+     */
     void onLoad(final IzeModAPIBase api);
 
+    /**
+     * Called when iZeMod is shutting down. This is the place to clean up resources, save data, etc.
+     *
+     * @param api The iZeMod API endpoint
+     */
     default void onShutdown(final IzeModAPIBase api) {
     }
 

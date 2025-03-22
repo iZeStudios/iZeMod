@@ -18,18 +18,49 @@
 
 package net.izestudios.izemod.api;
 
+import java.awt.*;
+import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.api.discord.DiscordRPC;
 import net.izestudios.izemod.api.hud.HudRendering;
-import java.awt.*;
 
+/**
+ * General API endpoint for iZeMod components. Get an instance of this class by registering a iZeMod {@link IzeAddon} entry point into the izemod namespace.
+ */
 public interface IzeModAPIBase {
 
+    /**
+     * Get the version of iZeMod. Note that this does not include alpha or beta tags.
+     *
+     * @return the version of iZeMod
+     */
     String version();
 
+    /**
+     * The blue color used for all the UI rendering.
+     *
+     * @return the theme color
+     */
     Color themeColor();
 
+    /**
+     * The HUD rendering API.
+     *
+     * @return the HUD rendering API
+     */
     HudRendering hudRendering();
 
+    /**
+     * The Discord RPC API.
+     *
+     * @return the Discord RPC API
+     */
     DiscordRPC discordRPC();
+
+    /**
+     * The command handler API.
+     *
+     * @return the command handler API
+     */
+    CommandHandler commandHandler();
 
 }

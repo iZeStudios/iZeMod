@@ -16,32 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.api.hud;
+package net.izestudios.izemod.component.command.impl;
 
-/**
- * Endpoint to extend the HUD rendering.
- */
-public interface HudRendering {
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.izestudios.izemod.api.command.AbstractCommand;
+import net.minecraft.command.CommandSource;
 
-    /**
-     * Adds a HUD element to the rendering.
-     *
-     * @param hudElement The HUD element to add.
-     */
-    void addHudElement(final HudElement hudElement);
+public final class TestCommand extends AbstractCommand {
 
-    /**
-     * Removes a HUD element from the rendering.
-     *
-     * @param hudElement The HUD element to remove.
-     */
-    void removeHudElement(final HudElement hudElement);
+    public TestCommand() {
+        super("Test");
+    }
 
-    /**
-     * Removes a HUD element from the rendering by the key. If the key is not found, nothing happens.
-     *
-     * @param key The key of the HUD element to remove.
-     */
-    void removeHudElement(final String key);
+    @Override
+    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+        builder.executes(commandContext -> {
+            System.out.println("This is just a test!");
+            printSuccessMessage("This is a test message!");
+            return SUCCESS;
+        });
+    }
 
 }

@@ -22,7 +22,7 @@ import net.minecraft.text.Text;
 import java.util.function.Supplier;
 
 /**
- * Represents a HUD element.
+ * Represents a HUD element. Use functions below to create instances or implement this interface into more complex classes.
  */
 public interface HudElement {
 

@@ -16,32 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package net.izestudios.izemod.api.hud;
+package net.izestudios.izemod.injection.mixin;
 
-/**
- * Endpoint to extend the HUD rendering.
- */
-public interface HudRendering {
+import net.izestudios.izemod.component.command.CommandHandlerImpl;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-    /**
-     * Adds a HUD element to the rendering.
-     *
-     * @param hudElement The HUD element to add.
-     */
-    void addHudElement(final HudElement hudElement);
+@Mixin(ClientPlayNetworkHandler.class)
+public abstract class MixinClientPlayNetworkHandler {
 
-    /**
-     * Removes a HUD element from the rendering.
-     *
-     * @param hudElement The HUD element to remove.
-     */
-    void removeHudElement(final HudElement hudElement);
-
-    /**
-     * Removes a HUD element from the rendering by the key. If the key is not found, nothing happens.
-     *
-     * @param key The key of the HUD element to remove.
-     */
-    void removeHudElement(final String key);
+    @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
+    private void onChatMessage(String content, CallbackInfo ci) {
+        if (CommandHandlerImpl.INSTANCE.onChatMessage(content)) {
+            ci.cancel();
+        }
+    }
 
 }
