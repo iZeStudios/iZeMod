@@ -18,22 +18,11 @@
 
 package net.izestudios.izemod.api;
 
-import com.google.common.base.Preconditions;
-import org.jetbrains.annotations.ApiStatus;
+public interface IzeAddon {
 
-public final class IzeModAPI {
+    void onLoad(final IzeModAPIBase api);
 
-    private static IzeModAPIBase impl;
-
-    @ApiStatus.Internal
-    public static void init(final IzeModAPIBase impl) {
-        Preconditions.checkArgument(IzeModAPI.impl == null, "iZeMod is already initialized");
-        IzeModAPI.impl = impl;
-    }
-
-    public static IzeModAPIBase getImpl() {
-        Preconditions.checkState(IzeModAPI.impl != null, "iZeMod is not initialized");
-        return IzeModAPI.impl;
+    default void onShutdown(final IzeModAPIBase api) {
     }
 
 }

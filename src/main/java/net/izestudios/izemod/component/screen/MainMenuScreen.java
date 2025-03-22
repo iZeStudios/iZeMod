@@ -19,6 +19,7 @@
 package net.izestudios.izemod.component.screen;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.izestudios.izemod.addon.AddonManager;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerWarningScreen;
 import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
@@ -45,8 +46,10 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         super.init();
         setupCopyrightTexts();
 
-        int worldCount = client.getLevelStorage().getLevelList().levels().size();
-        int serverCount = new ServerList(client).size();
+        final int addons = AddonManager.INSTANCE.count();
+        final int worldCount = client.getLevelStorage().getLevelList().levels().size();
+        final int serverCount = new ServerList(client).size();
+        final int mods = FabricLoader.getInstance().getAllMods().size() - addons;
 
         int baseY = (int) Math.sqrt((double) (this.height * this.height) / (1.3 * 1.2));
         int leftX = this.width / 2 - 202;
@@ -58,8 +61,8 @@ public final class MainMenuScreen extends AbstractInitialScreen {
 
         final String programText = I18n.translate("screens.title.program");
         final String optionsText = I18n.translate("screens.title.options");
-        final String modsText = I18n.translate("screens.title.mods", FabricLoader.getInstance().getAllMods().size());
-        final String addonsText = I18n.translate("screens.title.addons", 0 /* Filter for izemod entries */);
+        final String modsText = I18n.translate("screens.title.mods", mods);
+        final String addonsText = I18n.translate("screens.title.addons", addons);
         addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
         addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
         addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.client.setScreen(new RealmsMainScreen(this)));

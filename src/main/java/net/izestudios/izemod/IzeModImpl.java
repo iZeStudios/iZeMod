@@ -20,6 +20,7 @@ package net.izestudios.izemod;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.izestudios.izemod.addon.AddonManager;
 import net.izestudios.izemod.api.IzeModAPIBase;
 import net.izestudios.izemod.api.discord.DiscordRPC;
 import net.izestudios.izemod.api.hud.HudRendering;
@@ -49,10 +50,16 @@ public final class IzeModImpl implements IzeModAPIBase {
 
     public void lateInitialize() {
         HudRenderingImpl.INSTANCE.init();
+
+        // Run addons as late as possible
+        AddonManager.INSTANCE.run(addon -> addon.onLoad(this));
     }
 
     private void shutdown() {
         DiscordRPCImpl.INSTANCE.stop();
+
+        // Run addons as late as possible
+        AddonManager.INSTANCE.run(addon -> addon.onShutdown(this));
     }
 
     // --------------------------------------------------------------------------------------------
