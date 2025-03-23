@@ -67,5 +67,8 @@
 
   "commands.fullbright": "Erhellt deine Welt!",
   "commands.fullbright.enabled": "Fullbright aktiviert.",
-  "commands.fullbright.disabled": "Fullbright deaktiviert."
+  "commands.fullbright.disabled": "Fullbright deaktiviert.",
+
+  "commands.getcoord": "Kopiere deine aktuellen Koordinaten!",
+  "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert."
 }

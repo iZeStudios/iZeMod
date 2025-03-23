@@ -68,5 +68,8 @@
 
   "commands.fullbright": "Lights up your world!",
   "commands.fullbright.enabled": "Fullbright enabled.",
-  "commands.fullbright.disabled": "Fullbright disabled."
+  "commands.fullbright.disabled": "Fullbright disabled.",
+
+  "commands.getcoord": "Copies your current coordinates!",
+  "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!"
 }
