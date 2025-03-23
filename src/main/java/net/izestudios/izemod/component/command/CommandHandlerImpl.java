@@ -26,6 +26,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
+import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
@@ -49,6 +50,7 @@ public final class CommandHandlerImpl implements CommandHandler {
 
         addCommand(new TestCommand());
         addCommand(new FullbrightCommand());
+        addCommand(new CopyIPCommand());
         addCommand(new GetCoordCommand());
     }
 
