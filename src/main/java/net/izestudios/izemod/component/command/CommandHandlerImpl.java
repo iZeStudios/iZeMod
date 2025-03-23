@@ -24,7 +24,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.izestudios.izemod.addon.AddonManager;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
@@ -33,7 +32,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class CommandHandlerImpl implements CommandHandler {

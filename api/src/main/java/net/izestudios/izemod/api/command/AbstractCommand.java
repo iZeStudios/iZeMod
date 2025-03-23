@@ -24,6 +24,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.izestudios.izemod.util.ChatUtil;
 import net.minecraft.command.CommandSource;
+import net.minecraft.text.Text;
 
 /**
  * Command abstraction. Override {@link #builder(LiteralArgumentBuilder)} to create the command structure.
@@ -34,14 +35,14 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
     public static final int FAILURE = 0;
 
     private final String[] aliases;
-    private final String description;
+    private final Text description;
 
     public AbstractCommand(final String command) {
         this.description = null;
         this.aliases = new String[] { command };
     }
 
-    public AbstractCommand(final String description, final String... aliases) {
+    public AbstractCommand(final Text description, final String... aliases) {
         Preconditions.checkState(aliases.length > 0, "No aliases provided");
         this.description = description;
         this.aliases = aliases;
@@ -57,7 +58,7 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
 
     public abstract void builder(final LiteralArgumentBuilder<CommandSource> builder);
 
-    public String getDescription() {
+    public Text getDescription() {
         return description;
     }
 

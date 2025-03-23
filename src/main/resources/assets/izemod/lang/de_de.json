@@ -65,6 +65,7 @@
   "ingame.hud.date": "Datum",
   "ingame.hud.time": "Uhrzeit",
 
-  "ingame.fullbright.enabled": "Fullbright aktiviert.",
-  "ingame.fullbright.disabled": "Fullbright deaktiviert."
+  "commands.fullbright": "Erhellt deine Welt!",
+  "commands.fullbright.enabled": "Fullbright aktiviert.",
+  "commands.fullbright.disabled": "Fullbright deaktiviert."
 }

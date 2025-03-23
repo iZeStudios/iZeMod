@@ -28,14 +28,14 @@ public final class FullbrightCommand extends AbstractCommand {
     public static boolean active;
 
     public FullbrightCommand() {
-        super("Lights up your world!", "Fullbright");
+        super(Text.translatable("commands.fullbright"), "Fullbright");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(commandContext -> {
             active = !active;
-            printSuccessMessage(Text.translatable(active ? "ingame.fullbright.enabled" : "ingame.fullbright.disabled"));
+            printSuccessMessage(Text.translatable(active ? "commands.fullbright.enabled" : "commands.fullbright.disabled"));
             return SUCCESS;
         });
     }
