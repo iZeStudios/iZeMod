@@ -69,10 +69,10 @@ public final class RenderUtil {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
         final BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(width, y, 0).color(f1, f2, f3, startAlpha/255F);
-        buffer.vertex(x, y, 0).color(f1, f2, f3, startAlpha/255F);
-        buffer.vertex(x, height, 0).color(f5, f6, f7, endAlpha/255F);
-        buffer.vertex(width, height, 0).color(f5, f6, f7, endAlpha/255F);
+        buffer.vertex(width, y, 0).color(f1, f2, f3, startAlpha / 255F);
+        buffer.vertex(x, y, 0).color(f1, f2, f3, startAlpha / 255F);
+        buffer.vertex(x, height, 0).color(f5, f6, f7, endAlpha / 255F);
+        buffer.vertex(width, height, 0).color(f5, f6, f7, endAlpha / 255F);
         BufferRenderer.drawWithGlobalProgram(buffer.end());
         RenderSystem.disableBlend();
     }

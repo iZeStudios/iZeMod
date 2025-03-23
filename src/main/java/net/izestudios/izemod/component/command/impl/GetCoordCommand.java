@@ -24,6 +24,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
+
 import java.text.NumberFormat;
 
 public final class GetCoordCommand extends AbstractCommand {
@@ -42,7 +43,7 @@ public final class GetCoordCommand extends AbstractCommand {
             final String x = numberFormat.format(position.getX());
             final String y = numberFormat.format(position.getY());
             final String z = numberFormat.format(position.getZ());
-            MinecraftClient.getInstance().keyboard.setClipboard(x + " " + y + " " +z);
+            MinecraftClient.getInstance().keyboard.setClipboard(x + " " + y + " " + z);
 
             printSuccessMessage(Text.translatable("commands.getcoord.success"));
             return SUCCESS;
