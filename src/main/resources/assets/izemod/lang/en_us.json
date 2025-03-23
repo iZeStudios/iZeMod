@@ -75,5 +75,7 @@
   "commands.copyip.success": "Server IP copied to the clipboard.",
 
   "commands.getcoord": "Copies your current coordinates!",
-  "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!"
+  "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!",
+
+  "commands.clearchat": "Clears the chat."
 }
