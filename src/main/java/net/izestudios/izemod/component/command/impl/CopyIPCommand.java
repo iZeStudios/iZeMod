@@ -20,22 +20,28 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 
-public final class FullbrightCommand extends AbstractCommand {
+public final class CopyIPCommand extends AbstractCommand {
 
-    public static boolean active;
-
-    public FullbrightCommand() {
-        super(Text.translatable("commands.fullbright"), "fullbright");
+    public CopyIPCommand() {
+        super(Text.translatable("commands.copyip"), "copyip");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(commandContext -> {
-            active = !active;
-            printSuccessMessage(Text.translatable(active ? "commands.fullbright.enabled" : "commands.fullbright.disabled"));
+            final MinecraftClient client = MinecraftClient.getInstance();
+            if (client.isInSingleplayer()) {
+                printErrorMessage(Text.translatable("commands.copyip.singleplayer"));
+                return FAILURE;
+            }
+
+            final String address = client.getCurrentServerEntry().address;
+            client.keyboard.setClipboard(address);
+            printSuccessMessage(Text.translatable("commands.copyip.success"));
             return SUCCESS;
         });
     }

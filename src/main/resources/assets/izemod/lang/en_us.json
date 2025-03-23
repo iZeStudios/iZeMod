@@ -68,5 +68,12 @@
 
   "commands.fullbright": "Lights up your world!",
   "commands.fullbright.enabled": "Fullbright enabled.",
-  "commands.fullbright.disabled": "Fullbright disabled."
+  "commands.fullbright.disabled": "Fullbright disabled.",
+
+  "commands.copyip": "Copies the IP from the server!",
+  "commands.copyip.singleplayer": "You cannot copy the IP because you are in Singleplayer!",
+  "commands.copyip.success": "Server IP copied to the clipboard.",
+
+  "commands.getcoord": "Copies your current coordinates!",
+  "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!"
 }

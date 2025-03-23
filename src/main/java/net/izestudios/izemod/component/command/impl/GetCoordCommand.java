@@ -20,22 +20,31 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
+import java.text.NumberFormat;
 
-public final class FullbrightCommand extends AbstractCommand {
+public final class GetCoordCommand extends AbstractCommand {
 
-    public static boolean active;
-
-    public FullbrightCommand() {
-        super(Text.translatable("commands.fullbright"), "fullbright");
+    public GetCoordCommand() {
+        super(Text.translatable("commands.getcoord"), "getcoord");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(commandContext -> {
-            active = !active;
-            printSuccessMessage(Text.translatable(active ? "commands.fullbright.enabled" : "commands.fullbright.disabled"));
+            final NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMaximumFractionDigits(3);
+
+            final Vec3d position = MinecraftClient.getInstance().player.getPos();
+            final String x = numberFormat.format(position.getX());
+            final String y = numberFormat.format(position.getY());
+            final String z = numberFormat.format(position.getZ());
+            MinecraftClient.getInstance().keyboard.setClipboard(x + " " + y + " " +z);
+
+            printSuccessMessage(Text.translatable("commands.getcoord.success"));
             return SUCCESS;
         });
     }
