@@ -41,13 +41,8 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public Session session;
 
-    @Inject(method = "<init>", at = @At(
-        value = "FIELD",
-        target = "Lnet/minecraft/client/MinecraftClient;session:Lnet/minecraft/client/session/Session;",
-        ordinal = 0,
-        shift = At.Shift.AFTER
-    ))
-    private void overwriteSession(RunArgs args, CallbackInfo ci) {
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SplashOverlay;init(Lnet/minecraft/client/texture/TextureManager;)V"))
+    private void initialize(RunArgs args, CallbackInfo ci) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             session = new Session(
                 "iZeMod" + String.format("%06d", (int)(Math.random() * 1000000)),
@@ -58,10 +53,7 @@ public abstract class MixinMinecraftClient {
                 Session.AccountType.MOJANG
             );
         }
-    }
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
-    private void initialize(RunArgs args, CallbackInfo ci) {
         SplashOverlay.LOGO = Assets.SPLASH_OVERLAY;
         IzeModImpl.INSTANCE.lateInitialize();
     }
@@ -75,4 +67,5 @@ public abstract class MixinMinecraftClient {
     private void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")");
     }
+
 }

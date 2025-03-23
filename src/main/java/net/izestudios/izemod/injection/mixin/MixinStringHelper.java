@@ -23,10 +23,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(StringHelper.class)
-public class MixinStringHelper {
-    @SuppressWarnings("overwrite")
+public abstract class MixinStringHelper {
+
+    /**
+     * @author iZePlayz
+     * @reason Allow paragraph as valid character
+     */
     @Overwrite
     public static boolean isValidChar(char c) {
         return c >= ' ' && c != 127;
     }
+
 }
