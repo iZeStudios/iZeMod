@@ -24,14 +24,9 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 @Mixin(StringHelper.class)
 public class MixinStringHelper {
-
-    /**
-     * @author iZePlayz
-     * @reason Changed "§" to be a valid char
-     */
+    @SuppressWarnings("overwrite")
     @Overwrite
     public static boolean isValidChar(char c) {
         return c >= ' ' && c != 127;
     }
-
 }
