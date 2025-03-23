@@ -18,6 +18,7 @@
     "MixinPressableWidget",
     "MixinScreen",
     "MixinSplashOverlay",
+    "MixinStringHelper",
     "MixinTextFieldWidget",
     "MixinTitleScreen",
     "MixinWorldIcon"
