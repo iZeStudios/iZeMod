@@ -22,7 +22,13 @@ import java.awt.*;
 
 public final class ColorTheme {
 
-    public static final int DARK_BLUE = new Color(0, 75, 100).getRGB();
+    public static final int BASE_BLUE = new Color(0, 75, 100).getRGB();
+    public static final int EMPTY = new Color(255, 255, 255, 0).getRGB();
+    public static final int BLACK = new Color(0, 0, 0).getRGB();
+    public static final int WHITE_128 = new Color(255, 255, 255, 128).getRGB();
+    public static final int BLACK_50 = new Color(0, 0, 0, 50).getRGB();
+    public static final int BLACK_150 = new Color(0, 0, 0, 150).getRGB();
+    public static final int BLACK_200 = new Color(0, 0, 0, 200).getRGB();
 
     private static int blue = 150;
     private static boolean isReversing = false;

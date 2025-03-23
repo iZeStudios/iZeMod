@@ -8,6 +8,7 @@
     "MixinChatScreen",
     "MixinClientPlayNetworkHandler",
     "MixinDirectConnectScreen",
+    "MixinEntryListWidget",
     "MixinGameRenderer",
     "MixinIcons",
     "MixinLightmapTextureManager",

@@ -42,7 +42,7 @@ public abstract class MixinTextFieldWidget extends ClickableWidget {
     @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;drawsBackground()Z"))
     private boolean replaceTextFieldStyle(TextFieldWidget instance, @Local(argsOnly = true) DrawContext context) {
         if (drawsBackground()) {
-            context.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.DARK_BLUE);
+            context.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.BASE_BLUE);
         }
         return false;
     }
