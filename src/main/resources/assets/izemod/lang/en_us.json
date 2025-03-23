@@ -78,5 +78,5 @@
   "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!",
 
   "commands.clearchat": "Clears the chat.",
-  "commands.clearchat.success": "The chat was cleared"
+  "commands.clearchat.success": "The chat was cleared."
 }
