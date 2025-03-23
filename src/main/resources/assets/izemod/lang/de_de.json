@@ -63,5 +63,8 @@
   "ingame.hud.ping": "Ping",
   "ingame.hud.players": "Spieler",
   "ingame.hud.date": "Datum",
-  "ingame.hud.time": "Uhrzeit"
+  "ingame.hud.time": "Uhrzeit",
+
+  "ingame.fullbright.enabled": "Fullbright aktiviert.",
+  "ingame.fullbright.disabled": "Fullbright deaktiviert."
 }

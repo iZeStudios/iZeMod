@@ -10,6 +10,7 @@
     "MixinDirectConnectScreen",
     "MixinGameRenderer",
     "MixinIcons",
+    "MixinLightmapTextureManager",
     "MixinMain",
     "MixinMinecraftClient",
     "MixinMultiplayerScreen",

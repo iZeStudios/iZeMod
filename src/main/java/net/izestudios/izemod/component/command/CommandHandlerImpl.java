@@ -27,6 +27,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.addon.AddonManager;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
+import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
@@ -48,6 +49,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         Preconditions.checkState(commands.isEmpty(), "Commands already initialized");
 
         addCommand(new TestCommand());
+        addCommand(new FullbrightCommand());
     }
 
     public boolean onChatMessage(final String message) {
