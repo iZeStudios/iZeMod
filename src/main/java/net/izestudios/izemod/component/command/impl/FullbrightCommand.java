@@ -28,7 +28,7 @@ public final class FullbrightCommand extends AbstractCommand {
     public static boolean active;
 
     public FullbrightCommand() {
-        super(Text.translatable("commands.fullbright"), "Fullbright");
+        super(Text.translatable("commands.fullbright"), "fullbright");
     }
 
     @Override
