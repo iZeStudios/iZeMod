@@ -26,7 +26,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.SplashOverlay;
 import net.minecraft.client.session.Session;
-import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,12 +41,16 @@ public abstract class MixinMinecraftClient {
     @Shadow
     public Session session;
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
-    private void initialize(RunArgs args, CallbackInfo ci) {
-        SplashOverlay.LOGO = Assets.SPLASH_OVERLAY;
+    @Inject(method = "<init>", at = @At(
+        value = "FIELD",
+        target = "Lnet/minecraft/client/MinecraftClient;session:Lnet/minecraft/client/session/Session;",
+        ordinal = 0,
+        shift = At.Shift.AFTER
+    ))
+    private void overwriteSession(RunArgs args, CallbackInfo ci) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             session = new Session(
-                "iZeMod" + Util.getMeasuringTimeMs() % 10000000L,
+                "iZeMod" + String.format("%06d", (int)(Math.random() * 1000000)),
                 UUID.randomUUID(),
                 "00000000000000000000000000000000",
                 Optional.empty(),
@@ -55,7 +58,11 @@ public abstract class MixinMinecraftClient {
                 Session.AccountType.MOJANG
             );
         }
+    }
 
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/System;currentTimeMillis()J"))
+    private void initialize(RunArgs args, CallbackInfo ci) {
+        SplashOverlay.LOGO = Assets.SPLASH_OVERLAY;
         IzeModImpl.INSTANCE.lateInitialize();
     }
 
@@ -66,7 +73,6 @@ public abstract class MixinMinecraftClient {
 
     @Inject(method = "getWindowTitle", at = @At(value = "HEAD"), cancellable = true)
     private void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
-         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")");
+        cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")");
     }
-
 }
