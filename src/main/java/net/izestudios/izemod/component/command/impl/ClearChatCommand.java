@@ -21,22 +21,21 @@ package net.izestudios.izemod.component.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 
-public class ClearChatCommand extends AbstractCommand {
+public final class ClearChatCommand extends AbstractCommand {
+
     public ClearChatCommand() {
-        super(Text.translatable("commands.clearchat"), "cc");
+        super(Text.translatable("commands.clearchat"), "clearchat", "cc");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
         builder.executes(commandContext -> {
-            for (int i = 0; i < 100; i++) printChatMessage(" ");
-
-            printSuccessMessage(Text.translatable("commands.clearchat.success"));
+            MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
             return SUCCESS;
         });
     }
+
 }
