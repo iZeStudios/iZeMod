@@ -54,6 +54,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new CopyIPCommand());
         addCommand(new GetCoordCommand());
         addCommand(new ClearChatCommand());
+        addCommand(new EnchantCommand());
     }
 
     public boolean onChatMessage(final String message) {
