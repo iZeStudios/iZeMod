@@ -20,36 +20,24 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.command.CommandSource;
+import net.minecraft.text.Text;
 
-public class FullbrightCommand extends AbstractCommand {
+public final class FullbrightCommand extends AbstractCommand {
 
-    static Boolean fullbright = false;
+    public static boolean active;
 
     public FullbrightCommand() {
-        super("Fullbright");
+        super("Lights up your world!", "Fullbright");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
-
         builder.executes(commandContext -> {
-            toggleFullbright();
+            active = !active;
+            printSuccessMessage(Text.translatable(active ? "ingame.fullbright.enabled" : "ingame.fullbright.disabled"));
             return SUCCESS;
         });
-
-
     }
 
-    private void toggleFullbright() {
-        fullbright = !fullbright;
-        String statusMessage = fullbright ? "ingame.fullbright.enabled" : "ingame.fullbright.disabled";
-        printSuccessMessage(I18n.translate(statusMessage));
-    }
-
-
-    public static Boolean getFullbright() {
-        return fullbright;
-    }
 }

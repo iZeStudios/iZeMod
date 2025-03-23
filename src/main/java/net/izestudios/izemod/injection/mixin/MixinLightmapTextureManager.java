@@ -25,11 +25,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LightmapTextureManager.class)
-public class MixinLightmapTextureManager {
+public abstract class MixinLightmapTextureManager {
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 1))
-    private float onUpdate(Double instance) {
-        return (float) (FullbrightCommand.getFullbright() ? instance*100.0F : instance);
+    private float fullbright(Double instance) {
+        if (FullbrightCommand.active) {
+            return instance.floatValue() * 100.0F;
+        } else {
+            return instance.floatValue();
+        }
     }
 
 }
