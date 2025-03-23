@@ -74,5 +74,8 @@
   "commands.copyip.success": "Die Server-IP wurde in die Zwischenablage kopiert.",
 
   "commands.getcoord": "Kopiere deine aktuellen Koordinaten!",
-  "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert."
+  "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert.",
+
+  "commands.clearchat": "Leert den Chat.",
+  "commands.clearchat.success": "Der Chat wurde gelöscht."
 }
