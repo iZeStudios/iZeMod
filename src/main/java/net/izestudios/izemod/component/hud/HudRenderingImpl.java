@@ -39,6 +39,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.NotNull;
 
 public final class HudRenderingImpl implements HudRendering {
 
@@ -115,17 +116,20 @@ public final class HudRenderingImpl implements HudRendering {
     }
 
     @Override
-    public void addHudElement(final HudElement hudElement) {
+    public void addHudElement(final @NotNull HudElement hudElement) {
+        Preconditions.checkNotNull(hudElement);
         elements.add(hudElement);
     }
 
     @Override
-    public void removeHudElement(final HudElement hudElement) {
+    public void removeHudElement(final @NotNull HudElement hudElement) {
+        Preconditions.checkNotNull(hudElement);
         elements.remove(hudElement);
     }
 
     @Override
-    public void removeHudElement(final String key) {
+    public void removeHudElement(final @NotNull String key) {
+        Preconditions.checkNotNull(key);
         elements.removeIf(hudElement -> hudElement.key().equals(key));
     }
 

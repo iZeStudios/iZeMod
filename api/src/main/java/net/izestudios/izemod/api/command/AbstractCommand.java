@@ -43,7 +43,11 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
     }
 
     public AbstractCommand(final Text description, final String... aliases) {
+        Preconditions.checkNotNull(description);
         Preconditions.checkState(aliases.length > 0, "No aliases provided");
+        for (final String alias : aliases) {
+            Preconditions.checkState(alias != null && !alias.isEmpty(), "Invalid alias");
+        }
         this.description = description;
         this.aliases = aliases;
     }

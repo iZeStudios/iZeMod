@@ -18,7 +18,9 @@
 
 package net.izestudios.izemod.api.hud;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 /**
@@ -36,7 +38,9 @@ public interface HudElement {
      */
     String value();
 
-    static HudElement of(final Text key, final Text value) {
+    static HudElement of(final @NotNull Text key, final @NotNull Text value) {
+        Preconditions.checkNotNull(key);
+        Preconditions.checkNotNull(value);
         return new HudElement() {
             @Override
             public String key() {
@@ -50,7 +54,9 @@ public interface HudElement {
         };
     }
 
-    static HudElement of(final String key, final String value) {
+    static HudElement of(final @NotNull String key, final @NotNull String value) {
+        Preconditions.checkNotNull(key);
+        Preconditions.checkNotNull(value);
         return new HudElement() {
             @Override
             public String key() {
@@ -64,7 +70,9 @@ public interface HudElement {
         };
     }
 
-    static HudElement of(final Text text, final Supplier<Object> valueSupplier) {
+    static HudElement of(final @NotNull Text text, final @NotNull Supplier<Object> valueSupplier) {
+        Preconditions.checkNotNull(text);
+        Preconditions.checkNotNull(valueSupplier);
         return new HudElement() {
             @Override
             public String key() {

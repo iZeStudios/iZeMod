@@ -34,6 +34,7 @@ import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,8 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     @Override
-    public void addCommand(final AbstractCommand command) {
+    public void addCommand(final @NotNull AbstractCommand command) {
+        Preconditions.checkNotNull(command);
         final LiteralArgumentBuilder<CommandSource> literal = LiteralArgumentBuilder.literal(command.getCommand());
         command.builder(literal);
         final LiteralCommandNode<CommandSource> builder = dispatcher.register(literal);
@@ -99,12 +101,14 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     @Override
-    public void removeCommand(final AbstractCommand command) {
+    public void removeCommand(final @NotNull AbstractCommand command) {
+        Preconditions.checkNotNull(command);
         commands.remove(command);
     }
 
     @Override
-    public void removeCommand(final String alias) {
+    public void removeCommand(final @NotNull String alias) {
+        Preconditions.checkNotNull(alias);
         commands.removeIf(command -> {
             for (String commandAlias : command.getAliases()) {
                 if (commandAlias.equals(alias)) {

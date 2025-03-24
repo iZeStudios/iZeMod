@@ -18,6 +18,8 @@
 
 package net.izestudios.izemod.api.hud;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Endpoint to extend the HUD rendering.
  */
@@ -28,20 +30,20 @@ public interface HudRendering {
      *
      * @param hudElement The HUD element to add.
      */
-    void addHudElement(final HudElement hudElement);
+    void addHudElement(final @NotNull HudElement hudElement);
 
     /**
      * Removes a HUD element from the rendering.
      *
      * @param hudElement The HUD element to remove.
      */
-    void removeHudElement(final HudElement hudElement);
+    void removeHudElement(final @NotNull HudElement hudElement);
 
     /**
      * Removes a HUD element from the rendering by the key. If the key is not found, nothing happens.
      *
      * @param key The key of the HUD element to remove.
      */
-    void removeHudElement(final String key);
+    void removeHudElement(final @NotNull String key);
 
 }
