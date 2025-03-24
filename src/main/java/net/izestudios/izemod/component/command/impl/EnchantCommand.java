@@ -49,7 +49,7 @@ public final class EnchantCommand extends AbstractCommand {
                         return FAILURE;
                     }
 
-                    ItemStack item = client.player.getMainHandStack();
+                    final ItemStack item = client.player.getMainHandStack();
                     if (item.isEmpty()) {
                         printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
                         return FAILURE;
