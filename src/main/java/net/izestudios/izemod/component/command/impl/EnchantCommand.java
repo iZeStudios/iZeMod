@@ -25,12 +25,13 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public final class EnchantCommand extends AbstractCommand {
 
     public EnchantCommand() {
-        super("enchant");
+        super(Text.translatable("commands.enchant"), "enchant");
     }
 
     @Override
@@ -39,18 +40,18 @@ public final class EnchantCommand extends AbstractCommand {
             .then(argument("level", integer())
                 .executes(commandContext -> {
                     if (client.player == null || client.interactionManager == null) {
-                        printErrorMessage("Player not found!");
+                        printErrorMessage(Text.translatable("commands.enchant.error.player_not_found"));
                         return FAILURE;
                     }
 
                     if (!client.player.getAbilities().creativeMode) {
-                        printErrorMessage("§c§lError: §3You need to be in creative mode.");
+                        printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
                         return FAILURE;
                     }
 
                     ItemStack item = client.player.getMainHandStack();
                     if (item.isEmpty()) {
-                        printErrorMessage("§c§lError: §3You need to hold an item.");
+                        printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
                         return FAILURE;
                     }
 
@@ -59,12 +60,12 @@ public final class EnchantCommand extends AbstractCommand {
 
                     Enchantment enchantment = Registry.ENCHANTMENT.get(new Identifier(enchantName));
                     if (enchantment == null) {
-                        printErrorMessage("There is no enchantment with the name '" + enchantName + "'");
+                        printErrorMessage(Text.translatable("commands.enchant.error.invalid_enchant", enchantName));
                         return FAILURE;
                     }
 
                     item.addEnchantment(enchantment, level);
-                    printSuccessMessage(enchantment.getName(level).getString() + " added to " + item.getName().getString() + ".");
+                    printSuccessMessage(Text.translatable("commands.enchant.success", enchantment.getName(level).getString(), item.getName().getString()));
                     return SUCCESS;
                 })
             )
