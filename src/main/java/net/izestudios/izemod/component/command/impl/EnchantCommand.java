@@ -55,7 +55,7 @@ public final class EnchantCommand extends AbstractCommand {
                         return FAILURE;
                     }
 
-                    String enchantName = getString(commandContext, "enchant");
+                    final String enchantName = getString(commandContext, "enchant");
                     int level = getInteger(commandContext, "level");
 
                     Enchantment enchantment = Registry.ENCHANTMENT.get(new Identifier(enchantName));
