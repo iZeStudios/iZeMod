@@ -18,58 +18,124 @@
 
 package net.izestudios.izemod.component.command.impl;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.izestudios.izemod.api.command.AbstractCommand;
 import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.command.argument.EnchantmentArgumentType;
 
 public final class EnchantCommand extends AbstractCommand {
 
     public EnchantCommand() {
-        super(Text.translatable("commands.enchant"), "enchant");
+        super(Text.translatable("commands.enchant"), "enchantment");
     }
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
-        builder.then(argument("enchant", string())
-            .then(argument("level", integer())
-                .executes(commandContext -> {
-                    if (client.player == null || client.interactionManager == null) {
-                        printErrorMessage(Text.translatable("commands.enchant.error.player_not_found"));
-                        return FAILURE;
-                    }
-
-                    if (!client.player.getAbilities().creativeMode) {
-                        printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
-                        return FAILURE;
-                    }
-
-                    final ItemStack item = client.player.getMainHandStack();
-                    if (item.isEmpty()) {
-                        printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
-                        return FAILURE;
-                    }
-
-                    final String enchantName = getString(commandContext, "enchant");
-                    final int level = getInteger(commandContext, "level");
-
-                    final Enchantment enchantment = Registry.ENCHANTMENT.get(new Identifier(enchantName));
-                    if (enchantment == null) {
-                        printErrorMessage(Text.translatable("commands.enchant.error.invalid_enchant", enchantName));
-                        return FAILURE;
-                    }
-
-                    item.addEnchantment(enchantment, level);
-                    printSuccessMessage(Text.translatable("commands.enchant.success", enchantment.getName(level).getString(), item.getName().getString()));
-                    return SUCCESS;
-                })
+        builder.then(literal("add")
+            .then(argument("enchantment", EnchantmentArgumentType.enchantment())
+                .executes(ctx -> addEnchantment(ctx.getSource(), ctx.getArgument("enchantment", Enchantment.class), 1))
+                .then(argument("level", IntegerArgumentType.integer(1))
+                    .executes(ctx -> addEnchantment(ctx.getSource(), ctx.getArgument("enchantment", Enchantment.class), IntegerArgumentType.getInteger(ctx, "level")))
+                )
             )
+        );
+
+        builder.then(literal("remove")
+            .then(argument("enchantment", EnchantmentArgumentType.enchantment())
+                .executes(ctx -> removeEnchantment(ctx.getSource(), ctx.getArgument("enchantment", Enchantment.class)))
+            )
+        );
+
+        builder.then(literal("all")
+            .executes(ctx -> addAllEnchantments(ctx.getSource()))
+        );
+
+        builder.then(literal("clear")
+            .executes(ctx -> clearEnchantments(ctx.getSource()))
         );
     }
 
+    private int addEnchantment(CommandSource source, Enchantment enchantment, int level) {
+        if (client.player == null || !client.player.getAbilities().creativeMode) {
+            printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
+            return FAILURE;
+        }
+
+        ItemStack item = client.player.getMainHandStack();
+        if (item.isEmpty()) {
+            printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
+            return FAILURE;
+        }
+
+        item.addEnchantment(enchantment, level);
+        printSuccessMessage(Text.translatable("commands.enchant.success", enchantment.getName(level).getString(), item.getName().getString()));
+        return SUCCESS;
+    }
+
+    private int removeEnchantment(CommandSource source, Enchantment enchantment) {
+        if (client.player == null || !client.player.getAbilities().creativeMode) {
+            printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
+            return FAILURE;
+        }
+
+        ItemStack item = client.player.getMainHandStack();
+        if (item.isEmpty()) {
+            printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
+            return FAILURE;
+        }
+
+        if (!EnchantmentHelper.get(item).containsKey(enchantment)) {
+            printErrorMessage(Text.translatable("commands.enchant.error.not_found", enchantment.getName(1).getString()));
+            return FAILURE;
+        }
+
+        EnchantmentHelper.set(Collections.emptyMap(), item);
+        printSuccessMessage(Text.translatable("commands.enchant.removed", enchantment.getName(1).getString(), item.getName().getString()));
+        return SUCCESS;
+    }
+
+    private int addAllEnchantments(CommandSource source) {
+        if (client.player == null || !client.player.getAbilities().creativeMode) {
+            printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
+            return FAILURE;
+        }
+
+        ItemStack item = client.player.getMainHandStack();
+        if (item.isEmpty()) {
+            printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
+            return FAILURE;
+        }
+
+        for (Enchantment enchantment : Registries.ENCHANTMENT) {
+            item.addEnchantment(enchantment, 1);
+        }
+
+        printSuccessMessage(Text.translatable("commands.enchant.all_added", item.getName().getString()));
+        return SUCCESS;
+    }
+
+    private int clearEnchantments(CommandSource source) {
+        if (client.player == null || !client.player.getAbilities().creativeMode) {
+            printErrorMessage(Text.translatable("commands.enchant.error.not_creative"));
+            return FAILURE;
+        }
+
+        ItemStack item = client.player.getMainHandStack();
+        if (item.isEmpty()) {
+            printErrorMessage(Text.translatable("commands.enchant.error.no_item"));
+            return FAILURE;
+        }
+
+        EnchantmentHelper.set(Collections.emptyMap(), item);
+        printSuccessMessage(Text.translatable("commands.enchant.clear", item.getName().getString()));
+        return SUCCESS;
+    }
 }
