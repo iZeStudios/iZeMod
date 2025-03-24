@@ -80,9 +80,11 @@
   "commands.clearchat": "Clears the chat.",
 
   "commands.enchant": "Enchant",
-  "commands.enchant.error.player_not_found": "Player not found!",
   "commands.enchant.error.not_creative": "§c§lError: §3You need to be in creative mode.",
   "commands.enchant.error.no_item": "§c§lError: §3You need to hold an item.",
-  "commands.enchant.error.invalid_enchant": "There is no enchantment with the name '%s'",
-  "commands.enchant.success": "%s added to %s."
+  "commands.enchant.error.not_found": "Enchantment '%s' not found on the item.",
+  "commands.enchant.success": "%s added to %s.",
+  "commands.enchant.removed": "%s removed from %s.",
+  "commands.enchant.all_added": "All enchantments added to %s.",
+  "commands.enchant.clear": "All enchantments cleared from %s."
 }
