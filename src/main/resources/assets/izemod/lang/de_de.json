@@ -76,5 +76,12 @@
   "commands.getcoord": "Kopiere deine aktuellen Koordinaten!",
   "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert.",
 
-  "commands.clearchat": "Leert den Chat."
+  "commands.clearchat": "Leert den Chat.",
+
+  "commands.enchant": "Verzaubern",
+  "commands.enchant.error.player_not_found": "Spieler nicht gefunden!",
+  "commands.enchant.error.not_creative": "§c§lFehler: §3Du musst im Kreativmodus sein.",
+  "commands.enchant.error.no_item": "§c§lFehler: §3Du musst ein Item in der Hand halten.",
+  "commands.enchant.error.invalid_enchant": "Es gibt keine Verzauberung mit dem Namen '%s'",
+  "commands.enchant.success": "%s wurde zu %s hinzugefügt."
 }
