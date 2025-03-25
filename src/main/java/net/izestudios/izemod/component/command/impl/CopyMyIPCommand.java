@@ -40,16 +40,21 @@ public class CopyMyIPCommand extends AbstractCommand {
                 printSuccessMessage(Text.translatable("commands.copymyip.success"));
                 MinecraftClient.getInstance().keyboard.setClipboard(getIP());
                 return SUCCESS;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 return FAILURE;
             }
         });
     }
 
-    public String getIP() throws IOException {
-        URL url = new URL("http://checkip.amazonaws.com");
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-        return in.readLine();
+    public static String getIP() throws Exception {
+        URL url;
+        try {
+            url = new URL("http://checkip.amazonaws.com/");
+        } catch (Exception e) {
+            url = new URL("https://ipv4bot.whatismyipaddress.com/");
+        }
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+        return bufferedReader.readLine();
     }
 
 }
