@@ -10,13 +10,31 @@
   "screens.title.options": "iZeMod Einstellungen",
   "screens.title.addons": "iZeMod Addons (%s)",
   "screens.title.mods": "Fabric Mods (%s)",
+  "screens.title.minecraft": ".minecraft-Ordner",
 
   "screens.debug": "Debug",
   "screens.debug.title": "Debug-Menü",
   "screens.debug.toLoginScreen": "Zurück zum Login-Screen",
   "screens.debug.tetris": "Tetris",
-  "screens.debug.unusedTodo": "[UNGENUTZT/TODO]",
-  "screens.debug.back": "Zurück zum Hauptmenü",
+
+  "screens.settings": "iZeMod Einstellungen",
+  "screens.settings.title": "iZeMod Einstellungen",
+  "screens.settings.showAll": "Alles anzeigen",
+  "screens.settings.hideAll": "Alles verbergen",
+  "screens.settings.option.fps": "FPS",
+  "screens.settings.option.coords": "Koordinaten",
+  "screens.settings.option.biome": "Biom",
+  "screens.settings.option.date": "Datum",
+  "screens.settings.option.time": "Uhrzeit",
+  "screens.settings.option.serverip": "Server-IP",
+  "screens.settings.option.ping": "Ping",
+  "screens.settings.option.players": "Spieleranzahl",
+  "screens.settings.option.show": "Anzeigen",
+  "screens.settings.option.hide": "Verbergen",
+  "screens.settings.label": "%s: %s",
+
+  "screens.general.unusedTodo": "...",
+  "screens.general.back": "Zurück zum Hauptmenü",
 
   "update.first": "Ein neues Update von iZeMod ist verfügbar (%s)!",
   "update.second": "Klicke hier, um die neueste Version herunterzuladen!",
@@ -55,26 +73,13 @@
   "screens.directconnect.brand": "Brand",
   "screens.directconnect.version": "Version",
 
-  "ingame.hud.fps": "FPS",
-  "ingame.hud.x": "X",
-  "ingame.hud.y": "Y",
-  "ingame.hud.z": "Z",
-  "ingame.hud.biome": "Biom",
-  "ingame.hud.ping": "Ping",
-  "ingame.hud.players": "Spieler",
-  "ingame.hud.date": "Datum",
-  "ingame.hud.time": "Uhrzeit",
-
   "commands.fullbright": "Erhellt deine Welt!",
   "commands.fullbright.enabled": "Fullbright aktiviert.",
   "commands.fullbright.disabled": "Fullbright deaktiviert.",
-
   "commands.copyip": "Kopiere die IP vom Server!",
   "commands.copyip.singleplayer": "Du kannst die IP nicht kopieren, da du im Einzelspieler bist!",
   "commands.copyip.success": "Die Server-IP wurde in die Zwischenablage kopiert.",
-
   "commands.getcoord": "Kopiere deine aktuellen Koordinaten!",
   "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert.",
-
   "commands.clearchat": "Leert den Chat."
 }

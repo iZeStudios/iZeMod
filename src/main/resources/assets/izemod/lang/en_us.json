@@ -16,8 +16,25 @@
   "screens.debug.title": "Debug Menu",
   "screens.debug.toLoginScreen": "Back to login screen",
   "screens.debug.tetris": "Tetris",
-  "screens.debug.unusedTodo": "[UNUSED/TODO]",
-  "screens.debug.back": "Back to main menu",
+
+  "screens.settings": "iZeMod Settings",
+  "screens.settings.title": "iZeMod Settings",
+  "screens.settings.showAll": "Show all",
+  "screens.settings.hideAll": "Hide all",
+  "screens.settings.option.fps": "FPS",
+  "screens.settings.option.coords": "Coordinates",
+  "screens.settings.option.biome": "Biome",
+  "screens.settings.option.date": "Date",
+  "screens.settings.option.time": "Time",
+  "screens.settings.option.serverip": "Server IP",
+  "screens.settings.option.ping": "Ping",
+  "screens.settings.option.players": "Player count",
+  "screens.settings.option.show": "Show",
+  "screens.settings.option.hide": "Hide",
+  "screens.settings.label": "%s: %s",
+
+  "screens.general.unusedTodo": "...",
+  "screens.general.back": "Back to main menu",
 
   "update.first": "A new iZeMod update is available (%s)!",
   "update.second": "Click here to download the latest version!",
@@ -56,26 +73,13 @@
   "screens.directconnect.brand": "Brand",
   "screens.directconnect.version": "Version",
 
-  "ingame.hud.fps": "FPS",
-  "ingame.hud.x": "X",
-  "ingame.hud.y": "Y",
-  "ingame.hud.z": "Z",
-  "ingame.hud.biome": "Biome",
-  "ingame.hud.ping": "Ping",
-  "ingame.hud.players": "Players",
-  "ingame.hud.date": "Date",
-  "ingame.hud.time": "Time",
-
   "commands.fullbright": "Lights up your world!",
   "commands.fullbright.enabled": "Fullbright enabled.",
   "commands.fullbright.disabled": "Fullbright disabled.",
-
   "commands.copyip": "Copies the IP from the server!",
   "commands.copyip.singleplayer": "You cannot copy the IP because you are in Singleplayer!",
   "commands.copyip.success": "Server IP copied to the clipboard.",
-
   "commands.getcoord": "Copies your current coordinates!",
   "commands.getcoord.success": "Your current coordinates have been copied to the clipboard!",
-
   "commands.clearchat": "Clears the chat."
 }
