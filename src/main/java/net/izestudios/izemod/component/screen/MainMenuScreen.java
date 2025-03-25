@@ -69,7 +69,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
         addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
 
-        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.client.setScreen(SettingsScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));

@@ -19,12 +19,13 @@
 package net.izestudios.izemod.component.screen;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-public final class DebugScreen extends AbstractInitialScreen {
+public final class DebugScreen extends Screen {
 
     public static final DebugScreen INSTANCE = new DebugScreen();
 
@@ -34,38 +35,36 @@ public final class DebugScreen extends AbstractInitialScreen {
 
     @Override
     protected void init() {
-        final int baseY = (int) Math.sqrt(((double) (this.height * this.height) / (1.3 * 1.2)));
+        int baseY = (int) Math.sqrt(((double) (this.height * this.height) / (1.3 * 1.2)));
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.toLoginScreen"), button -> {
-            client.setScreen(LoginScreen.INSTANCE);
-        }).dimensions(this.width / 2 - 202, baseY + (25 * -4), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 - 202, baseY + (25 * -3), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 - 202, baseY + (25 * -2), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 - 202, baseY + (25 * -1), 200, 20).build());
+        this.addDrawableChild(new TextWidget(this.width / 2 - 100, baseY + (25 * -7), 200, 20,
+            Text.translatable("screens.debug.title")
+                .styled(style -> style.withColor(Formatting.RED).withBold(true)),
+            MinecraftClient.getInstance().textRenderer));
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.tetris"), button -> {
-            client.setScreen(TetrisScreen.INSTANCE);
-        }).dimensions(this.width / 2 + 2, baseY + (25 * -4), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 + 2, baseY + (25 * -3), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 + 2, baseY + (25 * -2), 200, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.unusedTodo"), button -> {
-            button.active = false;
-        }).dimensions(this.width / 2 + 2, baseY + (25 * -1), 200, 20).build());
+        this.createButton(0, -6, baseY, "screens.debug.toLoginScreen", b -> client.setScreen(LoginScreen.INSTANCE));
+        this.createButton(0, -5, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(0, -4, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(0, -3, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(0, -2, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(0, -1, baseY, "screens.general.unusedTodo", b -> b.active = false);
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.debug.back"), button -> {
-            this.client.setScreen(MainMenuScreen.INSTANCE);
-        }).dimensions(this.width / 2 - 100, baseY + 10, 200, 20).build());
+        this.createButton(1, -6, baseY, "screens.debug.tetris", b -> client.setScreen(TetrisScreen.INSTANCE));
+        this.createButton(1, -5, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(1, -4, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(1, -3, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(1, -2, baseY, "screens.general.unusedTodo", b -> b.active = false);
+        this.createButton(1, -1, baseY, "screens.general.unusedTodo", b -> b.active = false);
 
-        this.addDrawableChild(new TextWidget(this.width / 2 - 100, baseY + (25 * -5), 200, 20, Text.translatable("screens.debug.title").styled(style -> style.withColor(Formatting.RED)).styled(style -> style.withBold(true)), MinecraftClient.getInstance().textRenderer));
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.general.back"),
+                b -> this.client.setScreen(MainMenuScreen.INSTANCE))
+            .dimensions(this.width / 2 - 100, baseY + 10, 200, 20)
+            .build());
+    }
+
+    private void createButton(int column, int row, int baseY, String textKey, ButtonWidget.PressAction action) {
+        int x = this.width / 2 - 202 + (column * 204);
+        int y = baseY + (25 * row);
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable(textKey), action).dimensions(x, y, 200, 20).build());
     }
 }
