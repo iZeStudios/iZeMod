@@ -76,5 +76,8 @@
   "commands.getcoord": "Kopiere deine aktuellen Koordinaten!",
   "commands.getcoord.success": "Deine aktuellen Koordinaten wurden in die Zwischenablage kopiert.",
 
-  "commands.clearchat": "Leert den Chat."
+  "commands.clearchat": "Leert den Chat.",
+
+  "commands.copymyip": "Kopiere deine IP!",
+  "commands.copymyip.success": "Deine IP wurde in die Zwischenablage kopiert."
 }
