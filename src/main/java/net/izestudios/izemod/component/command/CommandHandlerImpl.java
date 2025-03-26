@@ -32,6 +32,7 @@ import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.ClearChatCommand;
+import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
@@ -68,7 +69,7 @@ public final class CommandHandlerImpl implements CommandHandler {
             try {
                 dispatcher.execute(reader, commandSource);
             } catch (CommandSyntaxException e) {
-
+                Constants.checkCommand(e, message);
             }
             return true;
         } else {
