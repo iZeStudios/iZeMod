@@ -41,6 +41,7 @@ import java.util.List;
 
 public final class CommandHandlerImpl implements CommandHandler {
 
+    private static final String PREFIX = "#";
     public static final CommandHandlerImpl INSTANCE = new CommandHandlerImpl();
 
     private final List<AbstractCommand> commands = new ArrayList<>();
@@ -60,9 +61,9 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     public boolean onChatMessage(final String message) {
-        if (message.startsWith("#")) {
+        if (message.startsWith(PREFIX)) {
             final StringReader reader = new StringReader(message);
-            reader.setCursor("#".length());
+            reader.setCursor(PREFIX.length());
 
             try {
                 dispatcher.execute(reader, commandSource);
@@ -76,8 +77,8 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     public boolean onRefreshSuggestions(final StringReader reader) {
-        if (reader.canRead("#".length()) && reader.getString().startsWith("#", reader.getCursor())) {
-            reader.setCursor(reader.getCursor() + "#".length());
+        if (reader.canRead(PREFIX.length()) && reader.getString().startsWith(PREFIX, reader.getCursor())) {
+            reader.setCursor(reader.getCursor() + PREFIX.length());
             return true;
         } else {
             return false;
