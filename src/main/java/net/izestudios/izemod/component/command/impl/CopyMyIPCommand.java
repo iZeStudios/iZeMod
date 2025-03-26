@@ -24,11 +24,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 
-public class CopyMyIPCommand extends AbstractCommand {
+public final class CopyMyIPCommand extends AbstractCommand {
+
     public CopyMyIPCommand() {
         super(Text.translatable("commands.copymyip"), "copymyip");
     }
@@ -40,20 +41,20 @@ public class CopyMyIPCommand extends AbstractCommand {
                 printSuccessMessage(Text.translatable("commands.copymyip.success"));
                 MinecraftClient.getInstance().keyboard.setClipboard(getIP());
                 return SUCCESS;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return FAILURE;
             }
         });
     }
 
-    public static String getIP() throws Exception {
+    private static String getIP() throws Exception {
         URL url;
         try {
-            url = new URL("http://checkip.amazonaws.com/");
+            url = new URI("https://checkip.amazonaws.com/").toURL();
         } catch (Exception e) {
-            url = new URL("https://ipv4bot.whatismyipaddress.com/");
+            url = new URI("https://ipv4bot.whatismyipaddress.com/").toURL();
         }
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
         return bufferedReader.readLine();
     }
 
