@@ -83,5 +83,8 @@
   "commands.enchant.error.not_creative": "§c§lFehler: §3Du musst im Kreativmodus sein.",
   "commands.enchant.error.no_item": "§c§lFehler: §3Du musst ein Item in der Hand halten.",
   "commands.enchant.error.invalid_enchant": "Es gibt keine Verzauberung mit dem Namen '%s'",
-  "commands.enchant.success": "%s wurde zu %s hinzugefügt."
+  "commands.enchant.success": "%s wurde zu %s hinzugefügt.",
+
+  "commands.copymyip": "Kopiere deine IP!",
+  "commands.copymyip.success": "Deine IP wurde in die Zwischenablage kopiert."
 }

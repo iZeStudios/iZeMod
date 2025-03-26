@@ -27,6 +27,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.component.command.impl.CopyIPCommand;
+import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
@@ -34,6 +35,7 @@ import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new GetCoordCommand());
         addCommand(new ClearChatCommand());
         addCommand(new EnchantCommand());
+        addCommand(new CopyMyIPCommand());
     }
 
     public boolean onChatMessage(final String message) {
@@ -83,7 +86,8 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     @Override
-    public void addCommand(final AbstractCommand command) {
+    public void addCommand(final @NotNull AbstractCommand command) {
+        Preconditions.checkNotNull(command);
         final LiteralArgumentBuilder<CommandSource> literal = LiteralArgumentBuilder.literal(command.getCommand());
         command.builder(literal);
         final LiteralCommandNode<CommandSource> builder = dispatcher.register(literal);
@@ -100,12 +104,14 @@ public final class CommandHandlerImpl implements CommandHandler {
     }
 
     @Override
-    public void removeCommand(final AbstractCommand command) {
+    public void removeCommand(final @NotNull AbstractCommand command) {
+        Preconditions.checkNotNull(command);
         commands.remove(command);
     }
 
     @Override
-    public void removeCommand(final String alias) {
+    public void removeCommand(final @NotNull String alias) {
+        Preconditions.checkNotNull(alias);
         commands.removeIf(command -> {
             for (String commandAlias : command.getAliases()) {
                 if (commandAlias.equals(alias)) {

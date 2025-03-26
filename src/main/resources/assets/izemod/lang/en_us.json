@@ -86,5 +86,9 @@
   "commands.enchant.success": "%s added to %s.",
   "commands.enchant.removed": "%s removed from %s.",
   "commands.enchant.all_added": "All enchantments added to %s.",
-  "commands.enchant.clear": "All enchantments cleared from %s."
+  "commands.enchant.clear": "All enchantments cleared from %s.",
+
+  "commands.copymyip": "Copy your IP!",
+  "commands.copymyip.success": "Your IP has been copied to the clipboard."
+
 }

@@ -18,6 +18,8 @@
 
 package net.izestudios.izemod.api.discord;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Endpoint to interact with the Discord Rich Presence. The methods here do not throw exceptions, but simply discard invalid usage.
  */
@@ -39,6 +41,6 @@ public interface DiscordRPC {
      * @param first  The first line to display.
      * @param second The second line to display.
      */
-    void update(final String first, final String second);
+    void update(final @Nullable String first, final @Nullable String second);
 
 }

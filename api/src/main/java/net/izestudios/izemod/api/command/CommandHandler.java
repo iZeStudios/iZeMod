@@ -18,6 +18,8 @@
 
 package net.izestudios.izemod.api.command;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Endpoint to handle commands.
  */
@@ -28,20 +30,20 @@ public interface CommandHandler {
      *
      * @param command The command to add.
      */
-    void addCommand(final AbstractCommand command);
+    void addCommand(final @NotNull AbstractCommand command);
 
     /**
      * Removes a command from the handler.
      *
      * @param command The command to remove.
      */
-    void removeCommand(final AbstractCommand command);
+    void removeCommand(final @NotNull AbstractCommand command);
 
     /**
      * Removes a command from the handler by one of the aliases. If the alias is not found, nothing happens.
      *
      * @param alias The alias of the command to remove.
      */
-    void removeCommand(final String alias);
+    void removeCommand(final @NotNull String alias);
 
 }
