@@ -19,29 +19,25 @@
 package net.izestudios.izemod.api.hud;
 
 import com.google.common.base.Preconditions;
-import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a HUD element. Use functions below to create instances or implement this interface into more complex classes.
  */
-public interface HudElement {
+public abstract class HudElement {
 
-    /**
-     * @return The literal key of the HUD element.
-     */
-    String key();
-
-    /**
-     * @return The value of the HUD element. Return null if the value is not available.
-     */
-    String value();
-
-    static HudElement of(final @NotNull Text key, final @NotNull Text value) {
+    public static HudElement of(final @NotNull Text key, final @NotNull Text value) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(value);
         return new HudElement() {
+            @Override
+            public String name() {
+                return key.getContent() instanceof TranslatableTextContent content ? content.getKey() : key();
+            }
+
             @Override
             public String key() {
                 return key.getString();
@@ -54,7 +50,7 @@ public interface HudElement {
         };
     }
 
-    static HudElement of(final @NotNull String key, final @NotNull String value) {
+    public static HudElement of(final @NotNull String key, final @NotNull String value) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(value);
         return new HudElement() {
@@ -70,13 +66,18 @@ public interface HudElement {
         };
     }
 
-    static HudElement of(final @NotNull Text text, final @NotNull Supplier<Object> valueSupplier) {
-        Preconditions.checkNotNull(text);
+    public static HudElement of(final @NotNull Text key, final @NotNull Supplier<Object> valueSupplier) {
+        Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(valueSupplier);
         return new HudElement() {
             @Override
+            public String name() {
+                return key.getContent() instanceof TranslatableTextContent content ? content.getKey() : key();
+            }
+
+            @Override
             public String key() {
-                return text.getString();
+                return key.getString();
             }
 
             @Override
@@ -85,6 +86,41 @@ public interface HudElement {
                 return value == null ? null : value.toString();
             }
         };
+    }
+
+    private boolean enabled;
+
+    /**
+     * @return The name of the HUD element. This is used for identifying the element and for config saving.
+     */
+    public String name() {
+        return key();
+    }
+
+    /**
+     * @return The literal key of the HUD element. This is used for rendering.
+     */
+    public abstract String key();
+
+    /**
+     * @return The value of the HUD element. Return null if the value is not available.
+     */
+    public abstract String value();
+
+    /**
+     * @return Whether the HUD element is enabled.
+     */
+    public boolean enabled() {
+        return enabled;
+    }
+
+    /**
+     * Sets whether the HUD element is enabled.
+     *
+     * @param enabled Whether the HUD element is enabled.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

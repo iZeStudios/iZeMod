@@ -19,6 +19,7 @@
 package net.izestudios.izemod.api;
 
 import java.awt.*;
+import java.nio.file.Path;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.api.discord.DiscordRPC;
 import net.izestudios.izemod.api.hud.HudRendering;
@@ -34,6 +35,13 @@ public interface IzeModAPIBase {
      * @return the version of iZeMod
      */
     String version();
+
+    /**
+     * Get the root path of iZeMod.
+     *
+     * @return the root path of iZeMod
+     */
+    Path path();
 
     /**
      * The blue color used for all the UI rendering.

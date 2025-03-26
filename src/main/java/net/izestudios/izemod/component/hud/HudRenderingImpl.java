@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import com.google.common.base.Preconditions;
 import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.api.hud.HudRendering;
+import net.izestudios.izemod.save.SaveLoader;
 import net.izestudios.izemod.util.TimeFormatter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -96,6 +97,8 @@ public final class HudRenderingImpl implements HudRendering {
         });
         register("date", () -> TimeFormatter.DATE_FORMAT.format(new Date()));
         register("time", () -> TimeFormatter.TIME_FORMAT.format(new Date()));
+
+        SaveLoader.INSTANCE.add(new HudSave());
     }
 
     public void render(final DrawContext context) {
@@ -104,7 +107,7 @@ public final class HudRenderingImpl implements HudRendering {
         int y = 15;
         for (final HudElement element : elements) {
             final String value = element.value();
-            if (value == null) {
+            if (!element.enabled() || value == null) {
                 continue;
             }
 
@@ -134,7 +137,9 @@ public final class HudRenderingImpl implements HudRendering {
     }
 
     private void register(final String key, final Supplier<Object> value) {
-        elements.add(HudElement.of(Text.translatable("ingame.hud." + key), value));
+        final HudElement element = HudElement.of(Text.translatable("ingame.hud." + key), value);
+        elements.add(element);
+        element.setEnabled(true);
     }
 
 }

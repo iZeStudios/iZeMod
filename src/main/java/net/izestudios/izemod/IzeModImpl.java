@@ -29,7 +29,13 @@ import net.izestudios.izemod.component.command.CommandHandlerImpl;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.component.discord.DiscordRPCImpl;
+import net.izestudios.izemod.save.SaveLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public final class IzeModImpl implements IzeModAPIBase {
 
@@ -40,9 +46,19 @@ public final class IzeModImpl implements IzeModAPIBase {
 
     public static final IzeModImpl INSTANCE = new IzeModImpl();
 
+    private final Logger logger = LogManager.getLogger("iZeMod");
+    private final Path path = FabricLoader.getInstance().getConfigDir().resolve("izemod");
+
     private String version;
 
     public void initialize() {
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                logger.error("Failed to create iZeMod directory", e);
+            }
+        }
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
@@ -54,15 +70,21 @@ public final class IzeModImpl implements IzeModAPIBase {
         HudRenderingImpl.INSTANCE.init();
         CommandHandlerImpl.INSTANCE.init();
 
-        // Run addons as late as possible
         AddonManager.INSTANCE.run(addon -> addon.onLoad(this));
+
+        SaveLoader.INSTANCE.init();
     }
 
     private void shutdown() {
         DiscordRPCImpl.INSTANCE.stop();
 
-        // Run addons as late as possible
         AddonManager.INSTANCE.run(addon -> addon.onShutdown(this));
+
+        SaveLoader.INSTANCE.save();
+    }
+
+    public Logger logger() {
+        return logger;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -71,6 +93,11 @@ public final class IzeModImpl implements IzeModAPIBase {
     @Override
     public String version() {
         return version;
+    }
+
+    @Override
+    public Path path() {
+        return path;
     }
 
     @Override
