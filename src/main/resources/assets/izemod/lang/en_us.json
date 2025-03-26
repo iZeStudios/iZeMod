@@ -79,6 +79,6 @@
 
   "commands.clearchat": "Clears the chat.",
 
-  "commands.copymyip": "Copy your IP!",
+  "commands.copymyip": "Copies your IP!",
   "commands.copymyip.success": "Your IP has been copied to the clipboard."
 }
