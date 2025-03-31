@@ -4,4 +4,4 @@ iZeMod 5.0 is in its very early development stage. No features have been impleme
 
 Announcement Trailer: https://youtu.be/jli5bhJmCdc
 
-Discord https://izemod.de/discord
+Discord: https://izemod.de/discord
