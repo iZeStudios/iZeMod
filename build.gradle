@@ -89,7 +89,7 @@ configurations {
 }
 
 dependencies {
-    modImplementation("com.viaversion:viafabricplus-api:4.1.0")
+    modImplementation("com.viaversion:viafabricplus-api:4.1.1")
     include modRuntimeOnly("com.viaversion:viafabricplus:4.1.0")
 
     include implementation("com.github.iZeStudios:discord-ipc:b0d38c7edc")
