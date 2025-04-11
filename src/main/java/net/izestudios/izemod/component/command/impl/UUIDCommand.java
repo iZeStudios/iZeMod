@@ -18,27 +18,16 @@
 
 package net.izestudios.izemod.component.command.impl;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import java.util.UUID;
 import net.izestudios.izemod.api.command.AbstractCommand;
+import net.izestudios.izemod.util.MojangAPI;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class UUIDCommand extends AbstractCommand {
-
-    String uuid;
 
     public UUIDCommand() {
         super(Text.translatable("commands.uuid"), "uuid");
@@ -46,50 +35,28 @@ public class UUIDCommand extends AbstractCommand {
 
     @Override
     public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
-
-
         builder.then(argument("name", StringArgumentType.string()).executes(commandContext -> {
-            String name = StringArgumentType.getString(commandContext, "name");
-            uuid = fetchUUID(name);
-            if(uuid.equals("")){
+            final String name = StringArgumentType.getString(commandContext, "name");
+            final String uuid = MojangAPI.fetchUUID(name);
+            if (uuid == null) {
                 printErrorMessage(Text.translatable("commands.uuid.invalid"));
                 return FAILURE;
-            }else {
-                MinecraftClient.getInstance().keyboard.setClipboard(uuid);
-                printSuccessMessage(Text.translatable("commands.uuid.success"));
-                return SUCCESS;
             }
+
+            MinecraftClient.getInstance().keyboard.setClipboard(uuid);
+            printSuccessMessage(Text.translatable("commands.uuid.success"));
+            return SUCCESS;
         })).executes(commandContext -> {
-            uuid = MinecraftClient.getInstance().player.getUuid().toString().replace("-", "");
-            if(uuid.equals("")){
+            final UUID uuid = MinecraftClient.getInstance().session.getUuidOrNull();
+            if (uuid == null) {
                 printErrorMessage(Text.translatable("commands.uuid.invalid"));
                 return FAILURE;
-            }else {
-                MinecraftClient.getInstance().keyboard.setClipboard(uuid);
-                printSuccessMessage(Text.translatable("commands.uuid.success"));
-                return SUCCESS;
             }
+
+            MinecraftClient.getInstance().keyboard.setClipboard(uuid.toString());
+            printSuccessMessage(Text.translatable("commands.uuid.success"));
+            return SUCCESS;
         });
     }
 
-    private String fetchUUID(final String name){
-        String uuid;
-        JsonObject jp;
-
-        try {
-            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/"+name);
-            HttpURLConnection request = (HttpURLConnection) url.openConnection();
-            request.connect();
-            jp = new JsonParser().parse(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
-        } catch (IOException e) {
-            return "";
-        }
-        if(jp.has("id")){
-            uuid = jp.get("id").getAsString();
-        }else {
-            uuid = "";
-        }
-
-        return uuid;
-    }
 }
