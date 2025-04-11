@@ -19,14 +19,13 @@
 package net.izestudios.izemod.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.izestudios.izemod.IzeModImpl;
-import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.ColorHelper;
@@ -56,7 +55,7 @@ public final class RenderUtil {
         context.fillGradient(x, y, width, height, 0, Integer.MIN_VALUE);
     }
 
-    public static void drawGradient(final int x, final int y, final int width, final int height, final int startColor, final int endColor, final int startAlpha, final int endAlpha) {
+    public static void drawGradient(final DrawContext context, final int x, final int y, final int width, final int height, final int startColor, final int endColor, final int startAlpha, final int endAlpha) {
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;
         float f3 = (float) (startColor & 255) / 255.0F;
@@ -65,29 +64,23 @@ public final class RenderUtil {
         float f6 = (float) (endColor >> 8 & 255) / 255.0F;
         float f7 = (float) (endColor & 255) / 255.0F;
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
-        final BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(width, y, 0).color(f1, f2, f3, startAlpha / 255F);
-        buffer.vertex(x, y, 0).color(f1, f2, f3, startAlpha / 255F);
-        buffer.vertex(x, height, 0).color(f5, f6, f7, endAlpha / 255F);
-        buffer.vertex(width, height, 0).color(f5, f6, f7, endAlpha / 255F);
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
-        RenderSystem.disableBlend();
+        context.draw(provider -> {
+            final VertexConsumer buffer = provider.getBuffer(RenderLayer.getGui());
+            buffer.vertex(width, y, 0).color(f1, f2, f3, startAlpha / 255F);
+            buffer.vertex(x, y, 0).color(f1, f2, f3, startAlpha / 255F);
+            buffer.vertex(x, height, 0).color(f5, f6, f7, endAlpha / 255F);
+            buffer.vertex(width, height, 0).color(f5, f6, f7, endAlpha / 255F);
+        });
     }
 
-    public static void drawShadow(final int x, final int y, final int width, final int height, final int startColor, final int endColor) {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
-        final BufferBuilder buffer = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x, height, 0F).color(startColor);
-        buffer.vertex(width, height, 0F).color(startColor);
-        buffer.vertex(width, y, 0F).color(endColor);
-        buffer.vertex(x, y, 0F).color(endColor);
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
-        RenderSystem.disableBlend();
+    public static void drawShadow(final DrawContext context, final int x, final int y, final int width, final int height, final int startColor, final int endColor) {
+        context.draw(provider -> {
+            final VertexConsumer buffer = provider.getBuffer(RenderLayer.getGui());
+            buffer.vertex(x, height, 0F).color(startColor);
+            buffer.vertex(width, height, 0F).color(startColor);
+            buffer.vertex(width, y, 0F).color(endColor);
+            buffer.vertex(x, y, 0F).color(endColor);
+        });
     }
 
 }
