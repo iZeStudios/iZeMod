@@ -54,12 +54,12 @@ public abstract class MixinEntryListWidget extends ContainerWidget {
         final int height = context.getScaledWindowHeight();
 
         context.fill(getX(), 0, getRight(), getY(), IzeModImpl.INSTANCE.themeColor().getRGB());
-        RenderUtil.drawGradient(getX(), 0, getRight(), getY(), BLACK, BLACK, 150, 50);
-        RenderUtil.drawShadow(getX(), getY(), getWidth(), getY() + izeMod$SHADOW_HEIGHT, 0, BLACK_200);
+        RenderUtil.drawGradient(context, getX(), 0, getRight(), getY(), BLACK, BLACK, 150, 50);
+        RenderUtil.drawShadow(context, getX(), getY(), getWidth(), getY() + izeMod$SHADOW_HEIGHT, 0, BLACK_200);
 
         context.fill(getX(), getBottom(), getRight(), height, IzeModImpl.INSTANCE.themeColor().getRGB());
-        RenderUtil.drawGradient(getX(), 0, getRight(), getY(), BLACK, BLACK, 50, 150);
-        RenderUtil.drawShadow(getX(), getBottom() - izeMod$SHADOW_HEIGHT, getWidth(), getBottom(), BLACK_200, 0);
+        RenderUtil.drawGradient(context, getX(), 0, getRight(), getY(), BLACK, BLACK, 50, 150);
+        RenderUtil.drawShadow(context, getX(), getBottom() - izeMod$SHADOW_HEIGHT, getWidth(), getBottom(), BLACK_200, 0);
     }
 
 }
