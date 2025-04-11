@@ -32,6 +32,7 @@ import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.ClearChatCommand;
+import net.izestudios.izemod.component.command.impl.UUIDCommand;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
@@ -59,6 +60,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new GetCoordCommand());
         addCommand(new ClearChatCommand());
         addCommand(new CopyMyIPCommand());
+        addCommand(new UUIDCommand());
     }
 
     public boolean onChatMessage(final String message) {
