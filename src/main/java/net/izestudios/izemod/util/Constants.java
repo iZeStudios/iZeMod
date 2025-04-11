@@ -58,7 +58,7 @@ public final class Constants {
         }
 
         final int i = Math.max(event.getInput().length(), event.getCursor());
-        final MutableText text = Text.empty().formatted(Formatting.GRAY).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, message)));
+        final MutableText text = Text.empty().formatted(Formatting.GRAY).styled(style -> style.withClickEvent(new ClickEvent.SuggestCommand(message)));
         if (i > 10) {
             text.append(ScreenTexts.ELLIPSIS);
         }

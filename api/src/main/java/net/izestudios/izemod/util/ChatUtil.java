@@ -89,10 +89,10 @@ public class ChatUtil {
     public static void printPrefixedChatMessage(final Text message, final String tooltip, final String suggestion) {
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(CHAT_PREFIX.copy().append(message).styled(style -> {
             if (tooltip != null) {
-                style = style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(tooltip)));
+                style = style.withHoverEvent(new HoverEvent.ShowText(Text.literal(tooltip)));
             }
             if (suggestion != null) {
-                style = style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestion));
+                style = style.withClickEvent(new ClickEvent.SuggestCommand(suggestion));
             }
             return style;
         }));
