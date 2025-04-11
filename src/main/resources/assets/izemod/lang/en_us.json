@@ -80,5 +80,9 @@
   "commands.clearchat": "Clears the chat.",
 
   "commands.copymyip": "Copies your IP!",
-  "commands.copymyip.success": "Your IP has been copied to the clipboard."
+  "commands.copymyip.success": "Your IP has been copied to the clipboard.",
+
+  "commands.uuid": "Gives you the UUID of yourself or other players",
+  "commands.uuid.success": "The UUID has been copied to the clipboard.",
+  "commands.uuid.invalid": "This player does not exist."
 }

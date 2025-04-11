@@ -79,5 +79,9 @@
   "commands.clearchat": "Leert den Chat.",
 
   "commands.copymyip": "Kopiert deine IP!",
-  "commands.copymyip.success": "Deine IP wurde in die Zwischenablage kopiert."
+  "commands.copymyip.success": "Deine IP wurde in die Zwischenablage kopiert.",
+
+  "commands.uuid": "Gibt dir die UUID von dir oder andere Spieler",
+  "commands.uuid.success": "Die UUID wurde in die Zwischenablage kopiert.",
+  "commands.uuid.invalid": "Dieser Spieler exestiert nicht."
 }
