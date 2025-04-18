@@ -30,6 +30,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 import static net.izestudios.izemod.component.theme.ColorTheme.BLACK;
 import static net.izestudios.izemod.component.theme.ColorTheme.BLACK_200;
 
@@ -62,4 +64,14 @@ public abstract class MixinEntryListWidget extends ContainerWidget {
         RenderUtil.drawShadow(context, getX(), getBottom() - izeMod$SHADOW_HEIGHT, getWidth(), getBottom(), BLACK_200, 0);
     }
 
+    @Inject(method = "drawSelectionHighlight", at = @At(value = "HEAD"), cancellable = true)
+    private void replaceDrawSelectionHighlight(DrawContext context, int y, int entryWidth, int entryHeight, int borderColor, int fillColor, CallbackInfo ci) {
+        ci.cancel();
+        int i = this.getX() + (this.width - entryWidth) / 2;
+        int j = this.getX() + (this.width + entryWidth) / 2;
+
+        context.fill(i, y - 2, j, y + entryHeight + 2, Color.TRANSLUCENT);
+
+        context.fillGradient(i + 1, y - 1, j - 1, y + entryHeight + 1, IzeModImpl.INSTANCE.themeColor().getRGB(), new Color(0, 0, 0, 170).getRGB());
+    }
 }
