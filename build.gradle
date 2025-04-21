@@ -57,10 +57,6 @@ allprojects {
             parchment("org.parchmentmc.data:parchment-${project.parchment_version}@zip")
         }
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-        afterEvaluate {
-            println(configurations.compileClasspath.asPath)
-        }
     }
 
     java {

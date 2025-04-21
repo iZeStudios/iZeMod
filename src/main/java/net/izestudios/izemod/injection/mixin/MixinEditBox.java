@@ -40,7 +40,7 @@ public abstract class MixinEditBox extends AbstractWidget {
     }
 
     @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/EditBox;isBordered()Z"))
-    private boolean replaceTextFieldStyle(EditBox instance, @Local(argsOnly = true) GuiGraphics guiGraphics) {
+    private boolean replaceEditBoxStyle(EditBox instance, @Local(argsOnly = true) GuiGraphics guiGraphics) {
         if (isBordered()) {
             guiGraphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.BASE_BLUE);
         }
