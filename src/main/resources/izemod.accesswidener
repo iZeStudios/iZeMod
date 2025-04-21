@@ -1,9 +1,9 @@
 accessWidener v1 named
 
-accessible field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
+accessible field net/minecraft/client/Minecraft user Lnet/minecraft/client/User;
 
-accessible method net/minecraft/client/gui/widget/TextFieldWidget getMaxLength ()I
-accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget$ServerEntry <init> (Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerServerListWidget;Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;Lnet/minecraft/client/network/ServerInfo;)V
+accessible method net/minecraft/client/gui/components/EditBox getMaxLength ()I
+accessible method net/minecraft/client/gui/screens/multiplayer/ServerSelectionList$OnlineServerEntry <init> (Lnet/minecraft/client/gui/screens/multiplayer/ServerSelectionList;Lnet/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen;Lnet/minecraft/client/multiplayer/ServerData;)V
 
-mutable field net/minecraft/client/MinecraftClient session Lnet/minecraft/client/session/Session;
-mutable field net/minecraft/client/gui/screen/SplashOverlay LOGO Lnet/minecraft/util/Identifier;
+mutable field net/minecraft/client/Minecraft user Lnet/minecraft/client/User;
+mutable field net/minecraft/client/gui/screens/LoadingOverlay MOJANG_STUDIOS_LOGO_LOCATION Lnet/minecraft/resources/ResourceLocation;
