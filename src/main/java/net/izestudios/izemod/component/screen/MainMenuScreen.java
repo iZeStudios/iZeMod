@@ -20,16 +20,16 @@ package net.izestudios.izemod.component.screen;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.addon.AddonManager;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerWarningScreen;
-import net.minecraft.client.gui.screen.option.LanguageOptionsScreen;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
-import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.ServerList;
-import net.minecraft.client.realms.gui.screen.RealmsMainScreen;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.SafetyScreen;
+import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
+import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.multiplayer.ServerList;
+import com.mojang.realmsclient.RealmsMainScreen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 
 import static net.izestudios.izemod.util.Constants.*;
 
@@ -38,7 +38,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
     public static final MainMenuScreen INSTANCE = new MainMenuScreen();
 
     private MainMenuScreen() {
-        super(Text.translatable("screen.title"));
+        super(Component.translatable("screen.title"));
     }
 
     @Override
@@ -47,38 +47,38 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         setupCopyrightTexts();
 
         final int addons = AddonManager.INSTANCE.count();
-        final int worldCount = client.getLevelStorage().getLevelList().levels().size();
-        final int serverCount = new ServerList(client).size();
+        final int worldCount = minecraft.getLevelSource().findLevelCandidates().levels().size();
+        final int serverCount = new ServerList(minecraft).size();
         final int mods = FabricLoader.getInstance().getAllMods().size() - addons;
 
         int baseY = (int) Math.sqrt((double) (this.height * this.height) / (1.3 * 1.2));
         int leftX = this.width / 2 - 202;
         int rightX = this.width / 2 + 2;
 
-        final String worldText = I18n.translate("screens.title.world");
-        final String worldsText = I18n.translate("screens.title.worlds");
-        final String serverText = I18n.translate("screens.title.server");
+        final String worldText = I18n.get("screens.title.world");
+        final String worldsText = I18n.get("screens.title.worlds");
+        final String serverText = I18n.get("screens.title.server");
 
-        final String programText = I18n.translate("screens.title.program");
-        final String optionsText = I18n.translate("screens.title.options");
-        final String modsText = I18n.translate("screens.title.mods", mods);
-        final String addonsText = I18n.translate("screens.title.addons", addons);
-        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.client.setScreen(new SelectWorldScreen(this)));
-        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.client.setScreen(this.client.options.skipMultiplayerWarning ? new MultiplayerScreen(this) : new MultiplayerWarningScreen(this)));
-        addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.client.setScreen(new RealmsMainScreen(this)));
-        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.client.setScreen(new LanguageOptionsScreen(this,this.client.options, this.client.getLanguageManager())));
-        addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.client.setScreen(new OptionsScreen(this, this.client.options)));
+        final String programText = I18n.get("screens.title.program");
+        final String optionsText = I18n.get("screens.title.options");
+        final String modsText = I18n.get("screens.title.mods", mods);
+        final String addonsText = I18n.get("screens.title.addons", addons);
+        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.minecraft.setScreen(new SelectWorldScreen(this)));
+        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.minecraft.setScreen(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this)));
+        addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.minecraft.setScreen(new RealmsMainScreen(this)));
+        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.minecraft.setScreen(new LanguageSelectScreen(this,this.minecraft.options, this.minecraft.getLanguageManager())));
+        addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options)));
 
-        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.client.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, client::scheduleStop);
+        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, minecraft::stop);
     }
 
     private void addMainMenuButton(int x, int baseY, int offset, String key, String extraText, Runnable action) {
-        final String buttonText = I18n.translate(key) + (extraText != null ? " (" + extraText + ")" : "");
-        addDrawableChild(ButtonWidget.builder(Text.of(buttonText), button -> action.run()).position(x, baseY + (25 * offset)).size(200, 20).build());
+        final String buttonText = I18n.get(key) + (extraText != null ? " (" + extraText + ")" : "");
+        addRenderableWidget(Button.builder(Component.nullToEmpty(buttonText), button -> action.run()).pos(x, baseY + (25 * offset)).size(200, 20).build());
     }
 
 }

@@ -34,9 +34,9 @@ import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.izestudios.izemod.component.command.impl.UUIDCommand;
 import net.izestudios.izemod.util.Constants;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientCommandSource;
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +48,8 @@ public final class CommandHandlerImpl implements CommandHandler {
 
     private final List<AbstractCommand> commands = new ArrayList<>();
 
-    public final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
-    public final ClientCommandSource commandSource = new ClientCommandSource(null, MinecraftClient.getInstance());
+    public final CommandDispatcher<SharedSuggestionProvider> dispatcher = new CommandDispatcher<>();
+    public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance());
 
     public void init() {
         Preconditions.checkState(commands.isEmpty(), "Commands already initialized");
@@ -91,16 +91,16 @@ public final class CommandHandlerImpl implements CommandHandler {
     @Override
     public void addCommand(final @NotNull AbstractCommand command) {
         Preconditions.checkNotNull(command);
-        final LiteralArgumentBuilder<CommandSource> literal = LiteralArgumentBuilder.literal(command.getCommand());
+        final LiteralArgumentBuilder<SharedSuggestionProvider> literal = LiteralArgumentBuilder.literal(command.getCommand());
         command.builder(literal);
-        final LiteralCommandNode<CommandSource> builder = dispatcher.register(literal);
+        final LiteralCommandNode<SharedSuggestionProvider> builder = dispatcher.register(literal);
 
         for (final String alias : command.getAliases()) {
             if (alias.equals(command.getCommand())) {
                 continue;
             }
 
-            dispatcher.register(LiteralArgumentBuilder.<CommandSource>literal(alias).redirect(builder));
+            dispatcher.register(LiteralArgumentBuilder.<SharedSuggestionProvider>literal(alias).redirect(builder));
         }
 
         commands.add(command);

@@ -19,21 +19,22 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.util.Constants;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 public final class LoginScreen extends AbstractInitialScreen {
 
     public static final LoginScreen INSTANCE = new LoginScreen();
     public static boolean loggedIn = false;
 
-    private TextFieldWidget passwordField;
+    private EditBox passwordField;
 
     private LoginScreen() {
-        super(Text.translatable("screen.login"));
+        super(Component.translatable("screen.login"));
     }
 
     @Override
@@ -44,58 +45,53 @@ public final class LoginScreen extends AbstractInitialScreen {
 
         final int textFieldY = (int) (this.height / 2.5);
 
-        addDrawableChild(
-            ButtonWidget
-                .builder(Text.translatable("screens.login.login"), button -> {
+        addRenderableWidget(
+            Button
+                .builder(Component.translatable("screens.login.login"), button -> {
                     loggedIn = true;
-                    if ("tetris".equals(passwordField.getText())) {
-                        client.setScreen(TetrisScreen.INSTANCE);
+                    if ("tetris".equals(passwordField.getValue())) {
+                        minecraft.setScreen(TetrisScreen.INSTANCE);
                     } else {
-                        client.setScreen(new TitleScreen());
+                        minecraft.setScreen(new TitleScreen());
                     }
                 })
-                .position(this.width / 2 - 102, textFieldY + 60)
+                .pos(this.width / 2 - 102, textFieldY + 60)
                 .size(101, 20)
                 .build()
         );
 
-        addDrawableChild(
-            ButtonWidget
-                .builder(Text.translatable(Constants.TEXT_QUIT), button -> {
-                    client.stop();
+        addRenderableWidget(
+            Button
+                .builder(Component.translatable(Constants.TEXT_QUIT), button -> {
+                    minecraft.stop();
                 })
-                .position(this.width / 2 + 2, textFieldY + 60)
+                .pos(this.width / 2 + 2, textFieldY + 60)
                 .size(101, 20)
                 .build()
         );
 
-        final TextFieldWidget nameField = addDrawableChild(new TextFieldWidget(
-            client.textRenderer,
+        final EditBox nameField = addRenderableWidget(new EditBox(
+            font,
             this.width / 2 - 102,
             textFieldY,
             205,
             20,
-            Text.empty()
+            Component.empty()
         ));
-        nameField.setText("iZePlayz");
+        nameField.setValue("iZePlayz");
 
-        passwordField = addDrawableChild(new TextFieldWidget(
-            client.textRenderer,
+        passwordField = addRenderableWidget(new EditBox(
+            font,
             this.width / 2 - 102,
             textFieldY + 30,
             205,
             20,
-            Text.empty()
+            Component.empty()
         ));
-        passwordField.setRenderTextProvider(
-            (text, index) -> Text.of("*".repeat(text.length())).asOrderedText()
+        passwordField.setFormatter(
+            (text, index) -> Component.nullToEmpty("*".repeat(text.length())).getVisualOrderText()
         );
-        passwordField.setText("123456");
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        passwordField.setValue("123456");
     }
 
 }

@@ -31,15 +31,15 @@ import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.save.SaveLoader;
 import net.izestudios.izemod.util.TimeFormatter;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 public final class HudRenderingImpl implements HudRendering {
@@ -53,16 +53,16 @@ public final class HudRenderingImpl implements HudRendering {
         final NumberFormat numberFormat = NumberFormat.getInstance();
         numberFormat.setMaximumFractionDigits(2);
 
-        final MinecraftClient client = MinecraftClient.getInstance();
-        register("fps", client::getCurrentFps);
+        final Minecraft client = Minecraft.getInstance();
+        register("fps", client::getFps);
         register("x", () -> numberFormat.format(client.player.getX()));
         register("y", () -> numberFormat.format(client.player.getY()));
         register("z", () -> numberFormat.format(client.player.getZ()));
         register("biome", () -> {
-            final Optional<RegistryKey<Biome>> key = client.world.getBiome(client.player.getBlockPos()).getKey();
+            final Optional<ResourceKey<Biome>> key = client.level.getBiome(client.player.blockPosition()).unwrapKey();
             if (key.isPresent()) {
-                final Identifier identifier = key.get().getValue();
-                if (Objects.equals(identifier.getNamespace(), Identifier.DEFAULT_NAMESPACE)) {
+                final ResourceLocation identifier = key.get().location();
+                if (Objects.equals(identifier.getNamespace(), ResourceLocation.DEFAULT_NAMESPACE)) {
                     return identifier.getPath();
                 } else {
                     return identifier.toString();
@@ -72,11 +72,11 @@ public final class HudRenderingImpl implements HudRendering {
             }
         });
         register("ping", () -> {
-            if (client.isInSingleplayer()) {
+            if (client.isLocalServer()) {
                 return null;
             }
 
-            final PlayerListEntry playerListEntry = client.getNetworkHandler().getPlayerListEntry(client.player.getUuid());
+            final PlayerInfo playerListEntry = client.getConnection().getPlayerInfo(client.player.getUUID());
             if (playerListEntry == null) {
                 return null;
             } else {
@@ -84,11 +84,11 @@ public final class HudRenderingImpl implements HudRendering {
             }
         });
         register("players", () -> {
-            if (client.isInSingleplayer()) {
+            if (client.isLocalServer()) {
                 return null;
             }
 
-            final Collection<PlayerListEntry> playerList = client.getNetworkHandler().getPlayerList();
+            final Collection<PlayerInfo> playerList = client.getConnection().getOnlinePlayers();
             if (playerList == null) {
                 return null;
             } else {
@@ -101,8 +101,8 @@ public final class HudRenderingImpl implements HudRendering {
         SaveLoader.INSTANCE.add(new HudSave());
     }
 
-    public void render(final DrawContext context) {
-        final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+    public void draw(final GuiGraphics guiGraphics) {
+        final Font font = Minecraft.getInstance().font;
         final int x = 2;
         int y = 15;
         for (final HudElement element : elements) {
@@ -111,9 +111,9 @@ public final class HudRenderingImpl implements HudRendering {
                 continue;
             }
 
-            final int keyWidth = context.drawTextWithShadow(textRenderer, element.key(), x, y, Formatting.DARK_AQUA.getColorValue());
-            final int arrowWidth = context.drawTextWithShadow(textRenderer, "»", x + keyWidth, y, Formatting.DARK_AQUA.getColorValue());
-            context.drawTextWithShadow(textRenderer, value, x + arrowWidth, y, Formatting.AQUA.getColorValue());
+            final int keyWidth = guiGraphics.drawString(font, element.key(), x, y, ChatFormatting.DARK_AQUA.getColor());
+            final int arrowWidth = guiGraphics.drawString(font, "»", x + keyWidth, y, ChatFormatting.DARK_AQUA.getColor());
+            guiGraphics.drawString(font, value, x + arrowWidth, y, ChatFormatting.AQUA.getColor());
             y += 10;
         }
     }
@@ -137,7 +137,7 @@ public final class HudRenderingImpl implements HudRendering {
     }
 
     private void register(final String key, final Supplier<Object> value) {
-        final HudElement element = HudElement.of(Text.translatable("ingame.hud." + key), value);
+        final HudElement element = HudElement.of(Component.translatable("ingame.hud." + key), value);
         elements.add(element);
         element.setEnabled(true);
     }

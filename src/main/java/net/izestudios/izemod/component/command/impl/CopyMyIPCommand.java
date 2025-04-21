@@ -20,9 +20,9 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -31,15 +31,15 @@ import java.net.URL;
 public final class CopyMyIPCommand extends AbstractCommand {
 
     public CopyMyIPCommand() {
-        super(Text.translatable("commands.copymyip"), "copymyip");
+        super(Component.translatable("commands.copymyip"), "copymyip");
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
             try {
-                printSuccessMessage(Text.translatable("commands.copymyip.success"));
-                MinecraftClient.getInstance().keyboard.setClipboard(getIP());
+                printSuccessMessage(Component.translatable("commands.copymyip.success"));
+                Minecraft.getInstance().keyboardHandler.setClipboard(getIP());
                 return SUCCESS;
             } catch (final Exception e) {
                 return FAILURE;

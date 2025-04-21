@@ -19,12 +19,12 @@
 package net.izestudios.izemod.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Formatting;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.ChatFormatting;
 
 /**
  * Used to move buttons or to add existing buttons to custom screens. Make sure to keep this up-to-date with the latest Minecraft version.
@@ -52,21 +52,21 @@ public final class Constants {
 
     // CommandManager#checkCommand
     public static void checkCommand(final CommandSyntaxException event, final String message) {
-        ChatUtil.printErrorMessage(Texts.toText(event.getRawMessage()));
+        ChatUtil.printErrorMessage(ComponentUtils.fromMessage(event.getRawMessage()));
         if (event.getCursor() < 0) {
             return;
         }
 
         final int i = Math.max(event.getInput().length(), event.getCursor());
-        final MutableText text = Text.empty().formatted(Formatting.GRAY).styled(style -> style.withClickEvent(new ClickEvent.SuggestCommand(message)));
+        final MutableComponent text = Component.empty().withStyle(ChatFormatting.GRAY).withStyle(style -> style.withClickEvent(new ClickEvent.SuggestCommand(message)));
         if (i > 10) {
-            text.append(ScreenTexts.ELLIPSIS);
+            text.append(CommonComponents.ELLIPSIS);
         }
         text.append(event.getInput().substring(Math.max(0, i - 10), i));
         if (i < event.getInput().length()) {
-            text.append(Text.literal(event.getInput().substring(i)).formatted(Formatting.RED, Formatting.UNDERLINE));
+            text.append(Component.literal(event.getInput().substring(i)).withStyle(ChatFormatting.RED, ChatFormatting.UNDERLINE));
         }
-        text.append(Text.translatable("command.context.here").formatted(Formatting.RED, Formatting.UNDERLINE));
+        text.append(Component.translatable("command.context.here").withStyle(ChatFormatting.RED, ChatFormatting.UNDERLINE));
         ChatUtil.printErrorMessage(text);
     }
 

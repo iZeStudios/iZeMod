@@ -23,38 +23,38 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import java.util.UUID;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.util.MojangAPI;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public class UUIDCommand extends AbstractCommand {
 
     public UUIDCommand() {
-        super(Text.translatable("commands.uuid"), "uuid");
+        super(Component.translatable("commands.uuid"), "uuid");
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.then(argument("name", StringArgumentType.string()).executes(commandContext -> {
             final String name = StringArgumentType.getString(commandContext, "name");
             final String uuid = MojangAPI.fetchUUID(name);
             if (uuid == null) {
-                printErrorMessage(Text.translatable("commands.uuid.invalid"));
+                printErrorMessage(Component.translatable("commands.uuid.invalid"));
                 return FAILURE;
             }
 
-            MinecraftClient.getInstance().keyboard.setClipboard(uuid);
-            printSuccessMessage(Text.translatable("commands.uuid.success"));
+            Minecraft.getInstance().keyboardHandler.setClipboard(uuid);
+            printSuccessMessage(Component.translatable("commands.uuid.success"));
             return SUCCESS;
         })).executes(commandContext -> {
-            final UUID uuid = MinecraftClient.getInstance().session.getUuidOrNull();
+            final UUID uuid = Minecraft.getInstance().getUser().getProfileId();
             if (uuid == null) {
-                printErrorMessage(Text.translatable("commands.uuid.invalid"));
+                printErrorMessage(Component.translatable("commands.uuid.invalid"));
                 return FAILURE;
             }
 
-            MinecraftClient.getInstance().keyboard.setClipboard(uuid.toString());
-            printSuccessMessage(Text.translatable("commands.uuid.success"));
+            Minecraft.getInstance().keyboardHandler.setClipboard(uuid.toString());
+            printSuccessMessage(Component.translatable("commands.uuid.success"));
             return SUCCESS;
         });
     }

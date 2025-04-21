@@ -20,22 +20,22 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public final class FullbrightCommand extends AbstractCommand {
 
     public static boolean active;
 
     public FullbrightCommand() {
-        super(Text.translatable("commands.fullbright"), "fullbright");
+        super(Component.translatable("commands.fullbright"), "fullbright");
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
             active = !active;
-            printSuccessMessage(Text.translatable(active ? "commands.fullbright.enabled" : "commands.fullbright.disabled"));
+            printSuccessMessage(Component.translatable(active ? "commands.fullbright.enabled" : "commands.fullbright.disabled"));
             return SUCCESS;
         });
     }

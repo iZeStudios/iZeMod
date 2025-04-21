@@ -20,20 +20,20 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public final class ClearChatCommand extends AbstractCommand {
 
     public ClearChatCommand() {
-        super(Text.translatable("commands.clearchat"), "clearchat", "cc");
+        super(Component.translatable("commands.clearchat"), "clearchat", "cc");
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-            MinecraftClient.getInstance().inGameHud.getChatHud().clear(false);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
             return SUCCESS;
         });
     }

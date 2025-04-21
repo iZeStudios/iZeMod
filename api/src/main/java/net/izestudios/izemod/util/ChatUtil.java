@@ -18,60 +18,60 @@
 
 package net.izestudios.izemod.util;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
 import java.awt.*;
 
 public class ChatUtil {
 
-    public static MutableText CHAT_PREFIX = Text.literal("[").styled(style -> style.withColor(Formatting.DARK_AQUA))
-        .append(Text.literal("iZeMod").styled(style -> style.withColor(Formatting.AQUA)))
-        .append(Text.literal("] ").styled(style -> style.withColor(Formatting.DARK_AQUA)));
+    public static MutableComponent CHAT_PREFIX = Component.literal("[").withStyle(style -> style.withColor(ChatFormatting.DARK_AQUA))
+        .append(Component.literal("iZeMod").withStyle(style -> style.withColor(ChatFormatting.AQUA)))
+        .append(Component.literal("] ").withStyle(style -> style.withColor(ChatFormatting.DARK_AQUA)));
 
     public static void printPrefixedMessage(final String message) {
-        printPrefixedChatMessage(Text.literal(message), null, null);
+        printPrefixedChatMessage(Component.literal(message), null, null);
     }
 
-    public static void printPrefixedMessage(final Text message) {
+    public static void printPrefixedMessage(final Component message) {
         printPrefixedChatMessage(message, null, null);
     }
 
     public static void printSuccessMessage(final String message) {
-        printSuccessMessage(Text.literal(message));
+        printSuccessMessage(Component.literal(message));
     }
 
-    public static void printSuccessMessage(final Text message) {
+    public static void printSuccessMessage(final Component message) {
         printSuccessMessage(message, null, null);
     }
 
     public static void printSuccessMessage(final String message, final String tooltip) {
-        printSuccessMessage(Text.of(message), tooltip);
+        printSuccessMessage(Component.literal(message), tooltip);
     }
 
     public static void printSuccessMessage(final String message, final String tooltip, final String suggestion) {
-        printSuccessMessage(Text.literal(message), tooltip, suggestion);
+        printSuccessMessage(Component.literal(message), tooltip, suggestion);
     }
 
-    public static void printSuccessMessage(final Text message, final String tooltip) {
+    public static void printSuccessMessage(final Component message, final String tooltip) {
         printSuccessMessage(message, tooltip, null);
     }
 
-    public static void printSuccessMessage(final Text message, final String tooltip, final String suggestion) {
-        printPrefixedChatMessage(message.copy().withColor(Formatting.GREEN.getColorValue()), tooltip, suggestion);
+    public static void printSuccessMessage(final Component message, final String tooltip, final String suggestion) {
+        printPrefixedChatMessage(message.copy().withColor(ChatFormatting.GREEN.getColor()), tooltip, suggestion);
     }
 
     public static void printErrorMessage(final String message) {
-        printErrorMessage(Text.literal(message));
+        printErrorMessage(Component.literal(message));
     }
 
-    public static void printErrorMessage(final Text message) {
-        printPrefixedChatMessage(message.copy().withColor(Formatting.RED.getColorValue()), null, null);
+    public static void printErrorMessage(final Component message) {
+        printPrefixedChatMessage(message.copy().withColor(ChatFormatting.RED.getColor()), null, null);
     }
 
     public static void printPrefixedChatMessage(final String message) {
@@ -79,17 +79,17 @@ public class ChatUtil {
     }
 
     public static void printPrefixedChatMessage(final String message, final String tooltip, final String suggestion) {
-        printPrefixedChatMessage(Text.literal(message), tooltip, suggestion);
+        printPrefixedChatMessage(Component.literal(message), tooltip, suggestion);
     }
 
-    public static void printPrefixedChatMessage(final Text message) {
+    public static void printPrefixedChatMessage(final Component message) {
         printPrefixedChatMessage(message, null, null);
     }
 
-    public static void printPrefixedChatMessage(final Text message, final String tooltip, final String suggestion) {
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(CHAT_PREFIX.copy().append(message).styled(style -> {
+    public static void printPrefixedChatMessage(final Component message, final String tooltip, final String suggestion) {
+        Minecraft.getInstance().gui.getChat().addMessage(CHAT_PREFIX.copy().append(message).withStyle(style -> {
             if (tooltip != null) {
-                style = style.withHoverEvent(new HoverEvent.ShowText(Text.literal(tooltip)));
+                style = style.withHoverEvent(new HoverEvent.ShowText(Component.literal(tooltip)));
             }
             if (suggestion != null) {
                 style = style.withClickEvent(new ClickEvent.SuggestCommand(suggestion));
@@ -103,39 +103,39 @@ public class ChatUtil {
     }
 
     public static void printChatMessage(final String message) {
-        printChatMessage(Text.literal(message));
+        printChatMessage(Component.literal(message));
     }
 
-    public static void printChatMessage(final Text message) {
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+    public static void printChatMessage(final Component message) {
+        Minecraft.getInstance().gui.getChat().addMessage(message);
     }
 
-    public static Text colored(final String text, final Formatting color) {
-        return colored(Text.literal(text), color);
+    public static Component colored(final String text, final ChatFormatting color) {
+        return colored(Component.literal(text), color);
     }
 
-    public static Text colored(final Text text, final Formatting color) {
-        return text.copy().styled(style -> style.withColor(color));
+    public static Component colored(final Component text, final ChatFormatting color) {
+        return text.copy().withStyle(style -> style.withColor(color));
     }
 
-    public static Text colored(final Text text, final Color color) {
+    public static Component colored(final Component text, final Color color) {
         return colored(text, color.getRGB());
     }
 
-    public static Text colored(final Text text, final int color) {
-        return text.copy().styled(style -> style.withColor(TextColor.fromRgb(color)));
+    public static Component colored(final Component text, final int color) {
+        return text.copy().withStyle(style -> style.withColor(TextColor.fromRgb(color)));
     }
 
     public static void sendChatMessage(final String message) {
-        final ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
-        if (handler == null) {
+        final ClientPacketListener listener = Minecraft.getInstance().getConnection();
+        if (listener == null) {
             throw new IllegalStateException("ChatUtils#sendChatMessage called before the client was connected to a server");
         }
 
         if (message.startsWith("/")) {
-            handler.sendChatCommand(message);
+            listener.sendCommand(message);
         } else {
-            handler.sendChatMessage(message);
+            listener.sendChat(message);
         }
     }
 

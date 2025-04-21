@@ -18,23 +18,29 @@
 
 package net.izestudios.izemod.component.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.sound.AbstractSoundInstance;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.Registries;
-import net.minecraft.sound.MusicSound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.Music;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +48,13 @@ import java.util.Optional;
 import java.util.Queue;
 
 public class TetrisScreen extends Screen {
-    private static final SoundEvent TETRIS_NORMAL = new SoundEvent(Identifier.of("izemod:tetris1"), Optional.empty());
-    private static final SoundEvent TETRIS_FAST = new SoundEvent(Identifier.of("izemod:tetris2"), Optional.empty());
+    private static final SoundEvent TETRIS_NORMAL = new SoundEvent(ResourceLocation.parse("izemod:tetris1"), Optional.empty());
+    private static final SoundEvent TETRIS_FAST = new SoundEvent(ResourceLocation.parse("izemod:tetris2"), Optional.empty());
 
     static {
         try {
-            Registry.register(Registries.SOUND_EVENT, Identifier.of("izemod", "tetris1"), TETRIS_NORMAL);
-            Registry.register(Registries.SOUND_EVENT, Identifier.of("izemod", "tetris2"), TETRIS_FAST);
+            Registry.register(BuiltInRegistries.SOUND_EVENT, ResourceLocation.fromNamespaceAndPath("izemod", "tetris1"), TETRIS_NORMAL);
+            Registry.register(BuiltInRegistries.SOUND_EVENT, ResourceLocation.fromNamespaceAndPath("izemod", "tetris2"), TETRIS_FAST);
         } catch (Exception ignored) {
         }
     }
@@ -57,20 +63,20 @@ public class TetrisScreen extends Screen {
     private TetrisGame tetrisGame;
 
     public TetrisScreen() {
-        super(Text.translatable("screens.tetris.title"));
+        super(Component.translatable("screens.tetris.title"));
     }
 
     @Override
     @Nullable
-    public MusicSound getMusic() {
+    public Music getBackgroundMusic() {
         return null;
     }
 
     @Override
     protected void init() {
         super.init();
-        if (client != null && client.getMusicTracker() != null) {
-            client.getMusicTracker().stop();
+        if (minecraft != null && minecraft.getMusicManager() != null) {
+            minecraft.getMusicManager().stopPlaying();
         }
         if (tetrisGame == null) {
             tetrisGame = new TetrisGame();
@@ -88,7 +94,7 @@ public class TetrisScreen extends Screen {
     }
 
     @Override
-    public void resize(MinecraftClient client, int width, int height) {
+    public void resize(Minecraft client, int width, int height) {
         super.resize(client, width, height);
     }
 
@@ -98,13 +104,13 @@ public class TetrisScreen extends Screen {
         if (tetrisGame != null) {
             tetrisGame.update();
         }
-        if (client != null && client.getMusicTracker() != null) {
-            client.getMusicTracker().stop();
+        if (minecraft != null && minecraft.getMusicManager() != null) {
+            minecraft.getMusicManager().stopPlaying();
         }
     }
 
     @Override
-    public void render(DrawContext c, int mx, int my, float d) {
+    public void render(GuiGraphics c, int mx, int my, float d) {
         super.render(c, mx, my, d);
         if (tetrisGame != null) {
             tetrisGame.render(c);
@@ -120,23 +126,23 @@ public class TetrisScreen extends Screen {
         return super.keyPressed(key, sc, mod);
     }
 
-    private void drawControls(DrawContext c) {
+    private void drawControls(GuiGraphics c) {
         String[] lines = {
-            Text.translatable("screens.tetris.controls.a").getString() + " = " + Text.translatable("screens.tetris.controls.left").getString(),
-            Text.translatable("screens.tetris.controls.d").getString() + " = " + Text.translatable("screens.tetris.controls.right").getString(),
-            Text.translatable("screens.tetris.controls.w").getString() + " = " + Text.translatable("screens.tetris.controls.down").getString(),
-            Text.translatable("screens.tetris.controls.s").getString() + " = " + Text.translatable("screens.tetris.controls.drop").getString(),
-            Text.translatable("screens.tetris.controls.space").getString() + " = " + Text.translatable("screens.tetris.controls.rotate").getString(),
-            Text.translatable("screens.tetris.controls.shift").getString() + " = " + Text.translatable("screens.tetris.controls.rotate").getString(),
-            Text.translatable("screens.tetris.controls.p").getString() + " = " + Text.translatable("screens.tetris.controls.pause").getString(),
-            Text.translatable("screens.tetris.controls.esc").getString() + " = " + Text.translatable("screens.tetris.controls.back").getString()
+            Component.translatable("screens.tetris.controls.a").getString() + " = " + Component.translatable("screens.tetris.controls.left").getString(),
+            Component.translatable("screens.tetris.controls.d").getString() + " = " + Component.translatable("screens.tetris.controls.right").getString(),
+            Component.translatable("screens.tetris.controls.w").getString() + " = " + Component.translatable("screens.tetris.controls.down").getString(),
+            Component.translatable("screens.tetris.controls.s").getString() + " = " + Component.translatable("screens.tetris.controls.drop").getString(),
+            Component.translatable("screens.tetris.controls.space").getString() + " = " + Component.translatable("screens.tetris.controls.rotate").getString(),
+            Component.translatable("screens.tetris.controls.shift").getString() + " = " + Component.translatable("screens.tetris.controls.rotate").getString(),
+            Component.translatable("screens.tetris.controls.p").getString() + " = " + Component.translatable("screens.tetris.controls.pause").getString(),
+            Component.translatable("screens.tetris.controls.esc").getString() + " = " + Component.translatable("screens.tetris.controls.back").getString()
         };
-        int lh = textRenderer.fontHeight + 2;
+        int lh = font.lineHeight + 2;
         int th = lines.length * lh;
         int x = 10;
         int y = (height - th) / 2;
         for (String line : lines) {
-            c.drawTextWithShadow(textRenderer, line, x, y, 0xFFFFFFFF);
+            c.drawString(font, line, x, y, 0xFFFFFFFF);
             y += lh;
         }
     }
@@ -177,7 +183,7 @@ public class TetrisScreen extends Screen {
         private void loadHighScore() {
             if (loadedHS) return;
             loadedHS = true;
-            HS_FILE = new File(MinecraftClient.getInstance().runDirectory, "tetrisHighscore.txt");
+            HS_FILE = new File(Minecraft.getInstance().gameDirectory, "tetrisHighscore.txt");
             if (!HS_FILE.exists()) {
                 highScore = 0;
                 return;
@@ -205,21 +211,21 @@ public class TetrisScreen extends Screen {
 
         private void startMusic() {
             if (playing) return;
-            if (client != null && client.getSoundManager() != null) {
+            if (minecraft != null && minecraft.getSoundManager() != null) {
                 if (level >= 5) {
                     music = new TetrisMusicInstance(TETRIS_FAST);
                 } else {
                     music = new TetrisMusicInstance(TETRIS_NORMAL);
                 }
-                client.getSoundManager().play(music);
+                minecraft.getSoundManager().play(music);
                 playing = true;
             }
         }
 
         private void stopMusic() {
             if (playing && music != null) {
-                if (client != null) {
-                    client.getSoundManager().stop(music);
+                if (minecraft != null) {
+                    minecraft.getSoundManager().stop(music);
                 }
                 music = null;
                 playing = false;
@@ -484,7 +490,7 @@ public class TetrisScreen extends Screen {
             return true;
         }
 
-        public void render(DrawContext c) {
+        public void render(GuiGraphics c) {
             int margin = 40;
             int aw = width - margin;
             int ah = height - margin;
@@ -552,13 +558,13 @@ public class TetrisScreen extends Screen {
             int ix = sx + bpw + 10;
             int iy = sy + 4;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.highScore"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 1;
-            c.drawTextWithShadow(textRenderer, String.valueOf(highScore), ix, iy, 0xFFFFFF00);
-            iy += textRenderer.fontHeight + 8;
+            c.drawString(font, Component.translatable("screens.tetris.highScore"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 1;
+            c.drawString(font, String.valueOf(highScore), ix, iy, 0xFFFFFF00);
+            iy += font.lineHeight + 8;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.next"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 2;
+            c.drawString(font, Component.translatable("screens.tetris.next"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 2;
 
             int pcs = cs;
             int boxWidth = pcs * 5;
@@ -606,23 +612,23 @@ public class TetrisScreen extends Screen {
 
             iy += boxHeight + 10;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.level"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 1;
-            c.drawTextWithShadow(textRenderer, String.valueOf(level), ix, iy, 0xFFFF0000);
-            iy += textRenderer.fontHeight + 10;
+            c.drawString(font, Component.translatable("screens.tetris.level"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 1;
+            c.drawString(font, String.valueOf(level), ix, iy, 0xFFFF0000);
+            iy += font.lineHeight + 10;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.score"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 1;
-            c.drawTextWithShadow(textRenderer, String.valueOf(score), ix, iy, 0xFFFF8000);
-            iy += textRenderer.fontHeight + 10;
+            c.drawString(font, Component.translatable("screens.tetris.score"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 1;
+            c.drawString(font, String.valueOf(score), ix, iy, 0xFFFF8000);
+            iy += font.lineHeight + 10;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.lines"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 1;
-            c.drawTextWithShadow(textRenderer, String.valueOf(linesClearedTotal), ix, iy, 0xFFFF00FF);
-            iy += textRenderer.fontHeight + 10;
+            c.drawString(font, Component.translatable("screens.tetris.lines"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 1;
+            c.drawString(font, String.valueOf(linesClearedTotal), ix, iy, 0xFFFF00FF);
+            iy += font.lineHeight + 10;
 
-            c.drawTextWithShadow(textRenderer, Text.translatable("screens.tetris.time"), ix, iy, 0xFFFFFFFF);
-            iy += textRenderer.fontHeight + 1;
+            c.drawString(font, Component.translatable("screens.tetris.time"), ix, iy, 0xFFFFFFFF);
+            iy += font.lineHeight + 1;
             long totalMs = roundTimeMs;
             long h = totalMs / 3600000;
             long r = totalMs % 3600000;
@@ -633,22 +639,22 @@ public class TetrisScreen extends Screen {
             String timeStr = (h > 0)
                 ? String.format("%02d:%02d:%02d.%03d", h, m, s, ms)
                 : String.format("%02d:%02d.%03d", m, s, ms);
-            c.drawTextWithShadow(textRenderer, timeStr, ix, iy, 0xFF00FF00);
+            c.drawString(font, timeStr, ix, iy, 0xFF00FF00);
 
             if (paused) {
                 c.fill(sx, sy, sx + bpw, sy + bph, 0xA0000000);
-                drawCenteredShadow(c, Text.translatable("screens.tetris.paused"), 0xFFFFFFFF);
+                drawCenteredShadow(c, Component.translatable("screens.tetris.paused"), 0xFFFFFFFF);
             } else if (gameOver) {
                 c.fill(sx, sy, sx + bpw, sy + bph, 0xA0000000);
-                String line1 = I18n.translate("screens.tetris.gameOver1");
-                String line2 = I18n.translate("screens.tetris.gameOver2");
-                int w1 = textRenderer.getWidth(line1);
-                int w2 = textRenderer.getWidth(line2);
+                String line1 = I18n.get("screens.tetris.gameOver1");
+                String line2 = I18n.get("screens.tetris.gameOver2");
+                int w1 = font.width(line1);
+                int w2 = font.width(line2);
                 int x1 = (width - w1) / 2;
                 int x2 = (width - w2) / 2;
                 int yMid = height / 2;
-                c.drawTextWithShadow(textRenderer, line1, x1, yMid - 10, 0xFF00FFFF);
-                c.drawTextWithShadow(textRenderer, line2, x2, yMid + 10, 0xFF0000FF);
+                c.drawString(font, line1, x1, yMid - 10, 0xFF00FFFF);
+                c.drawString(font, line2, x2, yMid + 10, 0xFF0000FF);
             }
         }
 
@@ -748,11 +754,11 @@ public class TetrisScreen extends Screen {
             lastTickTime = System.currentTimeMillis();
         }
 
-        private void drawCenteredShadow(DrawContext c, Text msg, int color) {
-            int w = textRenderer.getWidth(msg);
+        private void drawCenteredShadow(GuiGraphics c, Component msg, int color) {
+            int w = font.width(msg);
             int xx = (width - w) / 2;
             int yy = height / 2;
-            c.drawTextWithShadow(textRenderer, msg, xx, yy, color);
+            c.drawString(font, msg, xx, yy, color);
         }
 
         private void playClickSound() {
@@ -824,15 +830,15 @@ public class TetrisScreen extends Screen {
 
     private static class TetrisMusicInstance extends AbstractSoundInstance {
         public TetrisMusicInstance(SoundEvent event) {
-            super(event, SoundCategory.MASTER, Random.create());
-            this.repeat = true;
-            this.repeatDelay = 0;
+            super(event, SoundSource.MASTER, RandomSource.create());
+            this.looping = true;
+            this.delay = 0;
             this.volume = 1.0F;
             this.pitch = 1.0F;
             this.x = 0;
             this.y = 0;
             this.z = 0;
-            this.attenuationType = SoundInstance.AttenuationType.NONE;
+            this.attenuation = SoundInstance.Attenuation.NONE;
         }
     }
 }

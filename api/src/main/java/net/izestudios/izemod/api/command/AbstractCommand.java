@@ -23,8 +23,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.izestudios.izemod.util.ChatUtil;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 /**
  * Command abstraction. Override {@link #builder(LiteralArgumentBuilder)} to create the command structure.
@@ -35,14 +35,14 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
     public static final int FAILURE = 0;
 
     private final String[] aliases;
-    private final Text description;
+    private final Component description;
 
     public AbstractCommand(final String command) {
         this.description = null;
         this.aliases = new String[] { command };
     }
 
-    public AbstractCommand(final Text description, final String... aliases) {
+    public AbstractCommand(final Component description, final String... aliases) {
         Preconditions.checkNotNull(description);
         Preconditions.checkState(aliases.length > 0, "No aliases provided");
         for (final String alias : aliases) {
@@ -52,17 +52,17 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
         this.aliases = aliases;
     }
 
-    protected LiteralArgumentBuilder<CommandSource> literal(final String name) {
+    protected LiteralArgumentBuilder<SharedSuggestionProvider> literal(final String name) {
         return LiteralArgumentBuilder.literal(name);
     }
 
-    protected RequiredArgumentBuilder<CommandSource, ?> argument(final String name, final ArgumentType<?> type) {
+    protected RequiredArgumentBuilder<SharedSuggestionProvider, ?> argument(final String name, final ArgumentType<?> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
 
-    public abstract void builder(final LiteralArgumentBuilder<CommandSource> builder);
+    public abstract void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder);
 
-    public Text getDescription() {
+    public Component getDescription() {
         return description;
     }
 

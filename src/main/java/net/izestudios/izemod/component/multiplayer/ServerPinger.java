@@ -19,38 +19,39 @@
 package net.izestudios.izemod.component.multiplayer;
 
 import net.izestudios.izemod.IzeModImpl;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.tooltip.TooltipPositioner;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.ServerList;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
-public final class ServerPinger extends ClickableWidget {
+public final class ServerPinger extends AbstractWidget {
 
-    private static final MultiplayerServerListWidget WIDGET = new MultiplayerServerListWidget(null, null, 0, 0, 0, 0);
+    private static final ServerSelectionList WIDGET = new ServerSelectionList(null, null, 0, 0, 0, 0);
     public static final int WIDTH = 300;
     public static final int HEIGHT = 60;
 
-    private final MultiplayerScreen multiplayerScreen = new MultiplayerScreen(null) {
+    private final JoinMultiplayerScreen multiplayerScreen = new JoinMultiplayerScreen(null) {
 
         @Override
-        public void setTooltip(final List<OrderedText> tooltip, final TooltipPositioner positioner, final boolean focused) {
+        public void setTooltipForNextRenderPass(@NotNull List<FormattedCharSequence> tooltip, @NotNull ClientTooltipPositioner positioner, boolean override) {
             ServerPinger.this.tooltip = tooltip;
             ServerPinger.this.positioner = positioner;
         }
 
         @Override
-        public ServerList getServerList() {
-            return new ServerList(MinecraftClient.getInstance()) {
+        public @NotNull ServerList getServers() {
+            return new ServerList(Minecraft.getInstance()) {
 
                 @Override
                 public int size() {
@@ -58,74 +59,74 @@ public final class ServerPinger extends ClickableWidget {
                 }
 
                 @Override
-                public void saveFile() {
+                public void save() {
                 }
             };
         }
     };
-    private MultiplayerServerListWidget.ServerEntry serverEntry;
-    private MultiplayerServerListWidget.ServerEntry previousServerEntry;
+    private ServerSelectionList.OnlineServerEntry serverEntry;
+    private ServerSelectionList.OnlineServerEntry previousServerEntry;
 
-    private List<OrderedText> tooltip;
-    private TooltipPositioner positioner;
+    private List<FormattedCharSequence> tooltip;
+    private ClientTooltipPositioner positioner;
 
     public ServerPinger(final int x, final int y) {
-        super(x, y, WIDTH, HEIGHT, Text.empty());
+        super(x, y, WIDTH, HEIGHT, Component.empty());
     }
 
     public void updateServer(final String address) {
-        final ServerInfo serverInfo = new ServerInfo("", address, ServerInfo.ServerType.OTHER);
-        serverInfo.setStatus(ServerInfo.Status.INITIAL);
+        final ServerData serverInfo = new ServerData("", address, ServerData.Type.OTHER);
+        serverInfo.setState(ServerData.State.INITIAL);
 
-        multiplayerScreen.getServerListPinger().cancel();
-        serverEntry = WIDGET.new ServerEntry(multiplayerScreen, serverInfo);
+        multiplayerScreen.getPinger().removeAll();
+        serverEntry = WIDGET.new OnlineServerEntry(multiplayerScreen, serverInfo);
         if (previousServerEntry == null) {
             previousServerEntry = serverEntry;
         }
     }
 
     @Override
-    protected void renderWidget(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
+    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         if (serverEntry == null || previousServerEntry == null) {
             return;
         }
 
-        final ServerInfo.Status status = serverEntry.getServer().getStatus();
-        if (status == ServerInfo.Status.INITIAL || status == ServerInfo.Status.PINGING) {
+        final ServerData.State status = serverEntry.getServerData().state();
+        if (status == ServerData.State.INITIAL || status == ServerData.State.PINGING) {
             // The server entry is only pinged when rendered, but we only want to show it when it's successful, therefore
             // render it off-screen to avoid showing it when it's not successful
-            serverEntry.render(context, 0, context.getScaledWindowHeight(), context.getScaledWindowWidth(), 0, 0, mouseX, mouseY, false, delta);
-        } else if (status == ServerInfo.Status.SUCCESSFUL) {
+            serverEntry.render(guiGraphics, 0, guiGraphics.guiHeight(), guiGraphics.guiWidth(), 0, 0, mouseX, mouseY, false, partialTick);
+        } else if (status == ServerData.State.SUCCESSFUL) {
             previousServerEntry = serverEntry;
-        } else if (status == ServerInfo.Status.UNREACHABLE || status == ServerInfo.Status.INCOMPATIBLE) {
+        } else if (status == ServerData.State.UNREACHABLE || status == ServerData.State.INCOMPATIBLE) {
             return;
         }
 
-        if (previousServerEntry.getServer().getStatus() != ServerInfo.Status.SUCCESSFUL) {
+        if (previousServerEntry.getServerData().state() != ServerData.State.SUCCESSFUL) {
             return;
         }
 
-        final MultiplayerServerListWidget.ServerEntry entry = status != ServerInfo.Status.SUCCESSFUL ? previousServerEntry : serverEntry;
-        context.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
-        entry.render(context, 0, getY() + 2, getX() + 2, WIDTH + 1, HEIGHT, mouseX, mouseY, false, delta);
+        final ServerSelectionList.OnlineServerEntry entry = status != ServerData.State.SUCCESSFUL ? previousServerEntry : serverEntry;
+        guiGraphics.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
+        entry.render(guiGraphics, 0, getY() + 2, getX() + 2, WIDTH + 1, HEIGHT, mouseX, mouseY, false, partialTick);
         if (tooltip != null) {
-            context.drawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, positioner, mouseX, mouseY);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, positioner, mouseX, mouseY);
             tooltip = null;
         }
 
-        final String brand = I18n.translate("screens.directconnect.brand");
-        final String version = I18n.translate("screens.directconnect.version");
-        context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Formatting.RED + brand + ": " + Formatting.AQUA + entry.getServer().version.getString(), getX() + 2, getY() + 40, -1);
-        context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, Formatting.RED + version + ": " + Formatting.AQUA + entry.getServer().protocolVersion, getX() + 2, getY() + 50, -1);
+        final String brand = I18n.get("screens.directconnect.brand");
+        final String version = I18n.get("screens.directconnect.version");
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + brand + ": " + ChatFormatting.AQUA + entry.getServerData().version.getString(), getX() + 2, getY() + 40, -1);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + version + ": " + ChatFormatting.AQUA + entry.getServerData().protocol, getX() + 2, getY() + 50, -1);
     }
 
     @Override
-    public boolean mouseClicked(final double mouseX, final double mouseY, final int button) {
-        return false;
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    protected void appendClickableNarrations(final NarrationMessageBuilder builder) {
+    protected void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
     }
 
 }

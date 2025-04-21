@@ -20,8 +20,8 @@ package net.izestudios.izemod.api.hud;
 
 import com.google.common.base.Preconditions;
 import java.util.function.Supplier;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,13 +29,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class HudElement {
 
-    public static HudElement of(final @NotNull Text key, final @NotNull Text value) {
+    public static HudElement of(final @NotNull Component key, final @NotNull Component value) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(value);
         return new HudElement() {
             @Override
             public String name() {
-                return key.getContent() instanceof TranslatableTextContent content ? content.getKey() : key();
+                return key.getContents() instanceof TranslatableContents content ? content.getKey() : key();
             }
 
             @Override
@@ -66,13 +66,13 @@ public abstract class HudElement {
         };
     }
 
-    public static HudElement of(final @NotNull Text key, final @NotNull Supplier<Object> valueSupplier) {
+    public static HudElement of(final @NotNull Component key, final @NotNull Supplier<Object> valueSupplier) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(valueSupplier);
         return new HudElement() {
             @Override
             public String name() {
-                return key.getContent() instanceof TranslatableTextContent content ? content.getKey() : key();
+                return key.getContents() instanceof TranslatableContents content ? content.getKey() : key();
             }
 
             @Override

@@ -32,6 +32,7 @@ import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.save.SaveLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;

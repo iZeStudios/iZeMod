@@ -18,33 +18,33 @@
 
 package net.izestudios.izemod.util;
 
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.Util;
 import java.io.InputStream;
 
 public final class Assets {
 
-    public static final Identifier LOGO = Identifier.of("izemod", "textures/logo.png");
-    public static final Identifier SPLASH_OVERLAY = Identifier.of("izemod", "textures/splash_overlay.png");
-    public static final Identifier[] SATURATION_FRAMES = new Identifier[20];
-    public static final ButtonTextures BUTTON = new ButtonTextures(
-        Identifier.of("izemod", "button"),
-        Identifier.of("izemod", "button_disabled"),
-        Identifier.of("izemod", "button_highlighted")
+    public static final ResourceLocation LOGO = ResourceLocation.fromNamespaceAndPath("izemod", "textures/logo.png");
+    public static final ResourceLocation SPLASH_OVERLAY = ResourceLocation.fromNamespaceAndPath("izemod", "textures/splash_overlay.png");
+    public static final ResourceLocation[] SATURATION_FRAMES = new ResourceLocation[20];
+    public static final WidgetSprites BUTTON = new WidgetSprites(
+        ResourceLocation.fromNamespaceAndPath("izemod", "button"),
+        ResourceLocation.fromNamespaceAndPath("izemod", "button_disabled"),
+        ResourceLocation.fromNamespaceAndPath("izemod", "button_highlighted")
     );
 
     static {
         for (int i = 0; i <= 9; i++) {
-            SATURATION_FRAMES[i] = Identifier.of("izemod", "textures/gui/saturation/frame0.png");
+            SATURATION_FRAMES[i] = ResourceLocation.fromNamespaceAndPath("izemod", "textures/gui/saturation/frame0.png");
         }
         for (int i = 10; i <= 19; i++) {
-            SATURATION_FRAMES[i] = Identifier.of("izemod", "textures/gui/saturation/frame" + (i - 9) + ".png");
+            SATURATION_FRAMES[i] = ResourceLocation.fromNamespaceAndPath("izemod", "textures/gui/saturation/frame" + (i - 9) + ".png");
         }
     }
 
     public static InputStream icon(final String name) {
-        if (Util.getOperatingSystem() == Util.OperatingSystem.WINDOWS) {
+        if (Util.getPlatform() == Util.OS.WINDOWS) {
             return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/icon.png");
         } else {
             return Assets.class.getResourceAsStream("/assets/izemod/textures/icon/" + name);

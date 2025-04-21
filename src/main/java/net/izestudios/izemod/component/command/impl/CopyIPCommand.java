@@ -20,28 +20,28 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public final class CopyIPCommand extends AbstractCommand {
 
     public CopyIPCommand() {
-        super(Text.translatable("commands.copyip"), "copyip");
+        super(Component.translatable("commands.copyip"), "copyip");
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-            final MinecraftClient client = MinecraftClient.getInstance();
-            if (client.isInSingleplayer()) {
-                printErrorMessage(Text.translatable("commands.copyip.singleplayer"));
+            final Minecraft client = Minecraft.getInstance();
+            if (client.isLocalServer()) {
+                printErrorMessage(Component.translatable("commands.copyip.singleplayer"));
                 return FAILURE;
             }
 
-            final String address = client.getCurrentServerEntry().address;
-            client.keyboard.setClipboard(address);
-            printSuccessMessage(Text.translatable("commands.copyip.success"));
+            final String address = client.getCurrentServer().ip;
+            client.keyboardHandler.setClipboard(address);
+            printSuccessMessage(Component.translatable("commands.copyip.success"));
             return SUCCESS;
         });
     }

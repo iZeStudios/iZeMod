@@ -20,7 +20,7 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 public final class TestCommand extends AbstractCommand {
 
@@ -29,7 +29,7 @@ public final class TestCommand extends AbstractCommand {
     }
 
     @Override
-    public void builder(final LiteralArgumentBuilder<CommandSource> builder) {
+    public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
             System.out.println("This is just a test!");
             printSuccessMessage("This is a test message!");

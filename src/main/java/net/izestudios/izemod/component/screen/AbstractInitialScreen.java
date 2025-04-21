@@ -23,21 +23,22 @@ import net.izestudios.izemod.util.Constants;
 import net.izestudios.izemod.util.RenderUtil;
 import net.izestudios.izemod.util.UpdateUtil;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.CreditsAndAttributionScreen;
-import net.minecraft.client.gui.widget.PressableTextWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.CreditsAndAttributionScreen;
+import net.minecraft.client.gui.components.PlainTextButton;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import org.jetbrains.annotations.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public abstract class AbstractInitialScreen extends Screen {
 
-    protected AbstractInitialScreen(final Text title) {
+    protected AbstractInitialScreen(final Component title) {
         super(title);
     }
 
@@ -48,17 +49,17 @@ public abstract class AbstractInitialScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         final int logoX = (this.width / 2) - (2279 / 12);
         final int logoY = this.height / 20 + 4;
-        RenderUtil.drawLogo(context, logoX, logoY, -1);
+        RenderUtil.drawLogo(guiGraphics, logoX, logoY, -1);
     }
 
     private void openWebUrl(final String url) {
         try {
-            Util.getOperatingSystem().open(new URI(url));
+            Util.getPlatform().openUri(new URI(url));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -70,66 +71,62 @@ public abstract class AbstractInitialScreen extends Screen {
             return;
         }
 
-        final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-
-        final Text firstUpdateText = Text.translatable("update.first", version).styled(style -> style.withColor(Formatting.GOLD));
-        this.addDrawableChild(new PressableTextWidget(
-            this.width / 2 - textRenderer.getWidth(firstUpdateText) / 2,
+        final Component firstUpdateText = Component.translatable("update.first", version).withStyle(style -> style.withColor(ChatFormatting.GOLD));
+        this.addRenderableWidget(new PlainTextButton(
+            this.width / 2 - font.width(firstUpdateText) / 2,
             this.height - 45,
             200,
             10,
             firstUpdateText,
-            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
+            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.font
         ));
-        final Text secondUpdateText = Text.translatable("update.second").styled(style -> style.withColor(Formatting.GOLD));
-        this.addDrawableChild(new PressableTextWidget(
-            this.width / 2 - textRenderer.getWidth(secondUpdateText) / 2,
+        final Component secondUpdateText = Component.translatable("update.second").withStyle(style -> style.withColor(ChatFormatting.GOLD));
+        this.addRenderableWidget(new PlainTextButton(
+            this.width / 2 - font.width(secondUpdateText) / 2,
             this.height - 35,
             200,
             10,
             secondUpdateText,
-            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.textRenderer
+            button -> this.openWebUrl("https://github.com/iZeStudios/iZeMod/releases/latest"), this.font
         ));
     }
 
     protected void setupCopyrightTexts() {
-        final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-
-        this.addDrawableChild(new PressableTextWidget(
+        this.addRenderableWidget(new PlainTextButton(
             2,
             this.height - 20,
             200,
             10,
-            Text.of("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
-            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
+            Component.nullToEmpty("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
+            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.font
         ));
 
-        this.addDrawableChild(new PressableTextWidget(
+        this.addRenderableWidget(new PlainTextButton(
             2,
             this.height - 10,
             200,
             10,
-            Text.of("by iZePlayz & EnZaXD"),
-            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.textRenderer
+            Component.nullToEmpty("by iZePlayz & EnZaXD"),
+            button -> this.openWebUrl("https://izeplayz.de/izemod"), this.font
         ));
 
-        final String minecraftText = "Minecraft " + SharedConstants.getGameVersion().getName();
-        this.addDrawableChild(new PressableTextWidget(
-            this.width - textRenderer.getWidth(minecraftText) - 2,
+        final String minecraftText = "Minecraft " + SharedConstants.getCurrentVersion().getName();
+        this.addRenderableWidget(new PlainTextButton(
+            this.width - font.width(minecraftText) - 2,
             this.height - 20,
             200,
             10,
-            Text.of(minecraftText),
-            button -> this.client.setScreen(new CreditsAndAttributionScreen(this)), this.textRenderer));
+            Component.nullToEmpty(minecraftText),
+            button -> this.minecraft.setScreen(new CreditsAndAttributionScreen(this)), this.font));
 
-        final Text copyrightText = Text.translatable(Constants.TEXT_COPYRIGHT);
-        this.addDrawableChild(new PressableTextWidget(
-            this.width - textRenderer.getWidth(copyrightText) - 2,
+        final Component copyrightText = Component.translatable(Constants.TEXT_COPYRIGHT);
+        this.addRenderableWidget(new PlainTextButton(
+            this.width - font.width(copyrightText) - 2,
             this.height - 10,
             200,
             10,
             copyrightText,
-            button -> this.client.setScreen(new CreditsAndAttributionScreen(this)), this.textRenderer
+            button -> this.minecraft.setScreen(new CreditsAndAttributionScreen(this)), this.font
         ));
     }
 
