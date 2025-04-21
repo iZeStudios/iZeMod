@@ -18,20 +18,21 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.minecraft.util.StringHelper;
+import net.izestudios.izemod.component.command.CommandHandlerImpl;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(StringHelper.class)
-public abstract class MixinStringHelper {
+@Mixin(ClientPacketListener.class)
+public abstract class MixinClientPacketListener {
 
-    /**
-     * @author iZePlayz
-     * @reason Allow paragraph as valid character
-     */
-    @Overwrite
-    public static boolean isValidChar(char c) {
-        return c >= ' ' && c != 127;
+    @Inject(method = "sendChat", at = @At("HEAD"), cancellable = true)
+    private void onChatMessage(String message, CallbackInfo ci) {
+        if (CommandHandlerImpl.INSTANCE.onChatMessage(message)) {
+            ci.cancel();
+        }
     }
 
 }

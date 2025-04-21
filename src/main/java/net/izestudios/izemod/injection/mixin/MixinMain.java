@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Main.class)
 public abstract class MixinMain {
 
-    @Inject(method = "main", at = @At("HEAD"))
+    @Inject(method = "main", at = @At("HEAD"), remap = false)
     private static void initialize(CallbackInfo ci) {
         IzeModImpl.INSTANCE.initialize();
     }

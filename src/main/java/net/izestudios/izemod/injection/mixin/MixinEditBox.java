@@ -20,29 +20,29 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.izestudios.izemod.component.theme.ColorTheme;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(TextFieldWidget.class)
-public abstract class MixinTextFieldWidget extends ClickableWidget {
+@Mixin(EditBox.class)
+public abstract class MixinEditBox extends AbstractWidget {
 
-    public MixinTextFieldWidget(final int x, final int y, final int width, final int height, final Text message) {
+    @Shadow
+    public abstract boolean isBordered();
+
+    public MixinEditBox(final int x, final int y, final int width, final int height, final Component message) {
         super(x, y, width, height, message);
     }
 
-    @Shadow
-    public abstract boolean drawsBackground();
-
-    @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;drawsBackground()Z"))
-    private boolean replaceTextFieldStyle(TextFieldWidget instance, @Local(argsOnly = true) DrawContext context) {
-        if (drawsBackground()) {
-            context.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.BASE_BLUE);
+    @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/EditBox;isBordered()Z"))
+    private boolean replaceTextFieldStyle(EditBox instance, @Local(argsOnly = true) GuiGraphics guiGraphics) {
+        if (isBordered()) {
+            guiGraphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.BASE_BLUE);
         }
         return false;
     }

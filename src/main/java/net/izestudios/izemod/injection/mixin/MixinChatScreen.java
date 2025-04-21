@@ -18,13 +18,13 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,16 +35,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinChatScreen extends Screen {
 
     @Shadow
-    protected TextFieldWidget chatField;
+    protected EditBox input;
 
-    public MixinChatScreen(final Text title) {
+    public MixinChatScreen(final Component title) {
         super(title);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void renderChatCounter(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        final MutableText text = Text.translatable("screens.chat", chatField.getText().length(), chatField.getMaxLength()).styled(style -> style.withColor(Formatting.GRAY));
-        context.drawTextWithShadow(client.textRenderer, text, this.width - client.textRenderer.getWidth(text) - 3, chatField.getY() - client.textRenderer.fontHeight - 3, -1);
+    private void renderChatCounter(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+        final MutableComponent text = Component.translatable("screens.chat", input.getValue().length(), input.getMaxLength()).withStyle(style -> style.withColor(ChatFormatting.GRAY));
+        guiGraphics.drawString(minecraft.font, text, this.width - minecraft.font.width(text) - 3, input.getY() - minecraft.font.lineHeight - 3, -1);
     }
 
 }

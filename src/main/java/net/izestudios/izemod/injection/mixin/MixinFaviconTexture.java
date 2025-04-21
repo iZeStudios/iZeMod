@@ -18,8 +18,8 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.minecraft.client.gui.screen.world.WorldIcon;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.FaviconTexture;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,8 +27,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import static net.izestudios.izemod.util.Assets.SATURATION_FRAMES;
 
-@Mixin(WorldIcon.class)
-public abstract class MixinWorldIcon {
+@Mixin(FaviconTexture.class)
+public abstract class MixinFaviconTexture {
 
     @Unique
     private static final int iZeMod$WAIT_FRAMES = 7;
@@ -42,8 +42,8 @@ public abstract class MixinWorldIcon {
     @Unique
     private boolean izeMod$reversing = true;
 
-    @Redirect(method = "getTextureId", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/world/WorldIcon;UNKNOWN_SERVER_ID:Lnet/minecraft/util/Identifier;"))
-    private Identifier replaceUnknownServerIcon() {
+    @Redirect(method = "textureLocation", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/FaviconTexture;MISSING_LOCATION:Lnet/minecraft/resources/ResourceLocation;"))
+    private ResourceLocation replaceMissingServerIcon() {
         if (++izeMod$waitCounter >= iZeMod$WAIT_FRAMES) {
             izeMod$currentFrame += izeMod$reversing ? -1 : 1;
 

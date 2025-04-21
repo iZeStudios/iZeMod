@@ -22,9 +22,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.util.RenderUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,21 +35,21 @@ public abstract class MixinGameRenderer {
 
     @Shadow
     @Final
-    private MinecraftClient client;
+    private Minecraft minecraft;
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;draw()V"))
-    private void drawLogo(DrawContext instance, Operation<Void> original) {
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;flush()V"))
+    private void drawLogo(GuiGraphics instance, Operation<Void> original) {
         original.call(instance);
 
-        if (client.getOverlay() != null) {
+        if (minecraft.getOverlay() != null) {
             return;
         }
 
-        final boolean hud = client.player != null && !client.inGameHud.getDebugHud().shouldShowDebugHud();
+        final boolean hud = minecraft.player != null && !minecraft.gui.getDebugOverlay().showDebugScreen();
         RenderUtil.drawScaledLogo(instance, hud ? 1F : 0.6F);
-        instance.draw();
+        instance.flush();
         if (hud) {
-            HudRenderingImpl.INSTANCE.render(instance);
+            HudRenderingImpl.INSTANCE.draw(instance);
         }
     }
 

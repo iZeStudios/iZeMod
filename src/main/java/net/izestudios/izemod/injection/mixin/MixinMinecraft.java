@@ -22,11 +22,15 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.util.Assets;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.RunArgs;
-import net.minecraft.client.gui.screen.SplashOverlay;
-import net.minecraft.client.session.Session;
-import org.spongepowered.asm.mixin.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.GameConfig;
+import net.minecraft.client.gui.screens.LoadingOverlay;
+import net.minecraft.client.User;
+
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -34,27 +38,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.UUID;
 
-@Mixin(MinecraftClient.class)
-public abstract class MixinMinecraftClient {
+@Mixin(Minecraft.class)
+public abstract class MixinMinecraft {
 
     @Mutable
     @Shadow
-    public Session session;
+    @Final
+    private User user;
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SplashOverlay;init(Lnet/minecraft/client/texture/TextureManager;)V"))
-    private void initialize(RunArgs args, CallbackInfo ci) {
+    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;registerTextures(Lnet/minecraft/client/renderer/texture/TextureManager;)V"))
+    private void initialize(GameConfig gameConfig, CallbackInfo ci) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            session = new Session(
+            user = new User(
                 "iZeMod" + String.format("%06d", (int)(Math.random() * 1000000)),
                 UUID.randomUUID(),
                 "00000000000000000000000000000000",
                 Optional.empty(),
                 Optional.empty(),
-                Session.AccountType.MOJANG
+                User.Type.MOJANG
             );
         }
 
-        SplashOverlay.LOGO = Assets.SPLASH_OVERLAY;
+        LoadingOverlay.MOJANG_STUDIOS_LOGO_LOCATION = Assets.SPLASH_OVERLAY;
         IzeModImpl.INSTANCE.lateInitialize();
     }
 
@@ -63,7 +68,7 @@ public abstract class MixinMinecraftClient {
         ColorTheme.tick();
     }
 
-    @Inject(method = "getWindowTitle", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "createTitle", at = @At(value = "HEAD"), cancellable = true)
     private void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
         cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")");
     }

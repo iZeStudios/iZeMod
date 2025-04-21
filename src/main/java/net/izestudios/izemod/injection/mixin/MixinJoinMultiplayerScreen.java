@@ -19,39 +19,39 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.util.Constants;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Set;
 
-@Mixin(MultiplayerScreen.class)
-public abstract class MixinMultiplayerScreen extends Screen {
+@Mixin(JoinMultiplayerScreen.class)
+public abstract class MixinJoinMultiplayerScreen extends Screen {
 
-    protected MixinMultiplayerScreen(Text title) {
+    protected MixinJoinMultiplayerScreen(final Component title) {
         super(title);
     }
 
     @Inject(method = "init", at = @At("TAIL"))
     private void moveVanillaButtons(CallbackInfo ci) {
-        final String select = I18n.translate(Constants.TEXT_SELECT_SERVER);
-        final String direct = I18n.translate(Constants.TEXT_DIRECT_CONNECT);
-        final String add = I18n.translate(Constants.TEXT_ADD_SERVER);
-        final String edit = I18n.translate(Constants.TEXT_EDIT_SERVER);
-        final String delete = I18n.translate(Constants.TEXT_DELETE_SERVER);
-        final String refresh = I18n.translate(Constants.TEXT_REFRESH);
-        final String back = ScreenTexts.BACK.getString();
+        final String select = I18n.get(Constants.TEXT_SELECT_SERVER);
+        final String direct = I18n.get(Constants.TEXT_DIRECT_CONNECT);
+        final String add = I18n.get(Constants.TEXT_ADD_SERVER);
+        final String edit = I18n.get(Constants.TEXT_EDIT_SERVER);
+        final String delete = I18n.get(Constants.TEXT_DELETE_SERVER);
+        final String refresh = I18n.get(Constants.TEXT_REFRESH);
+        final String back = CommonComponents.GUI_BACK.getString();
         final Set<String> texts = Set.of(select, direct, add, edit, delete, refresh, back);
 
-        for (final Element element : children()) {
-            if (element instanceof final ButtonWidget button) {
+        for (final GuiEventListener element : children()) {
+            if (element instanceof final Button button) {
                 final String message = button.getMessage().getString();
                 if (!texts.contains(message)) {
                     continue;
@@ -76,13 +76,13 @@ public abstract class MixinMultiplayerScreen extends Screen {
             }
         }
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.multiplayer.manage"), button -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.manage"), button -> {
             // TODO
-        }).dimensions(this.width / 2 + 4 + 102, this.height - 52, 100, 20).build());
+        }).bounds(this.width / 2 + 4 + 102, this.height - 52, 100, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("screens.multiplayer.last"), button -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
             // TODO
-        }).dimensions(this.width - 207 , 5, 100, 20).build());
+        }).bounds(this.width - 207 , 5, 100, 20).build());
     }
 
 }

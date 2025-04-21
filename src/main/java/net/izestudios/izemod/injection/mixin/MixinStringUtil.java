@@ -18,22 +18,20 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.component.command.impl.FullbrightCommand;
-import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.util.StringUtil;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(LightmapTextureManager.class)
-public abstract class MixinLightmapTextureManager {
+@Mixin(StringUtil.class)
+public abstract class MixinStringUtil {
 
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 1))
-    private float fullbright(Double instance) {
-        if (FullbrightCommand.active) {
-            return instance.floatValue() * 100.0F;
-        } else {
-            return instance.floatValue();
-        }
+    /**
+     * @author iZePlayz
+     * @reason Allow paragraph as valid character
+     */
+    @Overwrite
+    public static boolean isAllowedChatCharacter(char character) {
+        return character >= ' ' && character != 127;
     }
 
 }

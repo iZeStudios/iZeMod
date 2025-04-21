@@ -23,9 +23,9 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.suggestion.Suggestions;
 import java.util.concurrent.CompletableFuture;
 import net.izestudios.izemod.component.command.CommandHandlerImpl;
-import net.minecraft.client.gui.screen.ChatInputSuggestor;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.gui.components.CommandSuggestions;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,43 +35,43 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(ChatInputSuggestor.class)
-public abstract class MixinChatInputSuggestor {
+@Mixin(CommandSuggestions.class)
+public abstract class MixinCommandSuggestions {
 
     @Shadow
     @Final
-    TextFieldWidget textField;
+    EditBox input;
 
     @Shadow
-    boolean completingSuggestions;
+    boolean keepSuggestions;
 
     @Shadow
-    private @Nullable ParseResults<CommandSource> parse;
+    private @Nullable ParseResults<SharedSuggestionProvider> currentParse;
 
     @Shadow
     @Nullable
-    private ChatInputSuggestor.SuggestionWindow window;
+    private CommandSuggestions.SuggestionsList suggestions;
 
     @Shadow
     private @Nullable CompletableFuture<Suggestions> pendingSuggestions;
 
     @Shadow
-    protected abstract void showCommandSuggestions();
+    protected abstract void updateUsageInfo();
 
-    @Inject(method = "refresh", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;canRead()Z", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "updateCommandInfo", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;canRead()Z", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private void onRefreshSuggestions(CallbackInfo ci, String string, StringReader stringReader) {
         if (CommandHandlerImpl.INSTANCE.onRefreshSuggestions(stringReader)) {
-            if (this.parse == null) {
-                this.parse = CommandHandlerImpl.INSTANCE.dispatcher.parse(stringReader, CommandHandlerImpl.INSTANCE.commandSource);
+            if (this.currentParse == null) {
+                this.currentParse = CommandHandlerImpl.INSTANCE.dispatcher.parse(stringReader, CommandHandlerImpl.INSTANCE.commandSource);
             }
 
-            final int cursor = textField.getCursor();
-            if (cursor >= 1 && (this.window == null || !this.completingSuggestions)) {
-                this.pendingSuggestions = CommandHandlerImpl.INSTANCE.dispatcher.getCompletionSuggestions(this.parse, cursor);
+            final int cursor = input.getCursorPosition();
+            if (cursor >= 1 && (this.suggestions == null || !this.keepSuggestions)) {
+                this.pendingSuggestions = CommandHandlerImpl.INSTANCE.dispatcher.getCompletionSuggestions(this.currentParse, cursor);
 
                 this.pendingSuggestions.thenRun(() -> {
                     if (this.pendingSuggestions.isDone()) {
-                        this.showCommandSuggestions();
+                        this.updateUsageInfo();
                     }
                 });
             }

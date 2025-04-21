@@ -20,8 +20,8 @@ package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.component.screen.LoginScreen;
 import net.izestudios.izemod.component.screen.MainMenuScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,9 +33,9 @@ public abstract class MixinTitleScreen {
     @Inject(method = "init", at = @At("HEAD"))
     private void redirectScreens(CallbackInfo ci) {
         if (LoginScreen.loggedIn) {
-            MinecraftClient.getInstance().setScreen(MainMenuScreen.INSTANCE);
+            Minecraft.getInstance().setScreen(MainMenuScreen.INSTANCE);
         } else {
-            MinecraftClient.getInstance().setScreen(LoginScreen.INSTANCE);
+            Minecraft.getInstance().setScreen(LoginScreen.INSTANCE);
         }
     }
 

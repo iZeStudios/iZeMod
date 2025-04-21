@@ -22,16 +22,16 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.izestudios.izemod.component.multiplayer.ServerPinger;
 import net.izestudios.izemod.component.multiplayer.ServerSaveStates;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.multiplayer.DirectConnectScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.DirectJoinServerScreen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,20 +41,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(DirectConnectScreen.class)
-public abstract class MixinDirectConnectScreen extends Screen {
+@Mixin(DirectJoinServerScreen.class)
+public abstract class MixinDirectJoinServerScreen extends Screen {
 
     @Shadow
-    private TextFieldWidget addressField;
+    private EditBox ipEdit;
 
     @Shadow
-    private ButtonWidget selectServerButton;
+    private Button selectButton;
 
     @Unique
     private static final int izeMod$PING_INTERVAL = 10_000;
 
     @Unique
-    private final List<ButtonWidget> izeMod$serverStateButtons = new ArrayList<>();
+    private final List<Button> izeMod$serverStateButtons = new ArrayList<>();
 
     @Unique
     private int izeMod$serverStateIndex = 0;
@@ -65,43 +65,43 @@ public abstract class MixinDirectConnectScreen extends Screen {
     @Unique
     private long izeMod$lastPingTime = 0;
 
-    protected MixinDirectConnectScreen(final Text title) {
+    protected MixinDirectJoinServerScreen(final Component title) {
         super(title);
     }
 
     @Inject(method = "init", at = @At("RETURN"))
     private void moveButtons(CallbackInfo ci) {
-        addressField.setX(this.width / 2 - 150);
-        addressField.setY(146);
-        addressField.setWidth(300);
+        ipEdit.setX(this.width / 2 - 150);
+        ipEdit.setY(146);
+        ipEdit.setWidth(300);
 
-        selectServerButton.setPosition(this.width / 2 - 150, this.height / 4 + 150);
-        selectServerButton.setDimensions(147, 20);
+        selectButton.setPosition(this.width / 2 - 150, this.height / 4 + 150);
+        selectButton.setSize(147, 20);
 
-        for (final Element element : children()) {
-            if (element instanceof ButtonWidget button && button.getMessage().getString().equals(ScreenTexts.CANCEL.getString())) {
+        for (final GuiEventListener element : children()) {
+            if (element instanceof Button button && button.getMessage().getString().equals(CommonComponents.GUI_CANCEL.getString())) {
                 button.setPosition(this.width / 2 + 3, this.height / 4 + 150);
-                button.setDimensions(147, 20);
+                button.setSize(147, 20);
             }
         }
 
         izeMod$serverStateButtons.clear(); // Just in case
         for (int i = 0; i < ServerSaveStates.STATE_COUNT - 1; i++) {
             final int index = i;
-            izeMod$serverStateButtons.add(addDrawableChild(ButtonWidget.builder(Text.of(izeMod$formatServerStateButton(index)), button -> {
-                ServerSaveStates.set(izeMod$serverStateIndex, addressField.getText().isBlank() ? null : addressField.getText().trim());
+            izeMod$serverStateButtons.add(addRenderableWidget(Button.builder(Component.nullToEmpty(izeMod$formatServerStateButton(index)), button -> {
+                ServerSaveStates.set(izeMod$serverStateIndex, ipEdit.getValue().isBlank() ? null : ipEdit.getValue().trim());
                 izeMod$serverStateIndex = index;
-                addressField.setText(ServerSaveStates.get(index));
+                ipEdit.setValue(ServerSaveStates.get(index));
                 button.setFocused(false);
                 izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
-            }).position(addressField.getX() + (i * 20), addressField.getY() + addressField.getHeight()).size(20, 20).build()));
+            }).pos(ipEdit.getX() + (i * 20), ipEdit.getY() + ipEdit.getHeight()).size(20, 20).build()));
         }
 
-        izeMod$serverPinger = addDrawableChild(new ServerPinger(this.width / 2 - 150, 51));
+        izeMod$serverPinger = addRenderableWidget(new ServerPinger(this.width / 2 - 150, 51));
         izeMod$updateServerPinger();
     }
 
-    @Inject(method = "onAddressFieldChanged", at = @At("RETURN"))
+    @Inject(method = "updateSelectButtonStatus", at = @At("RETURN"))
     private void resetPingTimer(CallbackInfo ci) {
         // Cause the if to be true after one second
         izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
@@ -110,8 +110,8 @@ public abstract class MixinDirectConnectScreen extends Screen {
     @Override
     public void tick() {
         for (int i = 0; i < ServerSaveStates.STATE_COUNT - 1; i++) {
-            final ButtonWidget button = izeMod$serverStateButtons.get(i);
-            button.setMessage(Text.of(izeMod$formatServerStateButton(i)));
+            final Button button = izeMod$serverStateButtons.get(i);
+            button.setMessage(Component.nullToEmpty(izeMod$formatServerStateButton(i)));
         }
 
         if (System.currentTimeMillis() - izeMod$lastPingTime > izeMod$PING_INTERVAL) {
@@ -120,9 +120,9 @@ public abstract class MixinDirectConnectScreen extends Screen {
         }
     }
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
-    private int moveAddressTitlePosition(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
-        return original.call(instance, textRenderer, text, addressField.getX(), addressField.getY() - textRenderer.fontHeight - 5, color);
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)I"))
+    private int moveAddressTitlePosition(GuiGraphics instance, Font textRenderer, Component text, int x, int y, int color, Operation<Integer> original) {
+        return original.call(instance, textRenderer, text, ipEdit.getX(), ipEdit.getY() - textRenderer.lineHeight - 5, color);
     }
 
     @Unique
@@ -130,20 +130,20 @@ public abstract class MixinDirectConnectScreen extends Screen {
         final boolean exists = ServerSaveStates.get(index) != null;
         final boolean selected = izeMod$serverStateIndex == index;
         if (exists) {
-            return (selected ? Formatting.GREEN : Formatting.WHITE) + String.valueOf(index + 1);
+            return (selected ? ChatFormatting.GREEN : ChatFormatting.WHITE) + String.valueOf(index + 1);
         } else {
-            return (selected ? Formatting.DARK_GREEN : Formatting.DARK_GRAY) + String.valueOf(index + 1);
+            return (selected ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_GRAY) + String.valueOf(index + 1);
         }
     }
 
     @Unique
     private void izeMod$updateServerPinger() {
-        if (addressField.getText().isBlank()) {
+        if (ipEdit.getValue().isBlank()) {
             return;
         }
 
         if (izeMod$serverPinger != null) {
-            izeMod$serverPinger.updateServer(addressField.getText().trim());
+            izeMod$serverPinger.updateServer(ipEdit.getValue().trim());
         }
     }
 
