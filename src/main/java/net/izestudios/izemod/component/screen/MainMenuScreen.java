@@ -26,10 +26,13 @@ import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.multiplayer.ServerList;
 import com.mojang.realmsclient.RealmsMainScreen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
+
+import java.io.IOException;
 
 import static net.izestudios.izemod.util.Constants.*;
 
@@ -48,7 +51,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
 
         final int addons = AddonManager.INSTANCE.count();
         final int worldCount = minecraft.getLevelSource().findLevelCandidates().levels().size();
-        final int serverCount = new ServerList(minecraft).size();
+        final int serverCount = getServerSize();
         final int mods = FabricLoader.getInstance().getAllMods().size() - addons;
 
         int baseY = (int) Math.sqrt((double) (this.height * this.height) / (1.3 * 1.2));
@@ -66,7 +69,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.minecraft.setScreen(new SelectWorldScreen(this)));
         addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.minecraft.setScreen(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this)));
         addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.minecraft.setScreen(new RealmsMainScreen(this)));
-        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.minecraft.setScreen(new LanguageSelectScreen(this,this.minecraft.options, this.minecraft.getLanguageManager())));
+        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager())));
         addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options)));
 
         addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
@@ -81,5 +84,19 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addRenderableWidget(Button.builder(Component.nullToEmpty(buttonText), button -> action.run()).pos(x, baseY + (25 * offset)).size(200, 20).build());
     }
 
+    private int getServerSize() {
+        int servers = 0;
+
+        try {
+            CompoundTag compoundTag = NbtIo.read(minecraft.gameDirectory.toPath().resolve("servers.dat"));
+            if (compoundTag == null) return 0;
+
+            servers += (int) compoundTag.getListOrEmpty("servers").compoundStream().filter(comTag -> !comTag.getBooleanOr("hidden", false)).count();
+
+            return servers;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
