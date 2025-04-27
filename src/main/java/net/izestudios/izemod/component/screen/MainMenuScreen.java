@@ -27,12 +27,9 @@ import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.gui.components.Button;
 import com.mojang.realmsclient.RealmsMainScreen;
+import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
-
-import java.io.IOException;
 
 import static net.izestudios.izemod.util.Constants.*;
 
@@ -51,7 +48,7 @@ public final class MainMenuScreen extends AbstractInitialScreen {
 
         final int addons = AddonManager.INSTANCE.count();
         final int worldCount = minecraft.getLevelSource().findLevelCandidates().levels().size();
-        final int serverCount = getServerSize();
+        final int serverCount = getServerCount();
         final int mods = FabricLoader.getInstance().getAllMods().size() - addons;
 
         int baseY = (int) Math.sqrt((double) (this.height * this.height) / (1.3 * 1.2));
@@ -84,19 +81,10 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         addRenderableWidget(Button.builder(Component.nullToEmpty(buttonText), button -> action.run()).pos(x, baseY + (25 * offset)).size(200, 20).build());
     }
 
-    private int getServerSize() {
-        int servers = 0;
-
-        try {
-            CompoundTag compoundTag = NbtIo.read(minecraft.gameDirectory.toPath().resolve("servers.dat"));
-            if (compoundTag == null) return 0;
-
-            servers += (int) compoundTag.getListOrEmpty("servers").compoundStream().filter(comTag -> !comTag.getBooleanOr("hidden", false)).count();
-
-            return servers;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private int getServerCount() {
+        final ServerList serverList = new ServerList(minecraft);
+        serverList.load();
+        return serverList.size();
     }
-}
 
+}
