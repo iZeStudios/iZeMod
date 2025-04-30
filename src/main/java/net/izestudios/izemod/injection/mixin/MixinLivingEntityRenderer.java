@@ -27,9 +27,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
-public class MixinLivingEntityRenderer {
-    @Inject(at = @At("HEAD"), method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", cancellable = true)
-    private void onShouldShowName(LivingEntity entity, double distanceSquared, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(Minecraft.renderNames());
+public abstract class MixinLivingEntityRenderer {
+
+    @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
+    private void showNameTagInThirdPerson(LivingEntity entity, double distanceSquared, CallbackInfoReturnable<Boolean> cir) {
+        if (entity == Minecraft.getInstance().getCameraEntity()) {
+            cir.setReturnValue(Minecraft.renderNames());
+        }
     }
+
 }
