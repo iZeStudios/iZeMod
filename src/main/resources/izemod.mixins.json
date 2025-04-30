@@ -22,7 +22,8 @@
     "MixinStringUtil",
     "MixinEditBox",
     "MixinTitleScreen",
-    "MixinFaviconTexture"
+    "MixinFaviconTexture",
+    "MixinLivingEntityRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
