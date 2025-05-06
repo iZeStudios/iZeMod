@@ -1,8 +1,13 @@
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+    }
+
+    plugins {
+        id("fabric-loom") version "1.10-SNAPSHOT"
+        id("de.florianmichael.baseproject.BaseProject") version "0.0.3"
     }
 }
 
@@ -11,7 +16,5 @@ plugins {
 }
 
 rootProject.name = "iZeMod"
-
-includeBuild("build-logic")
 
 include("izemod-api")

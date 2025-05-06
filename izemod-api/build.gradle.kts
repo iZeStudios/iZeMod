@@ -1,3 +1,9 @@
+import de.florianmichael.baseproject.*
+
 plugins {
-    id("ize.base-conventions")
+    id("fabric-loom")
+    id("de.florianmichael.baseproject.BaseProject")
 }
+
+setupProject()
+setupFabric()
