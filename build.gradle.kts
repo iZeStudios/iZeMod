@@ -5,8 +5,12 @@ plugins {
     id("de.florianmichael.baseproject.BaseProject")
 }
 
-setupProject()
-setupFabric(accessWidener = true)
+allprojects {
+
+    setupProject()
+    setupFabric()
+
+}
 
 val jij = configureJij()
 
