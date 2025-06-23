@@ -31,8 +31,8 @@ repositories {
 dependencies {
     jij("com.github.iZeStudios:discord-ipc:b0d38c7edc")
 
-    modImplementation("com.viaversion:viafabricplus-api:4.1.4")
-    modRuntimeOnly("com.viaversion:viafabricplus:4.1.4")
+    modImplementation("com.viaversion:viafabricplus-api:4.2.0")
+    modRuntimeOnly("com.viaversion:viafabricplus:4.2.0")
 
     includeFabricSubmodule(":izemod-api")
 }
