@@ -83,5 +83,9 @@
 
   "commands.uuid": "Gibt dir die UUID von dir oder andere Spieler",
   "commands.uuid.success": "Die UUID wurde in die Zwischenablage kopiert.",
-  "commands.uuid.invalid": "Dieser Spieler exestiert nicht."
+  "commands.uuid.invalid": "Dieser Spieler exestiert nicht.",
+
+  "commands.mc" : "Öffnet deinen .minecraft Ordner.",
+  "commands.mc.success": "Dein .minecraft Ordner wurde geöffnet.",
+  "commands.mc.failure": "Es konnte dein .minecraft Ordner nicht geöffnet werden."
 }

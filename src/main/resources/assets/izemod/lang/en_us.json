@@ -84,5 +84,10 @@
 
   "commands.uuid": "Gives you the UUID of yourself or other players",
   "commands.uuid.success": "The UUID has been copied to the clipboard.",
-  "commands.uuid.invalid": "This player does not exist."
+  "commands.uuid.invalid": "This player does not exist.",
+
+  "commands.mc": "Opens your .minecraft folder.",
+  "commands.mc.success": "Your .minecraft folder has been opened.",
+  "commands.mc.failure": "Your .minecraft folder could not be opened."
+
 }

@@ -30,6 +30,7 @@ import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
+import net.izestudios.izemod.component.command.impl.MCCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.izestudios.izemod.component.command.impl.UUIDCommand;
@@ -61,6 +62,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new ClearChatCommand());
         addCommand(new CopyMyIPCommand());
         addCommand(new UUIDCommand());
+        addCommand(new MCCommand());
     }
 
     public boolean onChatMessage(final String message) {
