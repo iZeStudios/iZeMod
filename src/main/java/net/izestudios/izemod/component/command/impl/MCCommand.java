@@ -21,10 +21,9 @@ package net.izestudios.izemod.component.command.impl;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.api.command.AbstractCommand;
+import net.minecraft.Util;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import java.io.IOException;
-import java.nio.file.Path;
 
 public class MCCommand extends AbstractCommand {
     public MCCommand() {
@@ -34,33 +33,11 @@ public class MCCommand extends AbstractCommand {
     @Override
     public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-            try {
 
-                openDirectoryWithExplorer(FabricLoader.getInstance().getConfigDir());
-                printSuccessMessage(Component.translatable("commands.mc.success"));
+            Util.getPlatform().openPath(FabricLoader.getInstance().getConfigDir());
+            printSuccessMessage(Component.translatable("commands.mc.success"));
 
-                return SUCCESS;
-            } catch (IOException e) {
-                // In case it can't find the folder, lol.
-                printErrorMessage(Component.translatable("commands.mc.failure"));
-                return FAILURE;
-            }
+            return SUCCESS;
         });
-    }
-
-    private void openDirectoryWithExplorer(final Path directoryPath) throws IOException {
-        final String os = System.getProperty("os.name").toLowerCase();
-        ProcessBuilder processBuilder;
-
-        if (os.contains("win")) {
-            processBuilder = new ProcessBuilder("explorer.exe", "/select," + directoryPath);
-        } else if (os.contains("mac")) {
-            processBuilder = new ProcessBuilder("open", directoryPath.toString());
-        } else if (os.contains("nix") || os.contains("nux")) {
-            processBuilder = new ProcessBuilder("xdg-open", directoryPath.toString());
-        } else {
-            throw new UnsupportedOperationException("Unsupported operating system: " + os);
-        }
-        processBuilder.start();
     }
 }

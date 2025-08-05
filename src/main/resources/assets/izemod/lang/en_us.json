@@ -87,7 +87,5 @@
   "commands.uuid.invalid": "This player does not exist.",
 
   "commands.mc": "Opens your .minecraft folder.",
-  "commands.mc.success": "Your .minecraft folder has been opened.",
-  "commands.mc.failure": "Your .minecraft folder could not be opened."
-
+  "commands.mc.success": "Your .minecraft folder has been opened."
 }
