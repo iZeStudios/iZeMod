@@ -19,13 +19,14 @@
 package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 
-public class MCCommand extends AbstractCommand {
+public final class MCCommand extends AbstractCommand {
+
     public MCCommand() {
         super(Component.translatable("commands.mc"), "mc");
     }
@@ -33,11 +34,10 @@ public class MCCommand extends AbstractCommand {
     @Override
     public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-
-            Util.getPlatform().openPath(FabricLoader.getInstance().getConfigDir());
+            Util.getPlatform().openPath(Minecraft.getInstance().gameDirectory.toPath());
             printSuccessMessage(Component.translatable("commands.mc.success"));
-
             return SUCCESS;
         });
     }
+
 }
