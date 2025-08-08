@@ -86,5 +86,10 @@
   "commands.uuid.invalid": "Dieser Spieler exestiert nicht.",
 
   "commands.mc" : "Öffnet deinen .minecraft Ordner.",
-  "commands.mc.success": "Dein .minecraft Ordner wurde geöffnet."
+  "commands.mc.success": "Dein .minecraft Ordner wurde geöffnet.",
+
+  "commands.getip": "Gibt dir die IP von der dazugehörigen Domain",
+  "commands.getip.success": "Die IP wurde in die Zwischenablage kopiert.",
+  "commands.getip.invalid": "Diese Domain existiert nicht.",
+  "commands.getip.singleplayer": "Du kannst diesen Command nicht im Einzelspieler verwenden!"
 }

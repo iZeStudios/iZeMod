@@ -87,5 +87,10 @@
   "commands.uuid.invalid": "This player does not exist.",
 
   "commands.mc": "Opens your .minecraft folder.",
-  "commands.mc.success": "Your .minecraft folder has been opened."
+  "commands.mc.success": "Your .minecraft folder has been opened.",
+
+  "commands.getip": "Gives you the IP of the associated domain",
+  "commands.getip.success": "The IP has been copied to the clipboard.",
+  "commands.getip.invalid": "This domain does not exist.",
+  "commands.getip.singleplayer": "You cannot use this command in singleplayer!"
 }
