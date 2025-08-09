@@ -18,24 +18,22 @@
 
 package net.izestudios.izemod.util;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import net.minecraft.client.multiplayer.resolver.ResolvedServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
+import java.net.InetSocketAddress;
+import java.util.Optional;
 
 public final class Fetcher {
 
     public static String fetchDomain2IP(final String domain) {
-        final String[] ip = {null};
+        InetSocketAddress inetSocketAddress;
+        Optional<InetSocketAddress> optional = ServerNameResolver.DEFAULT.resolveAddress(ServerAddress.parseString(domain)).map(ResolvedServerAddress::asInetSocketAddress);
 
-        Thread thread = new Thread(() -> {
-        try {
-            ip[0] = InetAddress.getByName(domain).getHostAddress();
-        } catch (UnknownHostException ignored) {}
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException ignored) {}
+        if (optional.isEmpty()) return null;
+        inetSocketAddress = optional.get();
 
-        return ip[0];
+        return inetSocketAddress.getAddress().getHostAddress();
     }
+
 }

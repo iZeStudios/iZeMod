@@ -27,6 +27,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 
 public final class GetIPCommand extends AbstractCommand {
+
     public GetIPCommand() {
         super(Component.translatable("commands.getip"), "getip");
     }
