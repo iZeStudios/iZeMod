@@ -27,7 +27,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.component.command.impl.AuthorCommand;
-import net.izestudios.izemod.component.command.impl.SkullCommand;
 import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
