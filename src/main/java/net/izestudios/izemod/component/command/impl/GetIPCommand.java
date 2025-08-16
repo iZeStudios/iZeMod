@@ -20,9 +20,12 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import java.util.Optional;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.izestudios.izemod.util.Fetcher;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.resolver.ResolvedServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 
@@ -34,34 +37,32 @@ public final class GetIPCommand extends AbstractCommand {
 
     @Override
     public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
-        builder.then(argument("domain", StringArgumentType.string()).executes(commandContext -> {
-            final String domain = StringArgumentType.getString(commandContext, "domain");
+        builder.then(argument("address", StringArgumentType.string()).executes(commandContext -> {
+            final String address = StringArgumentType.getString(commandContext, "address");
 
-            return sendIP(domain);
+            return sendIP(address);
         })).executes(commandContext -> {
-            final Minecraft client = Minecraft.getInstance();
-
-            if (!client.isSingleplayer()) {
-                final String domain = client.getCurrentServer().ip;
-                return sendIP(domain);
-            } else {
+            if (Minecraft.getInstance().isSingleplayer()) {
                 printErrorMessage(Component.translatable("commands.getip.singleplayer"));
                 return FAILURE;
             }
+
+            final String address = Minecraft.getInstance().getCurrentServer().ip;
+            return sendIP(address);
         });
     }
 
-    private int sendIP(final String domain) {
-        final String fetched = Fetcher.fetchDomain2IP(domain);
-
-        if (fetched != null) {
-            Minecraft.getInstance().keyboardHandler.setClipboard(fetched);
-            printSuccessMessage(Component.translatable("commands.getip.success"));
-            return SUCCESS;
-        } else {
+    private int sendIP(final String address) {
+        Optional<ResolvedServerAddress> serverAddress = ServerNameResolver.DEFAULT.resolveAddress(ServerAddress.parseString(address));
+        if (serverAddress.isEmpty()) {
             printErrorMessage(Component.translatable("commands.getip.invalid"));
             return FAILURE;
         }
+
+        final ResolvedServerAddress resolvedAddress = serverAddress.get();
+        Minecraft.getInstance().keyboardHandler.setClipboard(resolvedAddress.getHostIp());
+        printSuccessMessage(Component.translatable("commands.getip.success"));
+        return SUCCESS;
     }
 
 }
