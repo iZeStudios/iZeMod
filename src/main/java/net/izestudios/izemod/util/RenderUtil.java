@@ -20,10 +20,9 @@ package net.izestudios.izemod.util;
 
 import net.izestudios.izemod.IzeModImpl;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.ARGB;
+import org.joml.Matrix3x2fStack;
 
 import static net.izestudios.izemod.component.theme.ColorTheme.EMPTY;
 import static net.izestudios.izemod.component.theme.ColorTheme.WHITE_128;
@@ -31,17 +30,17 @@ import static net.izestudios.izemod.component.theme.ColorTheme.WHITE_128;
 public final class RenderUtil {
 
     public static void drawScaledLogo(final GuiGraphics context, final float opacity) {
-        final PoseStack matrices = context.pose();
-        matrices.pushPose();
-        matrices.scale(0.25F, 0.25F, 0.25F);
+        final Matrix3x2fStack matrices = context.pose();
+        matrices.pushMatrix();
+        matrices.scale(0.25F, 0.25F);
         drawLogo(context, 6, 6, ARGB.white(opacity));
-        matrices.popPose();
+        matrices.popMatrix();
     }
 
     public static void drawLogo(final GuiGraphics context, final int x, final int y, final int color) {
         final int logoSizeX = 2279 / 6;
         final int logoSizeY = 278 / 6;
-        context.blit(RenderType::guiTexturedOverlay, Assets.LOGO, x, y, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, color);
+        context.blit(RenderPipelines.GUI_TEXTURED, Assets.LOGO, x, y, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, logoSizeX, logoSizeY, color);
     }
 
     public static void drawBlueFade(final GuiGraphics context, final int x, final int y, final int width, final int height) {
@@ -59,23 +58,13 @@ public final class RenderUtil {
         float f6 = (float) (endColor >> 8 & 255) / 255.0F;
         float f7 = (float) (endColor & 255) / 255.0F;
 
-        context.drawSpecial(provider -> {
-            final VertexConsumer buffer = provider.getBuffer(RenderType.gui());
-            buffer.addVertex(width, y, 0).setColor(f1, f2, f3, startAlpha / 255F);
-            buffer.addVertex(x, y, 0).setColor(f1, f2, f3, startAlpha / 255F);
-            buffer.addVertex(x, height, 0).setColor(f5, f6, f7, endAlpha / 255F);
-            buffer.addVertex(width, height, 0).setColor(f5, f6, f7, endAlpha / 255F);
-        });
+        final int startColorWithAlpha = ARGB.colorFromFloat(startAlpha, f1, f2, f3);
+        final int endColorWithAlpha = ARGB.colorFromFloat(endAlpha, f5, f6, f7);
+        context.fillGradient(x, y, width, height, startColorWithAlpha, endColorWithAlpha);
     }
 
     public static void drawShadow(final GuiGraphics context, final int x, final int y, final int width, final int height, final int startColor, final int endColor) {
-        context.drawSpecial(provider -> {
-            final VertexConsumer buffer = provider.getBuffer(RenderType.gui());
-            buffer.addVertex(x, height, 0F).setColor(startColor);
-            buffer.addVertex(width, height, 0F).setColor(startColor);
-            buffer.addVertex(width, y, 0F).setColor(endColor);
-            buffer.addVertex(x, y, 0F).setColor(endColor);
-        });
+        // TODO find a replacement
     }
 
 }
