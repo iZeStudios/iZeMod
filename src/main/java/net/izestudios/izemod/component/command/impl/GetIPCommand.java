@@ -53,14 +53,13 @@ public final class GetIPCommand extends AbstractCommand {
     }
 
     private int sendIP(final String address) {
-        Optional<ResolvedServerAddress> serverAddress = ServerNameResolver.DEFAULT.resolveAddress(ServerAddress.parseString(address));
+        final Optional<ResolvedServerAddress> serverAddress = ServerNameResolver.DEFAULT.resolveAddress(ServerAddress.parseString(address));
         if (serverAddress.isEmpty()) {
             printErrorMessage(Component.translatable("commands.getip.invalid"));
             return FAILURE;
         }
 
-        final ResolvedServerAddress resolvedAddress = serverAddress.get();
-        Minecraft.getInstance().keyboardHandler.setClipboard(resolvedAddress.getHostIp());
+        Minecraft.getInstance().keyboardHandler.setClipboard(serverAddress.get().getHostIp());
         printSuccessMessage(Component.translatable("commands.getip.success"));
         return SUCCESS;
     }
