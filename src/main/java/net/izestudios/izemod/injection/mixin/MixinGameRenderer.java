@@ -22,7 +22,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.util.RenderUtil;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Final;
@@ -37,19 +39,18 @@ public abstract class MixinGameRenderer {
     @Final
     private Minecraft minecraft;
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;flush()V"))
-    private void drawLogo(GuiGraphics instance, Operation<Void> original) {
-        original.call(instance);
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V"))
+    private void drawLogo(Gui instance, GuiGraphics guiGraphics, DeltaTracker deltaTracker, Operation<Void> original) {
+        original.call(instance, guiGraphics, deltaTracker);
 
         if (minecraft.getOverlay() != null) {
             return;
         }
 
         final boolean hud = minecraft.player != null && !minecraft.gui.getDebugOverlay().showDebugScreen();
-        RenderUtil.drawScaledLogo(instance, hud ? 1F : 0.6F);
-        instance.flush();
+        RenderUtil.drawScaledLogo(guiGraphics, hud ? 1F : 0.6F);
         if (hud) {
-            HudRenderingImpl.INSTANCE.draw(instance);
+            HudRenderingImpl.INSTANCE.draw(guiGraphics);
         }
     }
 

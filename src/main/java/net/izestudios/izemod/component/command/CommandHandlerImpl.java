@@ -52,7 +52,7 @@ public final class CommandHandlerImpl implements CommandHandler {
     private final List<AbstractCommand> commands = new ArrayList<>();
 
     public final CommandDispatcher<SharedSuggestionProvider> dispatcher = new CommandDispatcher<>();
-    public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance());
+    public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance(), true);
 
     public void init() {
         Preconditions.checkState(commands.isEmpty(), "Commands already initialized");

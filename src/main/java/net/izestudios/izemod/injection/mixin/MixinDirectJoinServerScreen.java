@@ -120,9 +120,9 @@ public abstract class MixinDirectJoinServerScreen extends Screen {
         }
     }
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)I"))
-    private int moveAddressTitlePosition(GuiGraphics instance, Font textRenderer, Component text, int x, int y, int color, Operation<Integer> original) {
-        return original.call(instance, textRenderer, text, ipEdit.getX(), ipEdit.getY() - textRenderer.lineHeight - 5, color);
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
+    private void moveAddressTitlePosition(GuiGraphics instance, Font font, Component text, int x, int y, int color, Operation<Void> original) {
+        original.call(instance, font, text, ipEdit.getX(), ipEdit.getY() - font.lineHeight - 5, color);
     }
 
     @Unique

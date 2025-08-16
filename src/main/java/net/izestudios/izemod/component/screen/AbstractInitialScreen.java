@@ -110,7 +110,7 @@ public abstract class AbstractInitialScreen extends Screen {
             button -> this.openWebUrl("https://izeplayz.de/izemod"), this.font
         ));
 
-        final String minecraftText = "Minecraft " + SharedConstants.getCurrentVersion().getName();
+        final String minecraftText = "Minecraft " + SharedConstants.getCurrentVersion().name();
         this.addRenderableWidget(new PlainTextButton(
             this.width - font.width(minecraftText) - 2,
             this.height - 20,
