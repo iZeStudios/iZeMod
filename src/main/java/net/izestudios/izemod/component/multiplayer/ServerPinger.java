@@ -24,16 +24,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
 
 public final class ServerPinger extends AbstractWidget {
 
@@ -42,12 +39,6 @@ public final class ServerPinger extends AbstractWidget {
     public static final int HEIGHT = 60;
 
     private final JoinMultiplayerScreen multiplayerScreen = new JoinMultiplayerScreen(null) {
-
-        @Override
-        public void setTooltipForNextRenderPass(@NotNull List<FormattedCharSequence> tooltip, @NotNull ClientTooltipPositioner positioner, boolean override) {
-            ServerPinger.this.tooltip = tooltip;
-            ServerPinger.this.positioner = positioner;
-        }
 
         @Override
         public @NotNull ServerList getServers() {
@@ -66,9 +57,6 @@ public final class ServerPinger extends AbstractWidget {
     };
     private ServerSelectionList.OnlineServerEntry serverEntry;
     private ServerSelectionList.OnlineServerEntry previousServerEntry;
-
-    private List<FormattedCharSequence> tooltip;
-    private ClientTooltipPositioner positioner;
 
     public ServerPinger(final int x, final int y) {
         super(x, y, WIDTH, HEIGHT, Component.empty());
@@ -109,10 +97,6 @@ public final class ServerPinger extends AbstractWidget {
         final ServerSelectionList.OnlineServerEntry entry = status != ServerData.State.SUCCESSFUL ? previousServerEntry : serverEntry;
         guiGraphics.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
         entry.render(guiGraphics, 0, getY() + 2, getX() + 2, WIDTH + 1, HEIGHT, mouseX, mouseY, false, partialTick);
-        if (tooltip != null) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, positioner, mouseX, mouseY);
-            tooltip = null;
-        }
 
         final String brand = I18n.get("screens.directconnect.brand");
         final String version = I18n.get("screens.directconnect.version");
