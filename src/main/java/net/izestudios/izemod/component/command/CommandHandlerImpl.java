@@ -26,6 +26,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
+import net.izestudios.izemod.component.command.impl.AuthorCommand;
 import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
@@ -65,6 +66,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new UUIDCommand());
         addCommand(new MCCommand());
         addCommand(new GetIPCommand());
+        addCommand(new AuthorCommand());
     }
 
     public boolean onChatMessage(final String message) {

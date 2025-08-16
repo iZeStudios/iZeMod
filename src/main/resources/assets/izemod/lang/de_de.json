@@ -81,15 +81,21 @@
   "commands.copymyip": "Kopiert deine IP!",
   "commands.copymyip.success": "Deine IP wurde in die Zwischenablage kopiert.",
 
-  "commands.uuid": "Gibt dir die UUID von dir oder andere Spieler",
+  "commands.uuid": "Gibt dir die UUID von dir oder andere Spieler.",
   "commands.uuid.success": "Die UUID wurde in die Zwischenablage kopiert.",
   "commands.uuid.invalid": "Dieser Spieler exestiert nicht.",
 
   "commands.mc" : "Öffnet deinen .minecraft Ordner.",
   "commands.mc.success": "Dein .minecraft Ordner wurde geöffnet.",
 
-  "commands.getip": "Gibt dir die IP von der dazugehörigen Domain",
+  "commands.getip": "Gibt dir die IP von der dazugehörigen Domain.",
   "commands.getip.success": "Die IP wurde in die Zwischenablage kopiert.",
   "commands.getip.invalid": "Diese Domain existiert nicht.",
-  "commands.getip.singleplayer": "Du kannst diesen Command nicht im Einzelspieler verwenden!"
+  "commands.getip.singleplayer": "Du kannst diesen Command nicht im Einzelspieler verwenden!",
+
+  "commands.author": "Ändert den Autor eines Buches.",
+  "commands.author.success": "Der Autor wurde erfolgreich geändert!",
+  "commands.author.invalid": "Du brauchst ein signiertes Buch, um den Autor zu ändern!",
+  "commands.author.empty": "Du kannst den Autor eines leeren Buches nicht ändern!",
+  "commands.author.gamemode": "Du musst im Kreativmodus sein, um den Autor ändern zu können!"
 }
