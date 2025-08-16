@@ -97,6 +97,7 @@
   "commands.author": "Changes the author of a book.",
   "commands.author.success": "The author has been changed successfully!",
   "commands.author.invalid": "You need a written book to change the author!",
+  "commands.author.empty": "You cannot change the author of an empty book!",
   "commands.author.gamemode": "You must be in Creative mode to change the author!"
 
 }

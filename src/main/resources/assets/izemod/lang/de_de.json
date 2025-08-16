@@ -96,5 +96,6 @@
   "commands.author": "Ändert den Autor eines Buches.",
   "commands.author.success": "Der Autor wurde erfolgreich geändert!",
   "commands.author.invalid": "Du brauchst ein signiertes Buch, um den Autor zu ändern!",
+  "commands.author.empty": "Du kannst den Autor eines leeren Buches nicht ändern!",
   "commands.author.gamemode": "Du musst im Kreativmodus sein, um den Autor ändern zu können!"
 }
