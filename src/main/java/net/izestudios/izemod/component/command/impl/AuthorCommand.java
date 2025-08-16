@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.WrittenBookContent;
@@ -58,7 +59,7 @@ public final class AuthorCommand extends AbstractCommand {
             final String author = StringArgumentType.getString(commandContext, "author");
             final WrittenBookContent newContent = new WrittenBookContent(content.title(), author, content.generation(), content.pages(), content.resolved());
             mainHandItem.set(DataComponents.WRITTEN_BOOK_CONTENT, newContent);
-
+            Minecraft.getInstance().gameMode.handleCreativeModeItemAdd(mainHandItem, EquipmentSlot.MAINHAND.getId());
 
             printSuccessMessage(Component.translatable("commands.author.success", author));
             return SUCCESS;
