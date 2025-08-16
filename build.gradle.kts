@@ -12,8 +12,6 @@ allprojects {
 
 }
 
-val jij = configureJij()
-
 repositories {
     mavenCentral()
     maven("https://repo.viaversion.com")
@@ -28,11 +26,13 @@ repositories {
     }
 }
 
+includeFabricSubmodule(":izemod-api")
+
+val jij = configureJij()
+
 dependencies {
     jij("com.github.iZeStudios:discord-ipc:b0d38c7edc")
 
     modImplementation("com.viaversion:viafabricplus-api:4.1.4")
     modRuntimeOnly("com.viaversion:viafabricplus:4.1.4")
-
-    includeFabricSubmodule(":izemod-api")
 }
