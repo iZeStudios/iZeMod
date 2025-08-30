@@ -107,10 +107,10 @@ public final class HudRenderingImpl implements HudRendering {
             }
 
             final int keyWidth = font.width(element.key());
-            final int arrowWidth = font.width("»");
+            final int arrowWidth = font.width(" » ");
 
             guiGraphics.drawString(font, ChatFormatting.DARK_AQUA + element.key(), x, y, -1);
-            guiGraphics.drawString(font, ChatFormatting.DARK_AQUA + "»", x + keyWidth, y, -1);
+            guiGraphics.drawString(font, ChatFormatting.DARK_AQUA + " » ", x + keyWidth, y, -1);
             guiGraphics.drawString(font, ChatFormatting.AQUA + value, x + keyWidth + arrowWidth, y, -1);
             y += 10;
         }
