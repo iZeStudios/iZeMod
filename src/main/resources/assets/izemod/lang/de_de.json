@@ -60,6 +60,7 @@
   "ingame.hud.y": "Y",
   "ingame.hud.z": "Z",
   "ingame.hud.biome": "Biom",
+  "ingame.hud.brand": "Brand",
   "ingame.hud.ping": "Ping",
   "ingame.hud.players": "Spieler",
   "ingame.hud.date": "Datum",
