@@ -71,7 +71,7 @@ public final class HudRenderingImpl implements HudRendering {
             }
         });
         register("brand", () -> {
-            if(client.isLocalServer()) {
+            if (client.isLocalServer()) {
                 return null;
             } else {
                 return client.getCurrentServer().version.getString();
