@@ -20,7 +20,6 @@ package net.izestudios.izemod.component.hud;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -69,6 +68,13 @@ public final class HudRenderingImpl implements HudRendering {
                 }
             } else {
                 return null;
+            }
+        });
+        register("brand", () -> {
+            if (client.isLocalServer()) {
+                return null;
+            } else {
+                return client.getCurrentServer().version.getString();
             }
         });
         register("ping", () -> {
