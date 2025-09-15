@@ -98,5 +98,9 @@
   "commands.author.success": "Der Autor wurde erfolgreich geändert!",
   "commands.author.invalid": "Du brauchst ein signiertes Buch, um den Autor zu ändern!",
   "commands.author.empty": "Du kannst den Autor eines leeren Buches nicht ändern!",
-  "commands.author.gamemode": "Du musst im Kreativmodus sein, um den Autor ändern zu können!"
+  "commands.author.gamemode": "Du musst im Kreativmodus sein, um den Autor ändern zu können!",
+
+  "commands.help": "Zeigt dir die ganzen iZeMod-Befehle an.",
+  "commands.help.success": "Alle iZeMod 5 Befehle (Seite %s von %s):",
+  "commands.help.invalid": "Ungültige Seite: %s"
 }

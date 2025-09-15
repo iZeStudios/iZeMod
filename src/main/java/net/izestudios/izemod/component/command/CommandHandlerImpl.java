@@ -27,14 +27,15 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.component.command.impl.AuthorCommand;
+import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
-import net.izestudios.izemod.component.command.impl.MCCommand;
 import net.izestudios.izemod.component.command.impl.GetIPCommand;
+import net.izestudios.izemod.component.command.impl.HelpCommand;
+import net.izestudios.izemod.component.command.impl.MCCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
-import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.izestudios.izemod.component.command.impl.UUIDCommand;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.Minecraft;
@@ -46,7 +47,7 @@ import java.util.List;
 
 public final class CommandHandlerImpl implements CommandHandler {
 
-    private static final String PREFIX = "#";
+    public static final String PREFIX = "#";
     public static final CommandHandlerImpl INSTANCE = new CommandHandlerImpl();
 
     private final List<AbstractCommand> commands = new ArrayList<>();
@@ -67,6 +68,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new MCCommand());
         addCommand(new GetIPCommand());
         addCommand(new AuthorCommand());
+        addCommand(new HelpCommand());
     }
 
     public boolean onChatMessage(final String message) {
@@ -131,4 +133,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         });
     }
 
+    public List<AbstractCommand> getCommands() {
+        return commands;
+    }
 }

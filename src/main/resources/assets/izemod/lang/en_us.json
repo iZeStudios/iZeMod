@@ -99,6 +99,9 @@
   "commands.author.success": "The author has been changed successfully!",
   "commands.author.invalid": "You need a written book to change the author!",
   "commands.author.empty": "You cannot change the author of an empty book!",
-  "commands.author.gamemode": "You must be in Creative mode to change the author!"
+  "commands.author.gamemode": "You must be in Creative mode to change the author!",
 
+  "commands.help": "Shows you all iZeMod commands.",
+  "commands.help.success": "All iZeMod 5 commands (Page %s from %s):",
+  "commands.help.invalid": "Invalid page number: %s."
 }
