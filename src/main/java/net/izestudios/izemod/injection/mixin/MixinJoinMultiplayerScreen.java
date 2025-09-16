@@ -18,11 +18,12 @@
 
 package net.izestudios.izemod.injection.mixin;
 
+import java.util.Set;
 import net.izestudios.izemod.util.Constants;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -30,7 +31,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.util.Set;
 
 @Mixin(JoinMultiplayerScreen.class)
 public abstract class MixinJoinMultiplayerScreen extends Screen {
@@ -82,7 +82,7 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
 
         this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
             // TODO
-        }).bounds(this.width - 207 , 5, 100, 20).build());
+        }).bounds(this.width - 207, 5, 100, 20).build());
     }
 
 }

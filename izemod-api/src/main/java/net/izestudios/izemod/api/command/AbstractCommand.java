@@ -39,7 +39,7 @@ public abstract class AbstractCommand extends ChatUtil /*Allows for direct metho
 
     public AbstractCommand(final String command) {
         this.description = null;
-        this.aliases = new String[] { command };
+        this.aliases = new String[]{command};
     }
 
     public AbstractCommand(final Component description, final String... aliases) {

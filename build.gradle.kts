@@ -1,4 +1,7 @@
-import de.florianmichael.baseproject.*
+import de.florianmichael.baseproject.configureJij
+import de.florianmichael.baseproject.includeFabricSubmodule
+import de.florianmichael.baseproject.setupFabric
+import de.florianmichael.baseproject.setupProject
 
 plugins {
     id("fabric-loom")

@@ -18,20 +18,25 @@
 
 package net.izestudios.izemod.component.screen;
 
+import com.mojang.realmsclient.RealmsMainScreen;
 import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.addon.AddonManager;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.SafetyScreen;
 import net.minecraft.client.gui.screens.options.LanguageSelectScreen;
 import net.minecraft.client.gui.screens.options.OptionsScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraft.client.gui.components.Button;
-import com.mojang.realmsclient.RealmsMainScreen;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 
-import static net.izestudios.izemod.util.Constants.*;
+import static net.izestudios.izemod.util.Constants.OPTIONS_LANGUAGE;
+import static net.izestudios.izemod.util.Constants.TEXT_MULTIPLAYER;
+import static net.izestudios.izemod.util.Constants.TEXT_ONLINE;
+import static net.izestudios.izemod.util.Constants.TEXT_OPTIONS;
+import static net.izestudios.izemod.util.Constants.TEXT_QUIT;
+import static net.izestudios.izemod.util.Constants.TEXT_SINGLEPLAYER;
 
 public final class MainMenuScreen extends AbstractInitialScreen {
 

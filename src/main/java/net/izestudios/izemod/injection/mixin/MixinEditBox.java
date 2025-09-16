@@ -32,12 +32,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(EditBox.class)
 public abstract class MixinEditBox extends AbstractWidget {
 
-    @Shadow
-    public abstract boolean isBordered();
-
     public MixinEditBox(final int x, final int y, final int width, final int height, final Component message) {
         super(x, y, width, height, message);
     }
+
+    @Shadow
+    public abstract boolean isBordered();
 
     @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/EditBox;isBordered()Z"))
     private boolean replaceEditBoxStyle(EditBox instance, @Local(argsOnly = true) GuiGraphics guiGraphics) {

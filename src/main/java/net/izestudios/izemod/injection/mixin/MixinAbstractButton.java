@@ -19,8 +19,8 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.util.Assets;
-import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

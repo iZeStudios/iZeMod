@@ -19,25 +19,24 @@
 package net.izestudios.izemod.component.multiplayer;
 
 import net.izestudios.izemod.IzeModImpl;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import org.jetbrains.annotations.NotNull;
 
 public final class ServerPinger extends AbstractWidget {
 
-    private static final ServerSelectionList WIDGET = new ServerSelectionList(null, null, 0, 0, 0, 0);
     public static final int WIDTH = 300;
     public static final int HEIGHT = 60;
-
+    private static final ServerSelectionList WIDGET = new ServerSelectionList(null, null, 0, 0, 0, 0);
     private final JoinMultiplayerScreen multiplayerScreen = new JoinMultiplayerScreen(null) {
 
         @Override

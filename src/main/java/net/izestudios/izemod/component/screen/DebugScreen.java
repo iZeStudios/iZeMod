@@ -18,11 +18,11 @@
 
 package net.izestudios.izemod.component.screen;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 
 public final class DebugScreen extends Screen {
 

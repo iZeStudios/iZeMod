@@ -19,12 +19,10 @@
 package net.izestudios.izemod.component.screen;
 
 import net.izestudios.izemod.util.Constants;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 public final class LoginScreen extends AbstractInitialScreen {
 

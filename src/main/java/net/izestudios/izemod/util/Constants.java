@@ -19,12 +19,12 @@
 package net.izestudios.izemod.util;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.MutableComponent;
 
 /**
  * Used to move buttons or to add existing buttons to custom screens. Make sure to keep this up-to-date with the latest Minecraft version.

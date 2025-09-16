@@ -19,19 +19,30 @@
 package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.client.Minecraft;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import net.izestudios.izemod.api.command.AbstractCommand;
+import net.minecraft.client.Minecraft;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public final class CopyMyIPCommand extends AbstractCommand {
 
     public CopyMyIPCommand() {
         super(Component.translatable("commands.copymyip"), "copymyip");
+    }
+
+    private static String getIP() throws Exception {
+        URL url;
+        try {
+            url = new URI("https://checkip.amazonaws.com/").toURL();
+        } catch (Exception e) {
+            url = new URI("https://ipv4bot.whatismyipaddress.com/").toURL();
+        }
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+        return bufferedReader.readLine();
     }
 
     @Override
@@ -45,17 +56,6 @@ public final class CopyMyIPCommand extends AbstractCommand {
                 return FAILURE;
             }
         });
-    }
-
-    private static String getIP() throws Exception {
-        URL url;
-        try {
-            url = new URI("https://checkip.amazonaws.com/").toURL();
-        } catch (Exception e) {
-            url = new URI("https://ipv4bot.whatismyipaddress.com/").toURL();
-        }
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-        return bufferedReader.readLine();
     }
 
 }

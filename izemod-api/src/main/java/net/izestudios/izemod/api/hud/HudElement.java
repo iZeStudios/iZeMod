@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class HudElement {
 
+    private boolean enabled;
+
     public static HudElement of(final @NotNull Component key, final @NotNull Component value) {
         Preconditions.checkNotNull(key);
         Preconditions.checkNotNull(value);
@@ -87,8 +89,6 @@ public abstract class HudElement {
             }
         };
     }
-
-    private boolean enabled;
 
     /**
      * @return The name of the HUD element. This is used for identifying the element and for config saving.

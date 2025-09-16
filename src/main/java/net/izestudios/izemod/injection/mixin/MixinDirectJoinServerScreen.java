@@ -20,42 +20,38 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import java.util.ArrayList;
+import java.util.List;
 import net.izestudios.izemod.component.multiplayer.ServerPinger;
 import net.izestudios.izemod.component.multiplayer.ServerSaveStates;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.DirectJoinServerScreen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.DirectJoinServerScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.util.ArrayList;
-import java.util.List;
 
 @Mixin(DirectJoinServerScreen.class)
 public abstract class MixinDirectJoinServerScreen extends Screen {
 
-    @Shadow
-    private EditBox ipEdit;
-
-    @Shadow
-    private Button selectButton;
-
     @Unique
     private static final int izeMod$PING_INTERVAL = 10_000;
-
     @Unique
     private final List<Button> izeMod$serverStateButtons = new ArrayList<>();
-
+    @Shadow
+    private EditBox ipEdit;
+    @Shadow
+    private Button selectButton;
     @Unique
     private int izeMod$serverStateIndex = 0;
 

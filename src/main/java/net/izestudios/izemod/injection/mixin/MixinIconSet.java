@@ -18,15 +18,15 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import net.izestudios.izemod.util.Assets;
 import com.mojang.blaze3d.platform.IconSet;
-import net.minecraft.server.packs.resources.IoSupplier;
+import java.io.InputStream;
+import net.izestudios.izemod.util.Assets;
 import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.resources.IoSupplier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import java.io.InputStream;
 
 @Mixin(IconSet.class)
 public abstract class MixinIconSet {
@@ -35,5 +35,5 @@ public abstract class MixinIconSet {
     private void replaceProcessIcon(PackResources resources, String filename, CallbackInfoReturnable<IoSupplier<InputStream>> cir) {
         cir.setReturnValue(() -> Assets.icon(filename));
     }
-    
+
 }

@@ -21,11 +21,10 @@ package net.izestudios.izemod.save;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import net.izestudios.izemod.IzeModImpl;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import net.izestudios.izemod.IzeModImpl;
 
 /**
  * This class can be used to save data to a file.
@@ -77,6 +76,7 @@ public abstract class AbstractSave {
     }
 
     public abstract void write(final JsonObject object);
+
     public abstract void read(final JsonObject object);
 
     public Path path() {

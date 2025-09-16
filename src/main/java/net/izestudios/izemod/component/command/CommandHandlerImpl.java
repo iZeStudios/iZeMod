@@ -24,6 +24,8 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import java.util.ArrayList;
+import java.util.List;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.component.command.impl.AuthorCommand;
@@ -42,18 +44,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class CommandHandlerImpl implements CommandHandler {
 
     public static final String PREFIX = "#";
     public static final CommandHandlerImpl INSTANCE = new CommandHandlerImpl();
-
-    private final List<AbstractCommand> commands = new ArrayList<>();
-
     public final CommandDispatcher<SharedSuggestionProvider> dispatcher = new CommandDispatcher<>();
     public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance(), true);
+    private final List<AbstractCommand> commands = new ArrayList<>();
 
     public void init() {
         Preconditions.checkState(commands.isEmpty(), "Commands already initialized");

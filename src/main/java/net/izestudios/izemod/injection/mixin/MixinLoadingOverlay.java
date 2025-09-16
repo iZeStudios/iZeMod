@@ -18,8 +18,8 @@
 
 package net.izestudios.izemod.injection.mixin;
 
-import java.util.function.IntSupplier;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import java.util.function.IntSupplier;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.renderer.RenderPipelines;

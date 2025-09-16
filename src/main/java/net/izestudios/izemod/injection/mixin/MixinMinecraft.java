@@ -18,15 +18,16 @@
 
 package net.izestudios.izemod.injection.mixin;
 
+import java.util.Optional;
+import java.util.UUID;
 import net.fabricmc.loader.api.FabricLoader;
 import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.util.Assets;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.main.GameConfig;
-import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.User;
-
+import net.minecraft.client.gui.screens.LoadingOverlay;
+import net.minecraft.client.main.GameConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -35,8 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import java.util.Optional;
-import java.util.UUID;
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
@@ -50,7 +49,7 @@ public abstract class MixinMinecraft {
     private void initialize(GameConfig gameConfig, CallbackInfo ci) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             user = new User(
-                "iZeMod" + String.format("%06d", (int)(Math.random() * 1000000)),
+                "iZeMod" + String.format("%06d", (int) (Math.random() * 1000000)),
                 UUID.randomUUID(),
                 "00000000000000000000000000000000",
                 Optional.empty(),

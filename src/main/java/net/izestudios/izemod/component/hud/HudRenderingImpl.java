@@ -18,6 +18,7 @@
 
 package net.izestudios.izemod.component.hud;
 
+import com.google.common.base.Preconditions;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,18 +26,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import com.google.common.base.Preconditions;
 import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.save.SaveLoader;
 import net.izestudios.izemod.util.TimeFormatter;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.PlayerInfo;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.NotNull;

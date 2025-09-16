@@ -25,9 +25,8 @@ import net.izestudios.izemod.api.discord.DiscordRPC;
 
 public final class DiscordRPCImpl implements DiscordRPC {
 
-    private static final long APPLICATION_ID = 1352601841376165908L;
     public static final DiscordRPCImpl INSTANCE = new DiscordRPCImpl();
-
+    private static final long APPLICATION_ID = 1352601841376165908L;
     private long startTime = -1L;
 
     @Override

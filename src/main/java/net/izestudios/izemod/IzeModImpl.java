@@ -18,6 +18,10 @@
 
 package net.izestudios.izemod;
 
+import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.izestudios.izemod.addon.AddonManager;
@@ -26,17 +30,12 @@ import net.izestudios.izemod.api.command.CommandHandler;
 import net.izestudios.izemod.api.discord.DiscordRPC;
 import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.component.command.CommandHandlerImpl;
+import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
-import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.save.SaveLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.awt.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public final class IzeModImpl implements IzeModAPIBase {
 

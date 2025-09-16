@@ -18,6 +18,7 @@
 
 package net.izestudios.izemod.util;
 
+import java.awt.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -26,7 +27,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
-import java.awt.*;
 
 public class ChatUtil {
 

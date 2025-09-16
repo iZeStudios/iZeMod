@@ -18,10 +18,10 @@
 
 package net.izestudios.izemod.util;
 
+import java.io.InputStream;
+import net.minecraft.Util;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
-import java.io.InputStream;
 
 public final class Assets {
 

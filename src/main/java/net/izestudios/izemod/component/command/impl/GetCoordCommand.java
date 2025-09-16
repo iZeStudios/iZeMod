@@ -19,13 +19,12 @@
 package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import java.text.NumberFormat;
 import net.izestudios.izemod.api.command.AbstractCommand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
-
-import java.text.NumberFormat;
 
 public final class GetCoordCommand extends AbstractCommand {
 

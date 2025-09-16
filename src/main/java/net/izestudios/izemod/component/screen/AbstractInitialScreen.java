@@ -18,23 +18,21 @@
 
 package net.izestudios.izemod.component.screen;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.Constants;
 import net.izestudios.izemod.util.RenderUtil;
 import net.izestudios.izemod.util.UpdateUtil;
-import net.minecraft.SharedConstants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.CreditsAndAttributionScreen;
-import net.minecraft.client.gui.components.PlainTextButton;
-import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlainTextButton;
+import net.minecraft.client.gui.screens.CreditsAndAttributionScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public abstract class AbstractInitialScreen extends Screen {
 

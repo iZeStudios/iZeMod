@@ -18,23 +18,6 @@
 
 package net.izestudios.izemod.component.screen;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.resources.sounds.AbstractSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.sounds.Music;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.Nullable;
-
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,8 +29,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.Music;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.Nullable;
 
 public class TetrisScreen extends Screen {
+    public static final TetrisScreen INSTANCE = new TetrisScreen();
     private static final SoundEvent TETRIS_NORMAL = new SoundEvent(ResourceLocation.parse("izemod:tetris1"), Optional.empty());
     private static final SoundEvent TETRIS_FAST = new SoundEvent(ResourceLocation.parse("izemod:tetris2"), Optional.empty());
 
@@ -59,7 +58,6 @@ public class TetrisScreen extends Screen {
         }
     }
 
-    public static final TetrisScreen INSTANCE = new TetrisScreen();
     private TetrisGame tetrisGame;
 
     public TetrisScreen() {
@@ -147,7 +145,65 @@ public class TetrisScreen extends Screen {
         }
     }
 
+    private enum Tetromino {
+        Empty,
+        I,
+        O,
+        T,
+        S,
+        Z,
+        J,
+        L;
+
+        public static Tetromino randomT() {
+            Tetromino[] v = {I, O, T, S, Z, J, L};
+            return v[(int) (Math.random() * v.length)];
+        }
+    }
+
+    private record TetrominoData(int[][] shape, int color) {
+        public TetrominoData rotate() {
+            int[][] nc = new int[shape.length][2];
+            for (int i = 0; i < shape.length; i++) {
+                nc[i][0] = shape[i][1];
+                nc[i][1] = -shape[i][0];
+            }
+            return new TetrominoData(nc, color);
+        }
+    }
+
+    private record TetrominoWrapper(TetrominoData d) {
+        public int[][] cells() {
+            return d.shape();
+        }
+
+        public int color() {
+            return d.color();
+        }
+
+        public TetrominoWrapper rotate() {
+            return new TetrominoWrapper(d.rotate());
+        }
+    }
+
+    private static class TetrisMusicInstance extends AbstractSoundInstance {
+        public TetrisMusicInstance(SoundEvent event) {
+            super(event, SoundSource.MASTER, RandomSource.create());
+            this.looping = true;
+            this.delay = 0;
+            this.volume = 1.0F;
+            this.pitch = 1.0F;
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.attenuation = SoundInstance.Attenuation.NONE;
+        }
+    }
+
     private class TetrisGame {
+        private static int highScore = 0;
+        private static boolean loadedHS = false;
+        private static File HS_FILE;
         private final int bw = 10, bh = 20;
         private final int[][] board = new int[bw][bh];
         private TetrominoWrapper cur, nxt;
@@ -159,10 +215,6 @@ public class TetrisScreen extends Screen {
         private int score = 0;
         private int linesClearedTotal = 0;
         private int level = 1;
-        private static int highScore = 0;
-        private static boolean loadedHS = false;
-        private static File HS_FILE;
-
         private TetrisMusicInstance music;
         private boolean playing = false;
 
@@ -590,12 +642,12 @@ public class TetrisScreen extends Screen {
                 int centerX = ix + boxWidth / 2;
                 int centerY = boxY + boxHeight / 2;
                 int shapeLeft = centerX - shapeWidth / 2;
-                int shapeTop  = centerY - shapeHeight / 2;
+                int shapeTop = centerY - shapeHeight / 2;
                 for (int[] p : shape) {
                     int xx = p[0] - minX;
                     int yy = p[1] - minY;
                     int px = shapeLeft + xx * pcs;
-                    int py = shapeTop  + yy * pcs;
+                    int py = shapeTop + yy * pcs;
                     c.fill(px, py, px + pcs, py + pcs, nxt.color());
                 }
 
@@ -784,61 +836,6 @@ public class TetrisScreen extends Screen {
             };
             int color = mainColors[(int) (Math.random() * mainColors.length)];
             return new TetrominoData(shape, color);
-        }
-    }
-
-    private enum Tetromino {
-        Empty,
-        I,
-        O,
-        T,
-        S,
-        Z,
-        J,
-        L;
-
-        public static Tetromino randomT() {
-            Tetromino[] v = {I, O, T, S, Z, J, L};
-            return v[(int) (Math.random() * v.length)];
-        }
-    }
-
-    private record TetrominoData(int[][] shape, int color) {
-        public TetrominoData rotate() {
-            int[][] nc = new int[shape.length][2];
-            for (int i = 0; i < shape.length; i++) {
-                nc[i][0] = shape[i][1];
-                nc[i][1] = -shape[i][0];
-            }
-            return new TetrominoData(nc, color);
-        }
-    }
-
-    private record TetrominoWrapper(TetrominoData d) {
-        public int[][] cells() {
-            return d.shape();
-        }
-
-        public int color() {
-            return d.color();
-        }
-
-        public TetrominoWrapper rotate() {
-            return new TetrominoWrapper(d.rotate());
-        }
-    }
-
-    private static class TetrisMusicInstance extends AbstractSoundInstance {
-        public TetrisMusicInstance(SoundEvent event) {
-            super(event, SoundSource.MASTER, RandomSource.create());
-            this.looping = true;
-            this.delay = 0;
-            this.volume = 1.0F;
-            this.pitch = 1.0F;
-            this.x = 0;
-            this.y = 0;
-            this.z = 0;
-            this.attenuation = SoundInstance.Attenuation.NONE;
         }
     }
 }
