@@ -31,6 +31,7 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3x2fStack;
 
 public final class ServerPinger extends AbstractWidget {
 
@@ -67,6 +68,8 @@ public final class ServerPinger extends AbstractWidget {
 
         multiplayerScreen.getPinger().removeAll();
         serverEntry = WIDGET.new OnlineServerEntry(multiplayerScreen, serverInfo);
+        serverEntry.setWidth(WIDTH);
+        serverEntry.setHeight(HEIGHT);
         if (previousServerEntry == null) {
             previousServerEntry = serverEntry;
         }
@@ -82,7 +85,9 @@ public final class ServerPinger extends AbstractWidget {
         if (status == ServerData.State.INITIAL || status == ServerData.State.PINGING) {
             // The server entry is only pinged when rendered, but we only want to show it when it's successful, therefore
             // render it off-screen to avoid showing it when it's not successful
-            serverEntry.render(guiGraphics, 0, guiGraphics.guiHeight(), guiGraphics.guiWidth(), 0, 0, mouseX, mouseY, false, partialTick);
+            serverEntry.setX(guiGraphics.guiWidth());
+            serverEntry.setY(guiGraphics.guiHeight());
+            serverEntry.renderContent(guiGraphics, mouseX, mouseY, false, partialTick);
         } else if (status == ServerData.State.SUCCESSFUL) {
             previousServerEntry = serverEntry;
         } else if (status == ServerData.State.UNREACHABLE || status == ServerData.State.INCOMPATIBLE) {
@@ -94,18 +99,16 @@ public final class ServerPinger extends AbstractWidget {
         }
 
         final ServerSelectionList.OnlineServerEntry entry = status != ServerData.State.SUCCESSFUL ? previousServerEntry : serverEntry;
+        entry.setX(getX() + 2);
+        entry.setY(getY() + 2);
+
         guiGraphics.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
-        entry.render(guiGraphics, 0, getY() + 2, getX() + 2, WIDTH + 1, HEIGHT, mouseX, mouseY, false, partialTick);
+        entry.renderContent(guiGraphics, mouseX, mouseY, false, partialTick);
 
         final String brand = I18n.get("screens.directconnect.brand");
         final String version = I18n.get("screens.directconnect.version");
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + brand + ": " + ChatFormatting.AQUA + entry.getServerData().version.getString(), getX() + 2, getY() + 40, -1);
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + version + ": " + ChatFormatting.AQUA + entry.getServerData().protocol, getX() + 2, getY() + 50, -1);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

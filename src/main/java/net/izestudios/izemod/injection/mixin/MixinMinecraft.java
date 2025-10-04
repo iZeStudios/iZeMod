@@ -28,9 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.User;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import net.minecraft.client.main.GameConfig;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -40,10 +38,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
 
-    @Mutable
     @Shadow
-    @Final
-    private User user;
+    public User user;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;registerTextures(Lnet/minecraft/client/renderer/texture/TextureManager;)V"))
     private void initialize(GameConfig gameConfig, CallbackInfo ci) {
@@ -53,8 +49,7 @@ public abstract class MixinMinecraft {
                 UUID.randomUUID(),
                 "00000000000000000000000000000000",
                 Optional.empty(),
-                Optional.empty(),
-                User.Type.MOJANG
+                Optional.empty()
             );
         }
 

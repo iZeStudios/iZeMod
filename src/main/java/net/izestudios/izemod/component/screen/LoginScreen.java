@@ -86,7 +86,7 @@ public final class LoginScreen extends AbstractInitialScreen {
             20,
             Component.empty()
         ));
-        passwordField.setFormatter(
+        passwordField.addFormatter(
             (text, index) -> Component.nullToEmpty("*".repeat(text.length())).getVisualOrderText()
         );
         passwordField.setValue("123456");

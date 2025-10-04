@@ -28,6 +28,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,11 +36,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(JoinMultiplayerScreen.class)
 public abstract class MixinJoinMultiplayerScreen extends Screen {
 
+    @Unique
+    private Button iZeMod$manageButton;
+
+    @Unique
+    private Button iZeMod$lastButton;
+
     protected MixinJoinMultiplayerScreen(final Component title) {
         super(title);
     }
 
-    @Inject(method = "init", at = @At("TAIL"))
+    @Inject(method = "repositionElements", at = @At("TAIL"))
     private void moveVanillaButtons(CallbackInfo ci) {
         final String select = I18n.get(Constants.TEXT_SELECT_SERVER);
         final String direct = I18n.get(Constants.TEXT_DIRECT_CONNECT);
@@ -76,13 +83,21 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
             }
         }
 
-        this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.manage"), button -> {
-            // TODO
-        }).bounds(this.width / 2 + 4 + 102, this.height - 52, 100, 20).build());
+        if (iZeMod$manageButton == null) {
+            iZeMod$manageButton = this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.manage"), button -> {
+                // TODO
+            }).size(100, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
-            // TODO
-        }).bounds(this.width - 207, 5, 100, 20).build());
+            iZeMod$lastButton = this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
+                // TODO
+            }).size(100, 20).build());
+        }
+
+        iZeMod$manageButton.setX(this.width / 2 + 4 + 102);
+        iZeMod$manageButton.setY(this.height - 52);
+
+        iZeMod$lastButton.setX(this.width - 207);
+        iZeMod$lastButton.setY(5);
     }
 
 }

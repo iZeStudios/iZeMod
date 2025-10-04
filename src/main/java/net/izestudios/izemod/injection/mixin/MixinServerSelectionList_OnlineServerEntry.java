@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
 public abstract class MixinServerSelectionList_OnlineServerEntry {
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    @WrapOperation(method = "renderContent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private void replaceServerSprites(GuiGraphics instance, RenderPipeline pipeline, ResourceLocation sprite, int x, int y, int width, int height, Operation<Void> original) {
         final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("izemod", sprite.getPath());
         original.call(instance, pipeline, texture, x, y, width, height);

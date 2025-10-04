@@ -30,7 +30,7 @@ public abstract class MixinStringUtil {
      * @reason Allow paragraph as valid character
      */
     @Overwrite
-    public static boolean isAllowedChatCharacter(char character) {
+    public static boolean isAllowedChatCharacter(int character) {
         return character >= ' ' && character != 127;
     }
 

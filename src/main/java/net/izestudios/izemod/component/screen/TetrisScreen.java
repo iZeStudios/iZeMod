@@ -32,6 +32,7 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -117,11 +118,11 @@ public class TetrisScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int sc, int mod) {
-        if (tetrisGame != null && tetrisGame.handleKeyPress(key)) {
+    public boolean keyPressed(final KeyEvent keyEvent) {
+        if (tetrisGame != null && tetrisGame.handleKeyPress(keyEvent.key())) {
             return true;
         }
-        return super.keyPressed(key, sc, mod);
+        return super.keyPressed(keyEvent);
     }
 
     private void drawControls(GuiGraphics c) {
