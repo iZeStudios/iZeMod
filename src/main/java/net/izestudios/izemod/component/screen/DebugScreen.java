@@ -36,8 +36,9 @@ public final class DebugScreen extends Screen {
     protected void init() {
         final int baseY = (int) Math.sqrt(((double) (this.height * this.height) / (1.3 * 1.2)));
 
-        this.addRenderableWidget(new StringWidget(this.width / 2 - 100, baseY + (25 * -7), 200, 20,
-            Component.translatable("screens.debug.title").withStyle(style -> style.withColor(ChatFormatting.RED).withBold(true)), minecraft.font));
+        final Component titleText = Component.translatable("screens.debug.title").withStyle(style -> style.withColor(ChatFormatting.RED).withBold(true));
+        this.addRenderableWidget(new StringWidget(this.width / 2 - (minecraft.font.width(titleText) / 2), baseY + (25 * -7), 200, 20,
+            titleText, minecraft.font));
 
         this.createButton(0, -6, baseY, "screens.debug.toLoginScreen", b -> minecraft.setScreen(LoginScreen.INSTANCE));
         this.createButton(0, -5, baseY, "screens.debug.unusedTodo", null);
