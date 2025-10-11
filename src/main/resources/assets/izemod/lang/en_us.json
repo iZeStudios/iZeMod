@@ -103,5 +103,11 @@
 
   "commands.help": "Shows you all iZeMod commands.",
   "commands.help.success": "All iZeMod 5 commands (Page %s from %s):",
-  "commands.help.invalid": "Invalid page number: %s."
+  "commands.help.invalid": "Invalid page number: %s.",
+  
+  "commands.repair": "Repairs the item in your main hand.",
+  "commands.repair.success": "The item has been repaired successfully!",
+  "commands.repair.invalid": "You cannot repair this item!",
+  "commands.repair.gamemode": "You must be in Creative mode to repair items!",
+  "commands.repair.empty": "You must have an item in your hand to repair it!"
 }
