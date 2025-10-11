@@ -104,7 +104,7 @@
   "commands.help.success": "Alle iZeMod 5 Befehle (Seite %s von %s):",
   "commands.help.invalid": "Ungültige Seite: %s",
 
-  "commands.repair": "Repariert das Item in deiner Haupthand.",
+  "commands.repair": "Repariert das Item in deiner Hand.",
   "commands.repair.success": "Das Item wurde erfolgreich repariert!",
   "commands.repair.invalid": "Du kannst dieses Item nicht reparieren!",
   "commands.repair.gamemode": "Du musst im Kreativmodus sein, um Items zu reparieren!",
