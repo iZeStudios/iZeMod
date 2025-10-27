@@ -19,11 +19,14 @@
 package net.izestudios.izemod.injection.mixin;
 
 import java.util.Set;
+import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.ConnectScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +50,7 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
 
     @Inject(method = "repositionElements", at = @At("TAIL"))
     private void moveVanillaButtons(CallbackInfo ci) {
+        final IzeModImpl instance = IzeModImpl.INSTANCE;
         final String select = Component.translatable(Constants.TEXT_SELECT_SERVER).getString();
         final String direct = Component.translatable(Constants.TEXT_DIRECT_CONNECT).getString();
         final String add = Component.translatable(Constants.TEXT_ADD_SERVER).getString();
@@ -88,8 +92,9 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
             }).size(100, 20).build());
 
             iZeMod$lastButton = this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
-                // TODO
+                ConnectScreen.startConnecting(this, this.minecraft, ServerAddress.parseString(instance.lastServer.ip), instance.lastServer, false, null);
             }).size(100, 20).build());
+            iZeMod$lastButton.active = instance.lastServer != null;
         }
 
         iZeMod$manageButton.setX(this.width / 2 + 4 + 102);
