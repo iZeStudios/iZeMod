@@ -24,7 +24,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,12 +47,12 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
 
     @Inject(method = "repositionElements", at = @At("TAIL"))
     private void moveVanillaButtons(CallbackInfo ci) {
-        final String select = I18n.get(Constants.TEXT_SELECT_SERVER);
-        final String direct = I18n.get(Constants.TEXT_DIRECT_CONNECT);
-        final String add = I18n.get(Constants.TEXT_ADD_SERVER);
-        final String edit = I18n.get(Constants.TEXT_EDIT_SERVER);
-        final String delete = I18n.get(Constants.TEXT_DELETE_SERVER);
-        final String refresh = I18n.get(Constants.TEXT_REFRESH);
+        final String select = Component.translatable(Constants.TEXT_SELECT_SERVER).getString();
+        final String direct = Component.translatable(Constants.TEXT_DIRECT_CONNECT).getString();
+        final String add = Component.translatable(Constants.TEXT_ADD_SERVER).getString();
+        final String edit = Component.translatable(Constants.TEXT_EDIT_SERVER).getString();
+        final String delete = Component.translatable(Constants.TEXT_DELETE_SERVER).getString();
+        final String refresh = Component.translatable(Constants.TEXT_REFRESH).getString();
         final String back = CommonComponents.GUI_BACK.getString();
         final Set<String> texts = Set.of(select, direct, add, edit, delete, refresh, back);
 
