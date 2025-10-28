@@ -19,15 +19,18 @@
 package net.izestudios.izemod.injection.mixin;
 
 import java.util.Set;
+import net.izestudios.izemod.component.multiplayer.LastServer;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -38,13 +41,15 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
 
     @Unique
     private Button iZeMod$manageButton;
-
     @Unique
     private Button iZeMod$lastButton;
 
     protected MixinJoinMultiplayerScreen(final Component title) {
         super(title);
     }
+
+    @Shadow
+    public abstract void join(final ServerData serverData);
 
     @Inject(method = "repositionElements", at = @At("TAIL"))
     private void moveVanillaButtons(CallbackInfo ci) {
@@ -88,9 +93,7 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
                 // TODO
             }).size(100, 20).build());
 
-            iZeMod$lastButton = this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> {
-                // TODO
-            }).size(100, 20).build());
+            iZeMod$lastButton = this.addRenderableWidget(Button.builder(Component.translatable("screens.multiplayer.last"), button -> join(LastServer.getServerData())).size(100, 20).build());
         }
 
         iZeMod$manageButton.setX(this.width / 2 + 4 + 102);
@@ -98,6 +101,7 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
 
         iZeMod$lastButton.setX(this.width - 207);
         iZeMod$lastButton.setY(5);
+        iZeMod$lastButton.active = LastServer.getServerData() != null;
     }
 
 }
