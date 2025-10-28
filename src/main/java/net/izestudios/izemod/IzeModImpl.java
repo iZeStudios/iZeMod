@@ -34,7 +34,6 @@ import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.save.SaveLoader;
-import net.minecraft.client.multiplayer.ServerData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,8 +51,6 @@ public final class IzeModImpl implements IzeModAPIBase {
 
     private String version;
 
-    public ServerData lastServer;
-
     public void initialize() {
         if (!Files.exists(path)) {
             try {
@@ -66,7 +63,6 @@ public final class IzeModImpl implements IzeModAPIBase {
         version = metadata.getVersion().getFriendlyString();
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
 
-        lastServer = null;
         DiscordRPCImpl.INSTANCE.start();
     }
 
