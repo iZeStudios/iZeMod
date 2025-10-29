@@ -23,7 +23,8 @@
     "MixinScreen",
     "MixinServerSelectionList_OnlineServerEntry",
     "MixinStringUtil",
-    "MixinTitleScreen"
+    "MixinTitleScreen",
+    "MixinConnectScreen"
   ],
   "injectors": {
     "defaultRequire": 1
