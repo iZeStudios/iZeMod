@@ -27,6 +27,7 @@ import net.minecraft.network.chat.Component;
 public final class DebugScreen extends Screen {
 
     public static final DebugScreen INSTANCE = new DebugScreen();
+    private final Component title = Component.translatable("screens.debug.title").withStyle(style -> style.withColor(ChatFormatting.RED).withBold(true));
 
     private DebugScreen() {
         super(Component.translatable("screens.debug"));
@@ -36,8 +37,7 @@ public final class DebugScreen extends Screen {
     protected void init() {
         final int baseY = (int) Math.sqrt(((double) (this.height * this.height) / (1.3 * 1.2)));
 
-        this.addRenderableWidget(new StringWidget(this.width / 2 - 100, baseY + (25 * -7), 200, 20,
-            Component.translatable("screens.debug.title").withStyle(style -> style.withColor(ChatFormatting.RED).withBold(true)), minecraft.font));
+        this.addRenderableWidget(new StringWidget(this.width / 2 - (minecraft.font.width(title) / 2), baseY + (25 * -7), 200, 20, title, minecraft.font));
 
         this.createButton(0, -6, baseY, "screens.debug.toLoginScreen", b -> minecraft.setScreen(LoginScreen.INSTANCE));
         this.createButton(0, -5, baseY, "screens.debug.unusedTodo", null);
