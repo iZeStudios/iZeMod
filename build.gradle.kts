@@ -36,6 +36,6 @@ val jij = configureJij()
 dependencies {
     jij("com.github.iZeStudios:discord-ipc:b0d38c7edc")
 
-    modImplementation("com.viaversion:viafabricplus-api:4.3.1")
-    modRuntimeOnly("com.viaversion:viafabricplus:4.3.1")
+    modImplementation("com.viaversion:viafabricplus-api:4.3.2")
+    modRuntimeOnly("com.viaversion:viafabricplus:4.3.2")
 }
