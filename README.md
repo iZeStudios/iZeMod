@@ -1,9 +1,19 @@
 # iZeMod 5.0
 
-iZeMod 5.0 is in its very early development stage. No features have been implemented yet, as EnZaXD and I are currently
-working on porting the design/theme from iZeMod 4.0 to iZeMod 5.0. Contributions on GitHub are greatly appreciated.
-Please feel free to submit a pull request, open an issue, or start a discussion on GitHub.
+Minecraft Fabric utility mod designed to improve your gameplay.
 
-Announcement Trailer: https://youtu.be/jli5bhJmCdc
+## History
+iZeMod was originally created in 2013–2014 by iZePlayz and Garkolym as a private utility mod and remained private for
+more than a decade. It quickly gained attention through their YouTube channels, especially Garkolym’s, but despite
+several announcements, it was never publicly released.
 
-Discord: https://izemod.de/discord
+This repository is a full rewrite of the final private iZeMod build (version 4.0.0 for Minecraft 1.8.8/1.12.2), updated
+for the latest versions of Minecraft and rebuilt on a modern codebase.
+
+For more information, see the [announcement trailer](https://youtu.be/jli5bhJmCdc).
+
+## Contact
+
+If you encounter any issues, please report them on the [issue tracker](https://github.com/iZeStudios/iZeMod/issues).
+
+If you just want to talk or need help with iZeMod feel free to join our [Discord](https://izemod.de/discord).
