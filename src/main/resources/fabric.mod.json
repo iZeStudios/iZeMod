@@ -42,5 +42,8 @@
   "depends": {
     "minecraft": "${mcVersion}",
     "java": ">=21"
+  },
+  "custom": {
+    "ize:tag": "${shortCommitHash}"
   }
 }

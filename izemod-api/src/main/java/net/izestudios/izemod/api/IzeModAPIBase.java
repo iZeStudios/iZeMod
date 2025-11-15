@@ -37,6 +37,13 @@ public interface IzeModAPIBase {
     String version();
 
     /**
+     * Gets the first seven characters of the git commit hash representing the build of iZeMod.
+     *
+     * @return the shortened git commit hash
+     */
+    String tag();
+
+    /**
      * Get the root path of iZeMod.
      *
      * @return the root path of iZeMod

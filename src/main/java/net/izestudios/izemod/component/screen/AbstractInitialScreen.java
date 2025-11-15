@@ -65,7 +65,7 @@ public abstract class AbstractInitialScreen extends Screen {
 
     protected void setupUpdateNotification() {
         final String version = UpdateUtil.getLatestVersion();
-        if (version == null || IzeModImpl.ALPHA_VERSION_TAG.equals(version)) {
+        if (version == null || IzeModImpl.INSTANCE.tag().equals(version)) {
             return;
         }
 
@@ -95,7 +95,7 @@ public abstract class AbstractInitialScreen extends Screen {
             this.height - 20,
             200,
             10,
-            Component.nullToEmpty("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")"),
+            Component.nullToEmpty("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.INSTANCE.tag() + ")"),
             button -> this.openWebUrl("https://izeplayz.de/izemod"), this.font
         ));
 

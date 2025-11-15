@@ -1,5 +1,6 @@
 import de.florianmichael.baseproject.configureJij
 import de.florianmichael.baseproject.includeFabricSubmodule
+import de.florianmichael.baseproject.runGitCommand
 import de.florianmichael.baseproject.setupFabric
 import de.florianmichael.baseproject.setupProject
 

@@ -39,17 +39,13 @@ import org.apache.logging.log4j.Logger;
 
 public final class IzeModImpl implements IzeModAPIBase {
 
-    // To be removed once we leave alpha
-    public static final String ALPHA_VERSION = "0.4.1";
-    public static final String ALPHA_VERSION_TAG = "v" + ALPHA_VERSION + "-alpha";
-    public static final String ALPHA_VERSION_NAME = "Alpha v" + ALPHA_VERSION;
-
     public static final IzeModImpl INSTANCE = new IzeModImpl();
 
     private final Logger logger = LogManager.getLogger("iZeMod");
     private final Path path = FabricLoader.getInstance().getConfigDir().resolve("izemod");
 
     private String version;
+    private String tag;
 
     public void initialize() {
         if (!Files.exists(path)) {
@@ -61,6 +57,7 @@ public final class IzeModImpl implements IzeModAPIBase {
         }
         final ModMetadata metadata = FabricLoader.getInstance().getModContainer("izemod").get().getMetadata();
         version = metadata.getVersion().getFriendlyString();
+        tag = metadata.getCustomValue("ize:tag").getAsString();
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
 
         DiscordRPCImpl.INSTANCE.start();
@@ -93,6 +90,11 @@ public final class IzeModImpl implements IzeModAPIBase {
     @Override
     public String version() {
         return version;
+    }
+
+    @Override
+    public String tag() {
+        return tag;
     }
 
     @Override

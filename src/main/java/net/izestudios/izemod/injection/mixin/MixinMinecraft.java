@@ -64,7 +64,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "createTitle", at = @At(value = "HEAD"), cancellable = true)
     private void replaceWindowTitle(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.ALPHA_VERSION_NAME + ")");
+        cir.setReturnValue("iZeMod " + IzeModImpl.INSTANCE.version() + " (" + IzeModImpl.INSTANCE.tag() + ")");
     }
 
 }
