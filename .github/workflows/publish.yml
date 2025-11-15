@@ -1,0 +1,57 @@
+name: "Build and publish project"
+on: [ push, workflow_dispatch ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          check-latest: true
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Get commit hash
+        id: vars
+        run: echo "GITHUB_SHA_SHORT=$(git rev-parse --short=7 HEAD)" >> $GITHUB_ENV
+
+      - name: Get built JAR file name
+        id: jarfile
+        run: |
+          FILE=$(ls build/libs/*.jar | head -n 1)
+          echo "JAR_FILE=$(basename "$FILE")" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.GITHUB_SHA_SHORT }}
+          files: build/libs/**
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
+          make_latest: ${{ github.ref == 'refs/heads/main' }}
+          target_commitish: ${{ github.ref }}
+          body: |
+            ### How to Install:
+            1. Download the Fabric Installer from the [official download page](https://fabricmc.net/use/installer/).
+            2. Open the installer and select the correct Minecraft version for your environment.
+            3. Click **Install** to create a new Fabric game profile.
+            4. Download and copy **${{ env.JAR_FILE }}** into the `mods` folder inside your `.minecraft` directory.
+               - Create the folder if it doesn't exist.
+               - Remove any previous version of the mod to avoid conflicts.
+
+            ### Changelog:
+            https://github.com/${{ github.repository }}/compare/${{ env.GITHUB_SHA_SHORT }}~1...${{ env.GITHUB_SHA_SHORT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
