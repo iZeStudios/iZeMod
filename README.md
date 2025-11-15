@@ -3,12 +3,16 @@
 Minecraft Fabric utility mod designed to improve your gameplay.
 
 ## History
+
 iZeMod was originally created in 2013–2014 by iZePlayz and Garkolym as a private utility mod and remained private for
 more than a decade. It quickly gained attention through their YouTube channels, especially Garkolym’s, but despite
 several announcements, it was never publicly released.
 
 This repository is a full rewrite of the final private iZeMod build (version 4.0.0 for Minecraft 1.8.8/1.12.2), updated
 for the latest versions of Minecraft and rebuilt on a modern codebase.
+
+The current project maintainers are [FlorianMichael/EnZaXD](https://github.com/FlorianMichael)
+and [jxstMaurice](https://github.com/jxstMaurice).
 
 For more information, see the [announcement trailer](https://youtu.be/jli5bhJmCdc).
 
