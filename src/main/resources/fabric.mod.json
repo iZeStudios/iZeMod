@@ -17,10 +17,15 @@
       "contact": {
         "homepage": "https://www.youtube.com/@iZePlayz"
       }
+    },
+    {
+      "name": "jxstMaurice",
+      "contact": {
+        "homepage": "https://github.com/jxstMaurice"
+      }
     }
   ],
   "contributors": [
-    "jxstMaurice",
     {
       "name": "GitHub contributors",
       "contact": {
