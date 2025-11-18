@@ -63,6 +63,7 @@
   "ingame.hud.biome": "Biome",
   "ingame.hud.brand": "Brand",
   "ingame.hud.ping": "Ping",
+  "ingame.hud.tps": "TPS",
   "ingame.hud.players": "Players",
   "ingame.hud.date": "Date",
   "ingame.hud.time": "Time",
