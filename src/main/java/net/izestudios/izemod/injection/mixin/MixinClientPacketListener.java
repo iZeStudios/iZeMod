@@ -19,7 +19,9 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.component.command.CommandHandlerImpl;
+import net.izestudios.izemod.util.TPSUtil;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,6 +35,11 @@ public abstract class MixinClientPacketListener {
         if (CommandHandlerImpl.INSTANCE.onChatMessage(message)) {
             ci.cancel();
         }
+    }
+
+    @Inject(method = "handleSetTime", at = @At("RETURN"))
+    private void onSetTime(ClientboundSetTimePacket packet, CallbackInfo ci) {
+        TPSUtil.getInstance().onTimeUpdate();
     }
 
 }
