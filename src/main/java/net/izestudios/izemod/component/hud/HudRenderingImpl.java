@@ -89,6 +89,13 @@ public final class HudRenderingImpl implements HudRendering {
                 return playerListEntry.getLatency();
             }
         });
+        register("tps", () -> {
+            if (client.isLocalServer()) {
+                return null;
+            }
+
+            return numberFormat.format(ServerTPS.getTps());
+        });
         register("players", () -> {
             if (client.isLocalServer()) {
                 return null;
