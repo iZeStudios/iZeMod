@@ -19,7 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.component.command.CommandHandlerImpl;
-import net.izestudios.izemod.util.TPSUtil;
+import net.izestudios.izemod.component.hud.ServerTPS;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public abstract class MixinClientPacketListener {
 
     @Inject(method = "handleSetTime", at = @At("RETURN"))
     private void onSetTime(ClientboundSetTimePacket packet, CallbackInfo ci) {
-        TPSUtil.getInstance().onTimeUpdate();
+        ServerTPS.update();
     }
 
 }

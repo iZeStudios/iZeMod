@@ -30,7 +30,6 @@ import net.izestudios.izemod.api.hud.HudElement;
 import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.save.SaveLoader;
 import net.izestudios.izemod.util.TimeFormatter;
-import net.izestudios.izemod.util.TPSUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -95,7 +94,7 @@ public final class HudRenderingImpl implements HudRendering {
                 return null;
             }
 
-            return numberFormat.format(TPSUtil.getInstance().getTps());
+            return numberFormat.format(ServerTPS.getTps());
         });
         register("players", () -> {
             if (client.isLocalServer()) {
