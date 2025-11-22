@@ -35,7 +35,7 @@ includeFabricSubmodule(":izemod-api")
 val jij = configureJij()
 
 dependencies {
-    jij("com.github.iZeStudios:discord-ipc:b0d38c7edc")
+    jij("com.github.iZeStudios:discord-ipc:e2f57644a6")
 
     modImplementation("com.viaversion:viafabricplus-api:4.3.3")
     modRuntimeOnly("com.viaversion:viafabricplus:4.3.3")
