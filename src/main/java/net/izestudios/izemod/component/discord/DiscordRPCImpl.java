@@ -65,6 +65,7 @@ public final class DiscordRPCImpl implements DiscordRPC {
         presence.setState(second);
         presence.setLargeImage("icon", "© iZeStudios");
         presence.setStart(startTime);
+        presence.setButtons("Trailer", "https://www.youtube.com/watch?v=jli5bhJmCdc", "Website", "https://izemod.de");
 
         DiscordIPC.setActivity(presence);
     }
