@@ -110,5 +110,9 @@
   "commands.repair.success": "The item has been repaired successfully!",
   "commands.repair.invalid": "You cannot repair this item!",
   "commands.repair.gamemode": "You must be in Creative mode to repair items!",
-  "commands.repair.empty": "You must have an item in your hand to repair it!"
+  "commands.repair.empty": "You must have an item in your hand to repair it!",
+
+  "commands.slots.": "Shows you the max server slots.",
+  "commands.slots.singleplayer": "You cannot use this command in singleplayer!",
+  "commands.slots.success": "Server Slots: %s"
 }

@@ -38,6 +38,7 @@ import net.izestudios.izemod.component.command.impl.GetIPCommand;
 import net.izestudios.izemod.component.command.impl.HelpCommand;
 import net.izestudios.izemod.component.command.impl.MCCommand;
 import net.izestudios.izemod.component.command.impl.RepairCommand;
+import net.izestudios.izemod.component.command.impl.SlotsCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.UUIDCommand;
 import net.izestudios.izemod.util.Constants;
@@ -69,6 +70,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new AuthorCommand());
         addCommand(new HelpCommand());
         addCommand(new RepairCommand());
+        addCommand(new SlotsCommand());
     }
 
     public boolean onChatMessage(final String message) {
