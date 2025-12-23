@@ -24,7 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 
-public class SlotsCommand extends AbstractCommand {
+public final class SlotsCommand extends AbstractCommand {
 
     public SlotsCommand() {
         super(Component.literal("commands.slots"), "slots");
@@ -33,7 +33,7 @@ public class SlotsCommand extends AbstractCommand {
     @Override
     public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-            if(Minecraft.getInstance().isLocalServer()){
+            if (Minecraft.getInstance().isLocalServer()) {
                 printErrorMessage(Component.translatable("commands.slots.singleplayer"));
                 return FAILURE;
             }
