@@ -18,8 +18,6 @@
 
 package net.izestudios.izemod.util;
 
-import net.izestudios.izemod.IzeModImpl;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -37,6 +35,10 @@ public final class PolygonalBackgroundRenderer {
     private static int POINT_COUNT = 100;
     private static final float MAX_DISTANCE = 120.0f;
     private static final float SPEED_MULTIPLIER = 15.0f;
+    private static final float LINE_OPACITY = 0.1f;
+    private static final float MOUSE_LINE_OPACITY = 0.5f;
+    private static final float POINT_OPACITY = 0.1f;
+    private static final float LINE_THICKNESS = 0.4f;
     private static int lastWidth = -1;
     private static int lastHeight = -1;
     private static long lastTime = -1;
@@ -69,8 +71,8 @@ public final class PolygonalBackgroundRenderer {
                 if (distSq < MAX_DISTANCE * MAX_DISTANCE) {
                     final float dist = Mth.sqrt(distSq);
                     final float alpha = 1.0f - (dist / MAX_DISTANCE);
-                    final int color = ARGB.colorFromFloat(alpha * 0.3f, r, g, b);
-                    drawLine(guiGraphics, p1.x, p1.y, p2.x, p2.y, 1.0f, color);
+                    final int color = ARGB.colorFromFloat(alpha * LINE_OPACITY, r, g, b);
+                    drawLine(guiGraphics, p1.x, p1.y, p2.x, p2.y, LINE_THICKNESS, color);
                 }
             }
 
@@ -79,13 +81,13 @@ public final class PolygonalBackgroundRenderer {
             if (distSqMouse < MAX_DISTANCE * MAX_DISTANCE) {
                 final float dist = Mth.sqrt(distSqMouse);
                 final float alpha = 1.0f - (dist / MAX_DISTANCE);
-                final int color = ARGB.colorFromFloat(alpha * 0.5f, r, g, b);
-                drawLine(guiGraphics, p1.x, p1.y, mouseX, mouseY, 1.0f, color);
+                final int color = ARGB.colorFromFloat(alpha * MOUSE_LINE_OPACITY, r, g, b);
+                drawLine(guiGraphics, p1.x, p1.y, mouseX, mouseY, LINE_THICKNESS, color);
             }
         }
 
         for (final Point p : POINTS) {
-            final int color = ARGB.colorFromFloat(0.2f, r, g, b);
+            final int color = ARGB.colorFromFloat(POINT_OPACITY, r, g, b);
             guiGraphics.fill((int) (p.x - 1), (int) (p.y - 1), (int) (p.x + 1), (int) (p.y + 1), color);
         }
     }
