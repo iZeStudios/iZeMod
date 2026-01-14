@@ -37,7 +37,6 @@ public final class PolygonalBackgroundRenderer {
     private static final float SPEED_MULTIPLIER = 15.0f;
     private static final float LINE_OPACITY = 0.1f;
     private static final float MOUSE_LINE_OPACITY = 0.5f;
-    private static final float POINT_OPACITY = 0.1f;
     private static final float LINE_THICKNESS = 0.4f;
     private static int lastWidth = -1;
     private static int lastHeight = -1;
@@ -84,11 +83,6 @@ public final class PolygonalBackgroundRenderer {
                 final int color = ARGB.colorFromFloat(alpha * MOUSE_LINE_OPACITY, r, g, b);
                 drawLine(guiGraphics, p1.x, p1.y, mouseX, mouseY, LINE_THICKNESS, color);
             }
-        }
-
-        for (final Point p : POINTS) {
-            final int color = ARGB.colorFromFloat(POINT_OPACITY, r, g, b);
-            guiGraphics.fill((int) (p.x - 1), (int) (p.y - 1), (int) (p.x + 1), (int) (p.y + 1), color);
         }
     }
 
