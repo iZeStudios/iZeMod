@@ -64,5 +64,6 @@
   "commands.repair.success": "Das Item wurde erfolgreich repariert!",
   "commands.repair.invalid": "Du kannst dieses Item nicht reparieren!",
   "commands.repair.gamemode": "Du musst im Kreativmodus sein, um Items zu reparieren!",
-  "commands.repair.empty": "Du musst ein Item in der Hand halten, um es zu reparieren!"
+  "commands.repair.empty": "Du musst ein Item in der Hand halten, um es zu reparieren!",
+  "commands.slots.": "Zeigt dir die maximalen Slots an."
 }
