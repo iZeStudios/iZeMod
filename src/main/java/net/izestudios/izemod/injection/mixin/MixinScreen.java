@@ -19,6 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.component.discord.DiscordRPCImpl;
+import net.izestudios.izemod.util.PolygonalBackgroundRenderer;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -49,11 +50,23 @@ public abstract class MixinScreen {
     private void changeBackground(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         ci.cancel();
         RenderUtil.drawBlueFade(guiGraphics, 0, 0, this.width, this.height);
+        PolygonalBackgroundRenderer.render(guiGraphics, this.width, this.height, 0, 0);
+    }
+
+    @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
+    private void onRenderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+        ci.cancel();
+        if (this.minecraft.level == null) {
+            RenderUtil.drawBlueFade(guiGraphics, 0, 0, this.width, this.height);
+        }
+        PolygonalBackgroundRenderer.render(guiGraphics, this.width, this.height, mouseX, mouseY);
+        guiGraphics.blurBeforeThisStratum();
     }
 
     @Inject(method = "renderMenuBackground(Lnet/minecraft/client/gui/GuiGraphics;IIII)V", at = @At("HEAD"), cancellable = true)
     private void removeDarkening(GuiGraphics guiGraphics, int x, int y, int width, int height, CallbackInfo ci) {
         ci.cancel();
+        PolygonalBackgroundRenderer.render(guiGraphics, this.width, this.height,  0, 0);
     }
 
     @Inject(method = "init()V", at = @At("HEAD"))
