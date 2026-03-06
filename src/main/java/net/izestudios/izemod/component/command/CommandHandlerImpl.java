@@ -32,6 +32,7 @@ import net.izestudios.izemod.component.command.impl.AuthorCommand;
 import net.izestudios.izemod.component.command.impl.ClearChatCommand;
 import net.izestudios.izemod.component.command.impl.CopyIPCommand;
 import net.izestudios.izemod.component.command.impl.CopyMyIPCommand;
+import net.izestudios.izemod.component.command.impl.DropInvCommand;
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
 import net.izestudios.izemod.component.command.impl.GetCoordCommand;
 import net.izestudios.izemod.component.command.impl.GetIPCommand;
@@ -71,6 +72,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new HelpCommand());
         addCommand(new RepairCommand());
         addCommand(new SlotsCommand());
+        addCommand(new DropInvCommand());
     }
 
     public boolean onChatMessage(final String message) {
