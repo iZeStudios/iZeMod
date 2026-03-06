@@ -114,5 +114,11 @@
 
   "commands.slots.": "Shows you the max server slots.",
   "commands.slots.singleplayer": "You cannot use this command in singleplayer!",
-  "commands.slots.success": "Server Slots: %s"
+  "commands.slots.success": "Server Slots: %s",
+
+  "commands.rename": "Renames the item in your hand.",
+  "commands.rename.usage": "Usage: #rename <name>",
+  "commands.rename.success": "The item has been renamed successfully!",
+  "commands.rename.gamemode": "You must be in Creative mode to rename items!",
+  "commands.rename.empty": "You must have an item in your hand to rename it!"
 }
