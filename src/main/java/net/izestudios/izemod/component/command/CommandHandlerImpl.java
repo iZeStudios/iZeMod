@@ -41,6 +41,7 @@ import net.izestudios.izemod.component.command.impl.RepairCommand;
 import net.izestudios.izemod.component.command.impl.SlotsCommand;
 import net.izestudios.izemod.component.command.impl.TestCommand;
 import net.izestudios.izemod.component.command.impl.UUIDCommand;
+import net.izestudios.izemod.component.command.impl.RenameCommand;
 import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
@@ -71,6 +72,7 @@ public final class CommandHandlerImpl implements CommandHandler {
         addCommand(new HelpCommand());
         addCommand(new RepairCommand());
         addCommand(new SlotsCommand());
+        addCommand(new RenameCommand());
     }
 
     public boolean onChatMessage(final String message) {
