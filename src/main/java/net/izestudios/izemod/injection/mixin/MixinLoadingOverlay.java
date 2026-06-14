@@ -47,7 +47,7 @@ public abstract class MixinLoadingOverlay {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/ResourceLocation;IIFFIIIIIII)V"))
     private void useGuiTexturedRenderType(GuiGraphics instance, RenderPipeline pipeline, ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int uWidth, int vHeight, int textureWidth, int textureHeight, int color) {
-        instance.blit(RenderPipelines.GUI_TEXTURED, atlas, x, y, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight, color);
+        instance.blit(RenderPipelines.GUI_TEXTURED, atlas, x, y, u, v, width, height, uWidth, vHeight, textureWidth, textureHeight, color);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/function/IntSupplier;getAsInt()I"))
