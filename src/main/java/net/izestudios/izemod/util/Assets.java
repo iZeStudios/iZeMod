@@ -25,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class Assets {
 
+    public static final ResourceLocation ASCII_FONT = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/font/ascii.png");
     public static final ResourceLocation LOGO = ResourceLocation.fromNamespaceAndPath("izemod", "textures/logo.png");
     public static final ResourceLocation SPLASH_OVERLAY = ResourceLocation.fromNamespaceAndPath("izemod", "textures/splash_overlay.png");
     public static final ResourceLocation[] SATURATION_FRAMES = new ResourceLocation[20];
