@@ -20,6 +20,7 @@
     "MixinLoadingOverlay",
     "MixinMain",
     "MixinMinecraft",
+    "MixinResourceProvider",
     "MixinScreen",
     "MixinServerSelectionList_OnlineServerEntry",
     "MixinStringUtil",
