@@ -52,4 +52,8 @@ public final class Assets {
         }
     }
 
+    public static InputStream asciiFont() {
+        return Assets.class.getResourceAsStream("/assets/minecraft/textures/font/ascii.png");
+    }
+
 }
