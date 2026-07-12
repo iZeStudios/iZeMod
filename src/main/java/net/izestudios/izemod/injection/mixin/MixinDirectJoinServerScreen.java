@@ -87,10 +87,16 @@ public abstract class MixinDirectJoinServerScreen extends Screen {
             izeMod$serverStateButtons.add(addRenderableWidget(Button.builder(Component.nullToEmpty(izeMod$formatServerStateButton(index)), button -> {
                 ServerSaveStates.set(izeMod$serverStateIndex, ipEdit.getValue().isBlank() ? null : ipEdit.getValue().trim());
                 izeMod$serverStateIndex = index;
-                ipEdit.setValue(ServerSaveStates.get(index));
+                final String val = ServerSaveStates.get(index);
+                ipEdit.setValue(val == null ? "" : val);
                 button.setFocused(false);
                 izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
             }).pos(ipEdit.getX() + (i * 20), ipEdit.getY() + ipEdit.getHeight()).size(20, 20).build()));
+        }
+
+        final String activeState = ServerSaveStates.get(izeMod$serverStateIndex);
+        if (activeState != null) {
+            ipEdit.setValue(activeState);
         }
 
         izeMod$serverPinger = addRenderableWidget(new ServerPinger(this.width / 2 - 150, 51));
@@ -101,6 +107,11 @@ public abstract class MixinDirectJoinServerScreen extends Screen {
     private void resetPingTimer(CallbackInfo ci) {
         // Cause the if to be true after one second
         izeMod$lastPingTime = System.currentTimeMillis() - izeMod$PING_INTERVAL - 1;
+    }
+
+    @Inject(method = "removed", at = @At("HEAD"))
+    private void onRemoved(CallbackInfo ci) {
+        ServerSaveStates.set(izeMod$serverStateIndex, ipEdit.getValue().isBlank() ? null : ipEdit.getValue().trim());
     }
 
     @Override

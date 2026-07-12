@@ -32,6 +32,7 @@ import net.izestudios.izemod.api.hud.HudRendering;
 import net.izestudios.izemod.component.command.CommandHandlerImpl;
 import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.component.hud.HudRenderingImpl;
+import net.izestudios.izemod.component.multiplayer.ServerSaveStates;
 import net.izestudios.izemod.component.theme.ColorTheme;
 import net.izestudios.izemod.save.SaveLoader;
 import org.apache.logging.log4j.LogManager;
@@ -69,6 +70,7 @@ public final class IzeModImpl implements IzeModAPIBase {
 
         AddonManager.INSTANCE.run(addon -> addon.onLoad(this));
 
+        SaveLoader.INSTANCE.add(ServerSaveStates.INSTANCE);
         SaveLoader.INSTANCE.init();
     }
 

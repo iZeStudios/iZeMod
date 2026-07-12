@@ -18,11 +18,13 @@
 
 package net.izestudios.izemod.component.multiplayer;
 
+import com.google.gson.JsonObject;
 import java.util.Arrays;
+import net.izestudios.izemod.save.AbstractSave;
 
-// TODO FILE saving
-public final class ServerSaveStates {
+public final class ServerSaveStates extends AbstractSave {
 
+    public static final ServerSaveStates INSTANCE = new ServerSaveStates();
     public static final int STATE_COUNT = 16;
     private static final String[] STATES = new String[STATE_COUNT];
 
@@ -30,12 +32,39 @@ public final class ServerSaveStates {
         Arrays.fill(STATES, null);
     }
 
+    private ServerSaveStates() {
+        super("direct_connect_slots");
+    }
+
     public static void set(final int index, final String state) {
         STATES[index] = state;
+        INSTANCE.save();
     }
 
     public static String get(final int index) {
         return STATES[index];
+    }
+
+    @Override
+    public void write(final JsonObject object) {
+        for (int i = 0; i < STATE_COUNT; i++) {
+            final String state = STATES[i];
+            if (state != null) {
+                object.addProperty(String.valueOf(i), state);
+            }
+        }
+    }
+
+    @Override
+    public void read(final JsonObject object) {
+        for (int i = 0; i < STATE_COUNT; i++) {
+            final String key = String.valueOf(i);
+            if (object.has(key) && !object.get(key).isJsonNull()) {
+                STATES[i] = object.get(key).getAsString();
+            } else {
+                STATES[i] = null;
+            }
+        }
     }
 
 }
