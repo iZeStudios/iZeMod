@@ -63,7 +63,7 @@ public class ChatUtil {
     }
 
     public static void printSuccessMessage(final Component message, final String tooltip, final String suggestion) {
-        printPrefixedChatMessage(message.copy().withColor(ChatFormatting.GREEN.getColor()), tooltip, suggestion);
+        printPrefixedChatMessage(message.copy().withColor(TextColor.fromLegacyFormat(ChatFormatting.GREEN)), tooltip, suggestion);
     }
 
     public static void printErrorMessage(final String message) {
@@ -71,7 +71,7 @@ public class ChatUtil {
     }
 
     public static void printErrorMessage(final Component message) {
-        printPrefixedChatMessage(message.copy().withColor(ChatFormatting.RED.getColor()), null, null);
+        printPrefixedChatMessage(message.copy().withColor(TextColor.fromLegacyFormat(ChatFormatting.RED)), null, null);
     }
 
     public static void printPrefixedChatMessage(final String message) {
@@ -87,7 +87,7 @@ public class ChatUtil {
     }
 
     public static void printPrefixedChatMessage(final Component message, final String tooltip, final String suggestion) {
-        Minecraft.getInstance().gui.getChat().addMessage(CHAT_PREFIX.copy().append(message).withStyle(style -> {
+        Minecraft.getInstance().gui.hud.getChat().addClientSystemMessage(CHAT_PREFIX.copy().append(message).withStyle(style -> {
             if (tooltip != null) {
                 style = style.withHoverEvent(new HoverEvent.ShowText(Component.literal(tooltip)));
             }
@@ -107,7 +107,7 @@ public class ChatUtil {
     }
 
     public static void printChatMessage(final Component message) {
-        Minecraft.getInstance().gui.getChat().addMessage(message);
+        Minecraft.getInstance().gui.hud.getChat().addClientSystemMessage(message);
     }
 
     public static Component colored(final String text, final ChatFormatting color) {

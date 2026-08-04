@@ -42,7 +42,7 @@ public final class GetIPCommand extends AbstractCommand {
 
             return sendIP(address);
         })).executes(commandContext -> {
-            if (Minecraft.getInstance().isSingleplayer()) {
+            if (Minecraft.getInstance().isLocalServer()) {
                 printErrorMessage(Component.translatable("commands.getip.singleplayer"));
                 return FAILURE;
             }

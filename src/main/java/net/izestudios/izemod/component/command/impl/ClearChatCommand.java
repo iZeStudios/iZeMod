@@ -33,7 +33,7 @@ public final class ClearChatCommand extends AbstractCommand {
     @Override
     public void builder(final LiteralArgumentBuilder<SharedSuggestionProvider> builder) {
         builder.executes(commandContext -> {
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            Minecraft.getInstance().gui.hud.getChat().clearMessages(false);
             return SUCCESS;
         });
     }

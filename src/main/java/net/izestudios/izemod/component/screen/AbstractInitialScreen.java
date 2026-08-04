@@ -26,12 +26,12 @@ import net.izestudios.izemod.util.RenderUtil;
 import net.izestudios.izemod.util.UpdateUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
-import net.minecraft.Util;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlainTextButton;
 import net.minecraft.client.gui.screens.CreditsAndAttributionScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractInitialScreen extends Screen {
@@ -47,8 +47,8 @@ public abstract class AbstractInitialScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         final int logoX = (this.width / 2) - (2279 / 12);
         final int logoY = this.height / 20 + 4;
@@ -115,7 +115,7 @@ public abstract class AbstractInitialScreen extends Screen {
             200,
             10,
             Component.nullToEmpty(minecraftText),
-            button -> this.minecraft.setScreen(new CreditsAndAttributionScreen(this)), this.font));
+            button -> this.minecraft.gui.setScreen(new CreditsAndAttributionScreen(this)), this.font));
 
         final Component copyrightText = Component.translatable(Constants.TEXT_COPYRIGHT);
         this.addRenderableWidget(new PlainTextButton(
@@ -124,9 +124,8 @@ public abstract class AbstractInitialScreen extends Screen {
             200,
             10,
             copyrightText,
-            button -> this.minecraft.setScreen(new CreditsAndAttributionScreen(this)), this.font
+            button -> this.minecraft.gui.setScreen(new CreditsAndAttributionScreen(this)), this.font
         ));
     }
 
 }
-

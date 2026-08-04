@@ -19,20 +19,20 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.component.command.impl.FullbrightCommand;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.LightmapRenderStateExtractor;
+import net.minecraft.client.renderer.state.LightmapRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(LightTexture.class)
+@Mixin(LightmapRenderStateExtractor.class)
 public abstract class MixinLightTexture {
 
-    @Redirect(method = "updateLightTexture", at = @At(value = "INVOKE", target = "Ljava/lang/Double;floatValue()F", ordinal = 1))
-    private float fullbright(Double instance) {
+    @Inject(method = "extract", at = @At("TAIL"))
+    private void fullbright(LightmapRenderState renderState, float partialTicks, CallbackInfo ci) {
         if (FullbrightCommand.active) {
-            return instance.floatValue() * 100.0F;
-        } else {
-            return instance.floatValue();
+            renderState.brightness *= 100.0F;
         }
     }
 

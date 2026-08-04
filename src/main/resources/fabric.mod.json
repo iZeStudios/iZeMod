@@ -46,7 +46,7 @@
   "accessWidener": "izemod.accesswidener",
   "depends": {
     "minecraft": "${mcVersion}",
-    "java": ">=21"
+    "java": ">=25"
   },
   "custom": {
     "ize:tag": "${shortCommitHash}"

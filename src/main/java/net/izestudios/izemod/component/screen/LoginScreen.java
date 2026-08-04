@@ -48,9 +48,9 @@ public final class LoginScreen extends AbstractInitialScreen {
                 .builder(Component.translatable("screens.login.login"), button -> {
                     loggedIn = true;
                     if ("tetris".equals(passwordField.getValue())) {
-                        minecraft.setScreen(TetrisScreen.INSTANCE);
+                        minecraft.gui.setScreen(TetrisScreen.INSTANCE);
                     } else {
-                        minecraft.setScreen(new TitleScreen());
+                        minecraft.gui.setScreen(new TitleScreen());
                     }
                 })
                 .pos(this.width / 2 - 102, textFieldY + 60)

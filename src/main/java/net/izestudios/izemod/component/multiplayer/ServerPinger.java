@@ -21,7 +21,7 @@ package net.izestudios.izemod.component.multiplayer;
 import net.izestudios.izemod.IzeModImpl;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
@@ -31,7 +31,6 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix3x2fStack;
 
 public final class ServerPinger extends AbstractWidget {
 
@@ -76,7 +75,7 @@ public final class ServerPinger extends AbstractWidget {
     }
 
     @Override
-    protected void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         if (serverEntry == null || previousServerEntry == null) {
             return;
         }
@@ -87,7 +86,7 @@ public final class ServerPinger extends AbstractWidget {
             // render it off-screen to avoid showing it when it's not successful
             serverEntry.setX(guiGraphics.guiWidth());
             serverEntry.setY(guiGraphics.guiHeight());
-            serverEntry.renderContent(guiGraphics, mouseX, mouseY, false, partialTick);
+            serverEntry.extractContent(guiGraphics, mouseX, mouseY, false, partialTick);
         } else if (status == ServerData.State.SUCCESSFUL) {
             previousServerEntry = serverEntry;
         } else if (status == ServerData.State.UNREACHABLE || status == ServerData.State.INCOMPATIBLE) {
@@ -103,12 +102,12 @@ public final class ServerPinger extends AbstractWidget {
         entry.setY(getY() + 2);
 
         guiGraphics.fill(getX(), getY(), getX() + WIDTH, getY() + HEIGHT, IzeModImpl.INSTANCE.themeColor().getRGB());
-        entry.renderContent(guiGraphics, mouseX, mouseY, false, partialTick);
+        entry.extractContent(guiGraphics, mouseX, mouseY, false, partialTick);
 
         final String brand = I18n.get("screens.directconnect.brand");
         final String version = I18n.get("screens.directconnect.version");
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + brand + ": " + ChatFormatting.AQUA + entry.getServerData().version.getString(), getX() + 2, getY() + 40, -1);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.RED + version + ": " + ChatFormatting.AQUA + entry.getServerData().protocol, getX() + 2, getY() + 50, -1);
+        guiGraphics.text(Minecraft.getInstance().font, ChatFormatting.RED + brand + ": " + ChatFormatting.AQUA + entry.getServerData().version.getString(), getX() + 2, getY() + 40, -1);
+        guiGraphics.text(Minecraft.getInstance().font, ChatFormatting.RED + version + ": " + ChatFormatting.AQUA + entry.getServerData().protocol, getX() + 2, getY() + 50, -1);
     }
 
     @Override

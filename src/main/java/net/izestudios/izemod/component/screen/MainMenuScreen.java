@@ -68,16 +68,16 @@ public final class MainMenuScreen extends AbstractInitialScreen {
         final String optionsText = I18n.get("screens.title.options");
         final String modsText = I18n.get("screens.title.mods", mods);
         final String addonsText = I18n.get("screens.title.addons", addons);
-        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.minecraft.setScreen(new SelectWorldScreen(this)));
-        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.minecraft.setScreen(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this)));
-        addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.minecraft.setScreen(new RealmsMainScreen(this)));
-        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.minecraft.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager())));
-        addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.minecraft.setScreen(new OptionsScreen(this, this.minecraft.options)));
+        addMainMenuButton(leftX, baseY, -5, TEXT_SINGLEPLAYER, worldCount + " " + (worldCount == 1 ? worldText : worldsText), () -> this.minecraft.gui.setScreen(new SelectWorldScreen(this)));
+        addMainMenuButton(leftX, baseY, -4, TEXT_MULTIPLAYER, serverCount + " " + serverText, () -> this.minecraft.gui.setScreen(this.minecraft.options.skipMultiplayerWarning ? new JoinMultiplayerScreen(this) : new SafetyScreen(this)));
+        addMainMenuButton(leftX, baseY, -3, TEXT_ONLINE, null, () -> this.minecraft.gui.setScreen(new RealmsMainScreen(this)));
+        addMainMenuButton(leftX, baseY, -2, OPTIONS_LANGUAGE, null, () -> this.minecraft.gui.setScreen(new LanguageSelectScreen(this, this.minecraft.options, this.minecraft.getLanguageManager())));
+        addMainMenuButton(leftX, baseY, -1, TEXT_OPTIONS, null, () -> this.minecraft.gui.setScreen(new OptionsScreen(this, this.minecraft.options, false)));
 
-        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
-        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.minecraft.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -5, optionsText, null, () -> this.minecraft.gui.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -4, programText, null, () -> this.minecraft.gui.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -3, addonsText, null, () -> this.minecraft.gui.setScreen(DebugScreen.INSTANCE));
+        addMainMenuButton(rightX, baseY, -2, modsText, null, () -> this.minecraft.gui.setScreen(DebugScreen.INSTANCE));
         addMainMenuButton(rightX, baseY, -1, TEXT_QUIT, null, minecraft::stop);
     }
 

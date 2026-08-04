@@ -56,7 +56,7 @@ public abstract class MixinCommandSuggestions {
     private @Nullable CompletableFuture<Suggestions> pendingSuggestions;
 
     @Shadow
-    protected abstract void updateUsageInfo();
+    protected abstract void updateUsageInfo(ParseResults<?> currentParse, Suggestions suggestions);
 
     @Inject(method = "updateCommandInfo", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;canRead()Z", remap = false), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private void onRefreshSuggestions(CallbackInfo ci, String string, StringReader stringReader) {
@@ -69,9 +69,9 @@ public abstract class MixinCommandSuggestions {
             if (cursor >= 1 && (this.suggestions == null || !this.keepSuggestions)) {
                 this.pendingSuggestions = CommandHandlerImpl.INSTANCE.dispatcher.getCompletionSuggestions(this.currentParse, cursor);
 
-                this.pendingSuggestions.thenRun(() -> {
+                this.pendingSuggestions.thenAccept(suggestionResult -> {
                     if (this.pendingSuggestions.isDone()) {
-                        this.updateUsageInfo();
+                        this.updateUsageInfo(this.currentParse, suggestionResult);
                     }
                 });
             }

@@ -20,7 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.izestudios.izemod.component.theme.ColorTheme;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
@@ -39,8 +39,8 @@ public abstract class MixinEditBox extends AbstractWidget {
     @Shadow
     public abstract boolean isBordered();
 
-    @Redirect(method = "renderWidget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/EditBox;isBordered()Z"))
-    private boolean replaceEditBoxStyle(EditBox instance, @Local(argsOnly = true) GuiGraphics guiGraphics) {
+    @Redirect(method = "extractWidgetRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/EditBox;isBordered()Z"))
+    private boolean replaceEditBoxStyle(EditBox instance, @Local(argsOnly = true) GuiGraphicsExtractor guiGraphics) {
         if (isBordered()) {
             guiGraphics.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorTheme.BASE_BLUE);
         }

@@ -21,7 +21,7 @@ package net.izestudios.izemod.injection.mixin;
 import net.izestudios.izemod.component.discord.DiscordRPCImpl;
 import net.izestudios.izemod.util.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,14 +45,14 @@ public abstract class MixinScreen {
     @Shadow
     public abstract Component getTitle();
 
-    @Inject(method = "renderPanorama", at = @At("HEAD"), cancellable = true)
-    private void changeBackground(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+    @Inject(method = "extractPanorama", at = @At("HEAD"), cancellable = true)
+    private void changeBackground(GuiGraphicsExtractor guiGraphics, float partialTick, CallbackInfo ci) {
         ci.cancel();
         RenderUtil.drawBlueFade(guiGraphics, 0, 0, this.width, this.height);
     }
 
-    @Inject(method = "renderMenuBackground(Lnet/minecraft/client/gui/GuiGraphics;IIII)V", at = @At("HEAD"), cancellable = true)
-    private void removeDarkening(GuiGraphics guiGraphics, int x, int y, int width, int height, CallbackInfo ci) {
+    @Inject(method = "extractMenuBackground(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIII)V", at = @At("HEAD"), cancellable = true)
+    private void removeDarkening(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, CallbackInfo ci) {
         ci.cancel();
     }
 

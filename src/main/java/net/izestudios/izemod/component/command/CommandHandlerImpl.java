@@ -45,6 +45,7 @@ import net.izestudios.izemod.util.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.server.permissions.PermissionSet;
 import org.jetbrains.annotations.NotNull;
 
 public final class CommandHandlerImpl implements CommandHandler {
@@ -52,7 +53,7 @@ public final class CommandHandlerImpl implements CommandHandler {
     public static final String PREFIX = "#";
     public static final CommandHandlerImpl INSTANCE = new CommandHandlerImpl();
     public final CommandDispatcher<SharedSuggestionProvider> dispatcher = new CommandDispatcher<>();
-    public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance(), true);
+    public final ClientSuggestionProvider commandSource = new ClientSuggestionProvider(null, Minecraft.getInstance(), PermissionSet.NO_PERMISSIONS);
     private final List<AbstractCommand> commands = new ArrayList<>();
 
     public void init() {

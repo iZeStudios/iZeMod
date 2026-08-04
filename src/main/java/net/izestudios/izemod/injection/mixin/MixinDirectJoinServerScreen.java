@@ -26,7 +26,7 @@ import net.izestudios.izemod.component.multiplayer.ServerPinger;
 import net.izestudios.izemod.component.multiplayer.ServerSaveStates;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -116,8 +116,8 @@ public abstract class MixinDirectJoinServerScreen extends Screen {
         }
     }
 
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
-    private void moveAddressTitlePosition(GuiGraphics instance, Font font, Component text, int x, int y, int color, Operation<Void> original) {
+    @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;text(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)V"))
+    private void moveAddressTitlePosition(GuiGraphicsExtractor instance, Font font, Component text, int x, int y, int color, Operation<Void> original) {
         original.call(instance, font, text, ipEdit.getX(), ipEdit.getY() - font.lineHeight - 5, color);
     }
 
