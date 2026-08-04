@@ -33,11 +33,11 @@ import net.izestudios.izemod.util.TimeFormatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,14 +54,17 @@ public final class HudRenderingImpl implements HudRendering {
 
         final Minecraft client = Minecraft.getInstance();
         register("fps", client::getFps);
-        register("x", () -> numberFormat.format(client.player.getX()));
-        register("y", () -> numberFormat.format(client.player.getY()));
-        register("z", () -> numberFormat.format(client.player.getZ()));
+        register("x", () -> client.player == null ? null : numberFormat.format(client.player.getX()));
+        register("y", () -> client.player == null ? null : numberFormat.format(client.player.getY()));
+        register("z", () -> client.player == null ? null : numberFormat.format(client.player.getZ()));
         register("biome", () -> {
+            if (client.level == null || client.player == null) {
+                return null;
+            }
             final Optional<ResourceKey<Biome>> key = client.level.getBiome(client.player.blockPosition()).unwrapKey();
             if (key.isPresent()) {
-                final ResourceLocation identifier = key.get().location();
-                if (Objects.equals(identifier.getNamespace(), ResourceLocation.DEFAULT_NAMESPACE)) {
+                final Identifier identifier = key.get().identifier();
+                if (Objects.equals(identifier.getNamespace(), Identifier.DEFAULT_NAMESPACE)) {
                     return identifier.getPath();
                 } else {
                     return identifier.toString();
@@ -74,11 +77,14 @@ public final class HudRenderingImpl implements HudRendering {
             if (client.isLocalServer()) {
                 return null;
             } else {
+                if (client.getCurrentServer() == null) {
+                    return null;
+                }
                 return client.getCurrentServer().version.getString();
             }
         });
         register("ping", () -> {
-            if (client.isLocalServer()) {
+            if (client.isLocalServer() || client.getConnection() == null || client.player == null) {
                 return null;
             }
 
@@ -97,7 +103,7 @@ public final class HudRenderingImpl implements HudRendering {
             return numberFormat.format(ServerTPS.getTps());
         });
         register("players", () -> {
-            if (client.isLocalServer()) {
+            if (client.isLocalServer() || client.getConnection() == null) {
                 return null;
             }
 
@@ -109,7 +115,7 @@ public final class HudRenderingImpl implements HudRendering {
         SaveLoader.INSTANCE.add(new HudSave());
     }
 
-    public void draw(final GuiGraphics guiGraphics) {
+    public void draw(final GuiGraphicsExtractor guiGraphics) {
         final Font font = Minecraft.getInstance().font;
         final int x = 2;
         int y = 15;
@@ -122,9 +128,9 @@ public final class HudRenderingImpl implements HudRendering {
             final int keyWidth = font.width(element.key());
             final int arrowWidth = font.width(" » ");
 
-            guiGraphics.drawString(font, ChatFormatting.DARK_AQUA + element.key(), x, y, -1);
-            guiGraphics.drawString(font, ChatFormatting.DARK_AQUA + " » ", x + keyWidth, y, -1);
-            guiGraphics.drawString(font, ChatFormatting.AQUA + value, x + keyWidth + arrowWidth, y, -1);
+            guiGraphics.text(font, ChatFormatting.DARK_AQUA + element.key(), x, y, -1);
+            guiGraphics.text(font, ChatFormatting.DARK_AQUA + " » ", x + keyWidth, y, -1);
+            guiGraphics.text(font, ChatFormatting.AQUA + value, x + keyWidth + arrowWidth, y, -1);
             y += 10;
         }
     }

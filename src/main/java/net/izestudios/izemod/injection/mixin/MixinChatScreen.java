@@ -19,7 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,10 +41,10 @@ public abstract class MixinChatScreen extends Screen {
         super(title);
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
-    private void renderChatCounter(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    @Inject(method = "extractRenderState", at = @At("TAIL"))
+    private void renderChatCounter(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         final MutableComponent text = Component.translatable("screens.chat", input.getValue().length(), input.getMaxLength()).withStyle(style -> style.withColor(ChatFormatting.GRAY));
-        guiGraphics.drawString(minecraft.font, text, this.width - minecraft.font.width(text) - 3, input.getY() - minecraft.font.lineHeight - 3, -1);
+        guiGraphics.text(minecraft.font, text, this.width - minecraft.font.width(text) - 3, input.getY() - minecraft.font.lineHeight - 3, -1);
     }
 
 }

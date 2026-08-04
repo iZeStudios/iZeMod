@@ -1,4 +1,4 @@
-accessWidener v1 named
+accessWidener v1 official
 
 accessible field net/minecraft/client/Minecraft user Lnet/minecraft/client/User;
 
@@ -6,4 +6,4 @@ accessible method net/minecraft/client/gui/components/EditBox getMaxLength ()I
 accessible method net/minecraft/client/gui/screens/multiplayer/ServerSelectionList$OnlineServerEntry <init> (Lnet/minecraft/client/gui/screens/multiplayer/ServerSelectionList;Lnet/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen;Lnet/minecraft/client/multiplayer/ServerData;)V
 
 mutable field net/minecraft/client/Minecraft user Lnet/minecraft/client/User;
-mutable field net/minecraft/client/gui/screens/LoadingOverlay MOJANG_STUDIOS_LOGO_LOCATION Lnet/minecraft/resources/ResourceLocation;
+mutable field net/minecraft/client/gui/screens/LoadingOverlay MOJANG_STUDIOS_LOGO_LOCATION Lnet/minecraft/resources/Identifier;

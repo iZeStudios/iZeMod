@@ -19,7 +19,7 @@
 package net.izestudios.izemod.injection.mixin;
 
 import net.minecraft.client.gui.screens.FaviconTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,8 +42,8 @@ public abstract class MixinFaviconTexture {
     @Unique
     private boolean izeMod$reversing = true;
 
-    @Redirect(method = "textureLocation", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/FaviconTexture;MISSING_LOCATION:Lnet/minecraft/resources/ResourceLocation;"))
-    private ResourceLocation replaceMissingServerIcon() {
+    @Redirect(method = "textureLocation", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/FaviconTexture;MISSING_LOCATION:Lnet/minecraft/resources/Identifier;"))
+    private Identifier replaceMissingServerIcon() {
         if (++izeMod$waitCounter >= iZeMod$WAIT_FRAMES) {
             izeMod$currentFrame += izeMod$reversing ? -1 : 1;
 

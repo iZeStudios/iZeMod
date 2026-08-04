@@ -39,21 +39,21 @@ public final class DebugScreen extends Screen {
 
         this.addRenderableWidget(new StringWidget(this.width / 2 - (minecraft.font.width(title) / 2), baseY + (25 * -7), 200, 20, title, minecraft.font));
 
-        this.createButton(0, -6, baseY, "screens.debug.toLoginScreen", b -> minecraft.setScreen(LoginScreen.INSTANCE));
+        this.createButton(0, -6, baseY, "screens.debug.toLoginScreen", b -> minecraft.gui.setScreen(LoginScreen.INSTANCE));
         this.createButton(0, -5, baseY, "screens.debug.unusedTodo", null);
         this.createButton(0, -4, baseY, "screens.debug.unusedTodo", null);
         this.createButton(0, -3, baseY, "screens.debug.unusedTodo", null);
         this.createButton(0, -2, baseY, "screens.debug.unusedTodo", null);
         this.createButton(0, -1, baseY, "screens.debug.unusedTodo", null);
 
-        this.createButton(1, -6, baseY, "screens.debug.tetris", b -> minecraft.setScreen(TetrisScreen.INSTANCE));
+        this.createButton(1, -6, baseY, "screens.debug.tetris", b -> minecraft.gui.setScreen(TetrisScreen.INSTANCE));
         this.createButton(1, -5, baseY, "screens.debug.unusedTodo", null);
         this.createButton(1, -4, baseY, "screens.debug.unusedTodo", null);
         this.createButton(1, -3, baseY, "screens.debug.unusedTodo", null);
         this.createButton(1, -2, baseY, "screens.debug.unusedTodo", null);
         this.createButton(1, -1, baseY, "screens.debug.unusedTodo", null);
 
-        this.addRenderableWidget(Button.builder(Component.translatable("screens.debug.back"), b -> this.minecraft.setScreen(MainMenuScreen.INSTANCE)).bounds(this.width / 2 - 100, baseY + 10, 200, 20).build());
+        this.addRenderableWidget(Button.builder(Component.translatable("screens.debug.back"), b -> this.minecraft.gui.setScreen(MainMenuScreen.INSTANCE)).bounds(this.width / 2 - 100, baseY + 10, 200, 20).build());
     }
 
     private void createButton(final int column, final int row, final int baseY, final String textKey, final Button.OnPress action) {

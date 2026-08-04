@@ -1,11 +1,9 @@
 import de.florianmichael.baseproject.configureJij
-import de.florianmichael.baseproject.includeFabricSubmodule
-import de.florianmichael.baseproject.runGitCommand
 import de.florianmichael.baseproject.setupFabric
 import de.florianmichael.baseproject.setupProject
 
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     id("de.florianmichael.baseproject.BaseProject")
 }
 
@@ -30,13 +28,14 @@ repositories {
     }
 }
 
-includeFabricSubmodule(":izemod-api")
-
 val jij = configureJij()
 
 dependencies {
+    api(project(":izemod-api"))
+    include(project(":izemod-api"))
+
     jij("com.github.iZeStudios:discord-ipc:e2f57644a6")
 
-    modImplementation("com.viaversion:viafabricplus-api:4.3.4")
-    modRuntimeOnly("com.viaversion:viafabricplus:4.3.4")
+    implementation("com.viaversion:viafabricplus-api:4.6.1")
+    runtimeOnly("com.viaversion:viafabricplus:4.6.1")
 }

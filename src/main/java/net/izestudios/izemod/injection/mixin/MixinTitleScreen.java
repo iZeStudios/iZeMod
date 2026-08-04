@@ -33,10 +33,9 @@ public abstract class MixinTitleScreen {
     @Inject(method = "init", at = @At("HEAD"))
     private void redirectScreens(CallbackInfo ci) {
         if (LoginScreen.loggedIn) {
-            Minecraft.getInstance().setScreen(MainMenuScreen.INSTANCE);
+            Minecraft.getInstance().gui.setScreen(MainMenuScreen.INSTANCE);
         } else {
-            Minecraft.getInstance().setScreen(LoginScreen.INSTANCE);
+            Minecraft.getInstance().gui.setScreen(LoginScreen.INSTANCE);
         }
     }
-
 }

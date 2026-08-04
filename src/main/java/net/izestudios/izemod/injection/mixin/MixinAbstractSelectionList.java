@@ -20,7 +20,7 @@ package net.izestudios.izemod.injection.mixin;
 
 import net.izestudios.izemod.IzeModImpl;
 import net.izestudios.izemod.util.RenderUtil;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.network.chat.Component;
@@ -43,13 +43,13 @@ public abstract class MixinAbstractSelectionList extends AbstractContainerWidget
         super(i, j, k, l, component);
     }
 
-    @Inject(method = "renderListBackground", at = @At("HEAD"), cancellable = true)
-    private void cancelBackground(GuiGraphics guiGraphics, CallbackInfo ci) {
+    @Inject(method = "extractListBackground", at = @At("HEAD"), cancellable = true)
+    private void cancelBackground(GuiGraphicsExtractor guiGraphics, CallbackInfo ci) {
         ci.cancel();
     }
 
-    @Inject(method = "renderListSeparators", at = @At("HEAD"), cancellable = true)
-    private void replaceHeaderAndFooter(GuiGraphics guiGraphics, CallbackInfo ci) {
+    @Inject(method = "extractListSeparators", at = @At("HEAD"), cancellable = true)
+    private void replaceHeaderAndFooter(GuiGraphicsExtractor guiGraphics, CallbackInfo ci) {
         ci.cancel();
         final int height = guiGraphics.guiHeight();
 

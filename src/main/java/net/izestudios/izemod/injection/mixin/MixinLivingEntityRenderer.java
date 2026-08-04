@@ -32,7 +32,7 @@ public abstract class MixinLivingEntityRenderer {
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
     private void showNameTagInThirdPerson(LivingEntity entity, double distanceSquared, CallbackInfoReturnable<Boolean> cir) {
         if (entity == Minecraft.getInstance().getCameraEntity()) {
-            cir.setReturnValue(Minecraft.renderNames());
+            cir.setReturnValue(!Minecraft.getInstance().gui.hud.isHidden());
         }
     }
 

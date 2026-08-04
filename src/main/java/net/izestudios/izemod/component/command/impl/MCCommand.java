@@ -20,10 +20,10 @@ package net.izestudios.izemod.component.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.izestudios.izemod.api.command.AbstractCommand;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
 
 public final class MCCommand extends AbstractCommand {
 

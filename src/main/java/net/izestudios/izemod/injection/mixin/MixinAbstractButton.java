@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(AbstractButton.class)
 public abstract class MixinAbstractButton {
 
-    @Redirect(method = "renderWidget", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/AbstractButton;SPRITES:Lnet/minecraft/client/gui/components/WidgetSprites;"))
+    @Redirect(method = "extractDefaultSprite", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/AbstractButton;SPRITES:Lnet/minecraft/client/gui/components/WidgetSprites;"))
     private WidgetSprites replaceButtonTextures() {
         return Assets.BUTTON;
     }
